@@ -2,689 +2,376 @@ import { Icons } from "@/components/icons";
 import { HomeIcon, NotebookIcon } from "lucide-react";
 
 export const DATA = {
-  name: "Dillion Verma",
-  initials: "DV",
-  url: "https://dillion.io",
-  location: "San Francisco, CA",
-  locationLink: "https://www.google.com/maps/place/sanfrancisco",
+  name: "Mian Muhammad Hamza Shakeel",
+  initials: "HS",
+  url: "https://hamzashakeel.com",
+  location: "Mississauga, Ontario, Canada",
+  locationLink: "https://www.google.com/maps/place/Mississauga,+ON",
   description:
-    "Software Engineer turned Entrepreneur. I love building things and helping people. Very active on Twitter.",
+  "WordPress & web developer building fast, reliable sites for healthcare, security and data-driven teams.",
+
   summary:
-    "At the end of 2022, I quit my job as a software engineer to go fulltime into building and scaling my own SaaS businesses. In the past, [I pursued a double degree in computer science and business](/#education), [interned at big tech companies in Silicon Valley](https://www.youtube.com/watch?v=d-LJ2e5qKdE), and [competed in over 21 hackathons for fun](/#hackathons). I also had the pleasure of being a part of the first ever in-person cohort of buildspace called [buildspace sf1](https://buildspace.so/sf1).",
-  avatarUrl: "/me.png",
+  "7+ years of experience building fast, accessible, SEO-driven sites for healthcare, security, and data-driven teams. Recent work includes data dashboards and a digital front door for Health Workforce Canada, a marketing and custom WordPress site for Plurilock Security, and web experiences ranging from lean landing pages to large-scale content sites. I like building sharp, practical things—custom Gutenberg blocks, lightweight internal plugins, and integrations that help non-technical teams move faster instead of fighting their tools.",
+  avatarUrl: "/me.jpeg", // put your headshot at /public/me.jpeg
+
   skills: [
-    "React",
+    // WordPress-heavy stuff first
+    "WordPress (Gutenberg / Elementor)",
+    "Custom WordPress themes",
+    "Custom WordPress plugins",
+    "WooCommerce",
+    "Advanced Custom Fields (ACF)",
+    "Headless WordPress (REST API)",
+    "WordPress performance optimization (caching / images / CDNs)",
+    "WordPress security & hardening",
+    "WordPress migrations & maintenance",
+    "Multisite & multi-language (WPML / Polylang)",
+
+    // Frontend / JS stack
     "Next.js",
-    "Typescript",
+    "React",
+    "TypeScript",
     "Node.js",
-    "Python",
-    "Go",
-    "Postgres",
-    "Docker",
-    "Kubernetes",
-    "Java",
-    "C++",
+    "Tailwind CSS",
+    "Drupal",
+    "Shopify",
+    "Webflow",
+
+    // Infra / data / tooling
+    "AWS (Kendra, Lambda, S3, CloudFront)",
+    "Google Analytics 4",
+    "Google Tag Manager",
+    "Google Search Console",
+    "SEO",
+    "Mailchimp / Drip",
+    "n8n",
+    "DNS / SMTP / SPF / DKIM / DMARC",
+
+    // Design / content
+    "Adobe Creative Suite",
+    "Canva",
   ],
+
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
     { href: "/blog", icon: NotebookIcon, label: "Blog" },
   ],
   contact: {
-    email: "hello@example.com",
-    tel: "+123456789",
+    email: "mianmuhammadhamza@gmail.com",
+    tel: "+1 647 613 9953",
     social: {
       GitHub: {
         name: "GitHub",
-        url: "https://dub.sh/dillion-github",
+        url: "https://github.com/Hamza0",
         icon: Icons.github,
-
-        navbar: true,
+        navbar: false, // was true – now hidden from dock
       },
       LinkedIn: {
         name: "LinkedIn",
-        url: "https://dub.sh/dillion-linkedin",
+        url: "https://www.linkedin.com/in/mianhamza",
         icon: Icons.linkedin,
-
-        navbar: true,
+        navbar: true, // keep this in the dock
       },
       X: {
         name: "X",
-        url: "https://dub.sh/dillion-twitter",
+        url: "https://x.com/heyhamzah",
         icon: Icons.x,
-
-        navbar: true,
+        navbar: false, // hide
       },
       Youtube: {
-        name: "Youtube",
-        url: "https://dub.sh/dillion-youtube",
+        name: "YouTube",
+        url: "https://www.youtube.com/@heyhamzah",
         icon: Icons.youtube,
-        navbar: true,
+        navbar: false, // hide
+      },
+      Call: {
+        name: "Call",
+        url: "tel:+16476139953",
+        icon: Icons.phone, // we'll add this icon below
+        navbar: true,      // show in dock
       },
       email: {
         name: "Send Email",
-        url: "#",
+        url: "mailto:mianmuhammadhamza@gmail.com",
         icon: Icons.email,
-
         navbar: false,
       },
     },
   },
 
+  // Put logo files in /public/logos with these filenames
   work: [
     {
-      company: "Atomic Finance",
-      href: "https://atomic.finance",
-      badges: [],
-      location: "Remote",
-      title: "Bitcoin Protocol Engineer",
-      logoUrl: "/atomic.png",
-      start: "May 2021",
-      end: "Oct 2022",
+      company: "Health Workforce Canada",
+      href: "https://healthworkforce.ca",
+      badges: ["Contract", "Healthcare"],
+      location: "Ottawa, ON / Remote",
+      title: "Website Developer – Corporate Services",
+      logoUrl: "/logos/healthworkforce.png",
+      start: "Jun 2024",
+      end: "Jul 2025",
       description:
-        "Implemented the Bitcoin discreet log contract (DLC) protocol specifications as an open source Typescript SDK. Dockerized all microservices and setup production kubernetes cluster. Architected a data lake using AWS S3 and Athena for historical backtesting of bitcoin trading strategies. Built a mobile app using react native and typescript.",
+        "Lead developer for healthworkforce.ca. Built and iterated on the Digital Front Door (AI-powered intelligent search), the Dashboards landing and use-case experience, and the Modelling & Forecasting microsite. Implemented AWS Kendra + Lambda integration in WordPress, designed Gutenberg block-based layouts for pages and resource hubs, integrated third-party APIs/plugins, managed domain and DNS, and configured SPF/DKIM/DMARC + SMTP relays. Supported analytics, campaigns and emergency communications content while keeping the site accessible and maintainable.",
     },
     {
-      company: "Shopify",
-      badges: [],
-      href: "https://shopify.com",
-      location: "Remote",
-      title: "Software Engineer",
-      logoUrl: "/shopify.svg",
-      start: "January 2021",
-      end: "April 2021",
+      company: "Stratomer IT",
+      href: "https://stratomerit.com",
+      badges: ["Part-time"],
+      location: "Edmonton, AB / Remote",
+      title: "Website Developer",
+      logoUrl: "/logos/stratomer.png",
+      start: "Jun 2023",
+      end: "Mar 2025",
       description:
-        "Implemented a custom Kubernetes controller in Go to automate the deployment of MySQL and ProxySQL custom resources in order to enable 2,000+ internal developers to instantly deploy their app databases to production. Wrote several scripts in Go to automate MySQL database failovers while maintaining master-slave replication topologies and keeping Zookeeper nodes consistent with changes.",
+        "Planned and executed digital marketing web work for IT and security services: SEO-first websites, landing pages and email funnels. Implemented and monitored SEO strategies, optimized performance and UX, integrated tools like GA4, GSC, Tag Manager and Salesforce, and produced marketing assets using Adobe Creative Suite and Canva.",
     },
     {
-      company: "Nvidia",
-      href: "https://nvidia.com/",
-      badges: [],
-      location: "Santa Clara, CA",
-      title: "Software Engineer",
-      logoUrl: "/nvidia.png",
-      start: "January 2020",
-      end: "April 2020",
+      company: "Plurilock Security",
+      href: "https://plurilock.com",
+      badges: ["Cybersecurity"],
+      location: "Victoria, BC / Remote",
+      title: "Website Developer / Administrator",
+      logoUrl: "/logos/plurilock.jpeg",
+      start: "May 2022",
+      end: "Nov 2022",
       description:
-        "Architected and wrote the entire MVP of the GeForce Now Cloud Gaming internal admin and A/B testing dashboard using React, Redux, TypeScript, and Python.",
+        "Owned front-end development and website administration for a cybersecurity SaaS. Created and maintained CSS/HTML/PHP templates, ensured brand consistency, improved performance and collaborated with product, UX and marketing teams to solve complex UX problems and ship new marketing pages and reporting / dashboard views in an agile environment.",
     },
     {
-      company: "Splunk",
-      href: "https://splunk.com",
-      badges: [],
-      location: "San Jose, CA",
-      title: "Software Engineer",
-      logoUrl: "/splunk.svg",
-      start: "January 2019",
-      end: "April 2019",
+      company: "Ibex",
+      href: "https://www.ibex.co/",
+      badges: ["CX / BPO"],
+      location: "Lahore, Pakistan",
+      title: "Website Developer",
+      logoUrl: "/logos/ibex.jpeg",
+      start: "Jul 2019",
+      end: "Jun 2021",
       description:
-        "Co-developed a prototype iOS app with another intern in Swift for the new Splunk Phantom security orchestration product (later publicly demoed and launched at .conf annual conference in Las Vegas). Implemented a realtime service for the iOS app in Django (Python) and C++; serialized data using protobufs transmitted over gRPC resulting in an approximate 500% increase in data throughput.",
+        "Modified existing and built new marketing and campaign sites for enterprise clients: restructuring layouts, adding and updating content, integrating forms, banners and popups, and collaborating with internal product, design and account teams to deliver reliable, on-brand experiences.",
     },
     {
-      company: "Lime",
-      href: "https://li.me/",
-      badges: [],
-      location: "San Francisco, CA",
-      title: "Software Engineer",
-      logoUrl: "/lime.svg",
-      start: "January 2018",
-      end: "April 2018",
+      company: "Tech Nerds",
+      href: "https://technerds.com",
+      badges: ["Agency"],
+      location: "Remote / Miami-based",
+      title: "Website Developer",
+      logoUrl: "/logos/technerds.png",
+      start: "Aug 2018",
+      end: "Feb 2019",
       description:
-        "Proposed and implemented an internal ruby API for sending/receiving commands to scooters over LTE networks. Developed a fully automated bike firmware update system to handle asynchronous firmware updates of over 100,000+ scooters worldwide, and provide progress reports in real-time using React, Ruby on Rails, PostgreSQL and AWS EC2 saving hundreds of developer hours.",
-    },
-    {
-      company: "Mitre Media",
-      href: "https://mitremedia.com/",
-      badges: [],
-      location: "Toronto, ON",
-      title: "Software Engineer",
-      logoUrl: "/mitremedia.png",
-      start: "May 2017",
-      end: "August 2017",
-      description:
-        "Designed and implemented a robust password encryption and browser cookie storage system in Ruby on Rails. Leveraged the Yahoo finance API to develop the dividend.com equity screener",
+        "Built industrial-scale WordPress and HTML sites for a US digital agency. Delivered site builds, analytics setups, landing pages and graphic assets, including tracking (GA, GSC, GTM, pixels) and recommendations based on website analysis.",
     },
   ],
+
   education: [
     {
-      school: "Buildspace",
-      href: "https://buildspace.so",
-      degree: "s3, s4, sf1, s5",
-      logoUrl: "/buildspace.jpg",
-      start: "2023",
-      end: "2024",
-    },
-    {
-      school: "University of Waterloo",
-      href: "https://uwaterloo.ca",
-      degree: "Bachelor's Degree of Computer Science (BCS)",
-      logoUrl: "/waterloo.png",
-      start: "2016",
-      end: "2021",
-    },
-    {
-      school: "Wilfrid Laurier University",
-      href: "https://wlu.ca",
-      degree: "Bachelor's Degree of Business Administration (BBA)",
-      logoUrl: "/laurier.png",
-      start: "2016",
-      end: "2021",
-    },
-    {
-      school: "International Baccalaureate",
-      href: "https://ibo.org",
-      degree: "IB Diploma",
-      logoUrl: "/ib.png",
+      school: "Forman Christian College (A Chartered University)",
+      href: "https://www.fccollege.edu.pk",
+      degree: "BCS – Computer Science (Software Engineering & IT)",
+      logoUrl: "/logos/fcc.png",
       start: "2012",
       end: "2016",
     },
   ],
+
   projects: [
     {
-      title: "Chat Collect",
-      href: "https://chatcollect.com",
-      dates: "Jan 2024 - Feb 2024",
+      title:
+        "Health Workforce Canada – Digital Front Door, Dashboards & Modelling",
+      href: "https://healthworkforce.ca/digital-front-door/",
+      dates: "2024 – 2025",
       active: true,
       description:
-        "With the release of the [OpenAI GPT Store](https://openai.com/blog/introducing-the-gpt-store), I decided to build a SaaS which allows users to collect email addresses from their GPT users. This is a great way to build an audience and monetize your GPT API usage.",
+        "End-to-end web experience for Health Workforce Canada’s digital front door and data tools. Built the Digital Front Door (AI-powered intelligent search), the Dashboards landing and use-case flows, and the Modelling & Forecasting microsite. Implemented AWS Kendra + Lambda in WordPress, designed Gutenberg block-based layouts, and wired in analytics, feedback and tutorials so non-technical teams can actually find, understand and use workforce data.",
       technologies: [
-        "Next.js",
-        "Typescript",
-        "PostgreSQL",
-        "Prisma",
-        "TailwindCSS",
-        "Stripe",
-        "Shadcn UI",
-        "Magic UI",
+        "WordPress",
+        "Custom Gutenberg blocks",
+        "PHP",
+        "AWS Kendra",
+        "AWS Lambda",
+        "Tailwind CSS",
+        "GA4",
+        "GSC",
       ],
       links: [
         {
-          type: "Website",
-          href: "https://chatcollect.com",
+          type: "Digital Front Door",
+          href: "https://healthworkforce.ca/digital-front-door/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Dashboards",
+          href: "https://healthworkforce.ca/dashboards/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Modelling & Forecasting",
+          href: "https://healthworkforce.ca/modelling-and-forecasting/",
           icon: <Icons.globe className="size-3" />,
         },
       ],
       image: "",
-      video:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/chat-collect.mp4",
+      video: "",
     },
     {
-      title: "Magic UI",
-      href: "https://magicui.design",
-      dates: "June 2023 - Present",
+      title: "Health Workforce Canada – Resource Library & Content Patterns",
+      href: "https://healthworkforce.ca",
+      dates: "2024 – 2025",
       active: true,
       description:
-        "Designed, developed and sold animated UI components for developers.",
+        "Designed and implemented Gutenberg-based content patterns for resource hubs, FAQs, explainers and tutorials. Focused on accessible typography, consistent layouts and reusable blocks so policy, research and comms teams can publish complex workforce content without needing a developer every time.",
       technologies: [
-        "Next.js",
-        "Typescript",
-        "PostgreSQL",
-        "Prisma",
-        "TailwindCSS",
-        "Stripe",
-        "Shadcn UI",
-        "Magic UI",
+        "WordPress",
+        "Custom Gutenberg blocks",
+        "block.json",
+        "SCSS",
+        "Accessibility",
       ],
       links: [
         {
           type: "Website",
-          href: "https://magicui.design",
+          href: "https://healthworkforce.ca",
           icon: <Icons.globe className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/magicuidesign/magicui",
-          icon: <Icons.github className="size-3" />,
         },
       ],
       image: "",
-      video: "https://cdn.magicui.design/bento-grid.mp4",
+      video: "",
     },
     {
-      title: "llm.report",
-      href: "https://llm.report",
-      dates: "April 2023 - September 2023",
-      active: true,
+      title: "Plurilock Security – Marketing Site & Dashboards",
+      href: "https://plurilock.com",
+      dates: "2022",
+      active: false,
       description:
-        "Developed an open-source logging and analytics platform for OpenAI: Log your ChatGPT API requests, analyze costs, and improve your prompts.",
-      technologies: [
-        "Next.js",
-        "Typescript",
-        "PostgreSQL",
-        "Prisma",
-        "TailwindCSS",
-        "Shadcn UI",
-        "Magic UI",
-        "Stripe",
-        "Cloudflare Workers",
-      ],
+        "Maintained and extended Plurilock’s WordPress marketing site and related dashboard/reporting views. Delivered new templates and landing pages for product and investor content, refactored legacy CSS/JS, improved performance and stability, and supported marketing campaigns without breaking core conversion funnels.",
+      technologies: ["WordPress", "PHP", "JavaScript", "CSS", "WP Engine"],
       links: [
         {
           type: "Website",
-          href: "https://llm.report",
+          href: "https://plurilock.com",
           icon: <Icons.globe className="size-3" />,
-        },
-        {
-          type: "Source",
-          href: "https://github.com/dillionverma/llm.report",
-          icon: <Icons.github className="size-3" />,
         },
       ],
       image: "",
-      video: "https://cdn.llm.report/openai-demo.mp4",
+      video: "",
     },
     {
-      title: "Automatic Chat",
-      href: "https://automatic.chat",
-      dates: "April 2023 - March 2024",
+      title: "Aurora IT – Security Services Web Platform",
+      href: "#",
+      dates: "2023 – 2024",
       active: true,
       description:
-        "Developed an AI Customer Support Chatbot which automatically responds to customer support tickets using the latest GPT models.",
+        "Web experience for a security and IT services provider, focused on clearly explaining complex offerings to non-technical buyers. Defined page structure, service landing templates and a reusable component system so new pages can be shipped quickly while staying on-brand and performance-friendly.",
       technologies: [
+        "WordPress",
         "Next.js",
-        "Typescript",
-        "PostgreSQL",
-        "Prisma",
-        "TailwindCSS",
-        "Shadcn UI",
-        "Magic UI",
-        "Stripe",
-        "Cloudflare Workers",
+        "Tailwind CSS",
+        "SEO",
+        "GA4",
+        "GTM",
       ],
+      links: [],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Stratomer IT – Core Site & SEO Foundation",
+      href: "https://stratomerit.com",
+      dates: "2023 – 2025",
+      active: true,
+      description:
+        "Planned and executed the main Stratomer IT website for cloud, networking and security services. Structured information architecture, implemented SEO-first templates, integrated GA4, GSC and Tag Manager, and optimized performance so paid and organic traffic both land on fast, clear pages.",
+      technologies: ["WordPress", "Elementor", "SEO", "GA4", "GSC", "GTM"],
       links: [
         {
           type: "Website",
-          href: "https://automatic.chat",
+          href: "https://stratomerit.com",
           icon: <Icons.globe className="size-3" />,
         },
       ],
       image: "",
-      video:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/automatic-chat.mp4",
+      video: "",
+    },
+    {
+      title: "Stratomer IT – Lead Gen Landing Page System",
+      href: "#",
+      dates: "2023 – 2024",
+      active: true,
+      description:
+        "A system of reusable landing page templates for campaigns around security assessments, cloud migrations and managed services. Built with modular sections, integrated forms and tracking pixels so marketing can spin up, clone and A/B test pages without developer involvement.",
+      technologies: ["WordPress", "Landing pages", "SEO", "GA4", "GTM"],
+      links: [],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Multi-Clinic Healthcare Websites",
+      href: "#",
+      dates: "2021 – 2024",
+      active: true,
+      description:
+        "Designed and developed WordPress sites for medical clinics and healthcare groups, focusing on accessibility, clear appointment flows and mobile performance. Implemented booking/forms integrations, location-based pages and SEO foundations so clinics show up where patients actually search.",
+      technologies: [
+        "WordPress",
+        "Gutenberg / Elementor",
+        "Forms",
+        "SEO",
+        "Performance",
+      ],
+      links: [],
+      image: "",
+      video: "",
+    },
+    {
+      title: "WordPress Editor Toolkit – Blocks, Tours & Health Checks",
+      href: "#",
+      dates: "2022 – 2025",
+      active: true,
+      description:
+        "Internal toolkit used across sites: guided tours for complex dashboards and flows, reusable Gutenberg patterns for FAQs and explainers, and quick health checks for analytics and forms. Built to reduce handholding and support tickets by giving editors obvious, repeatable ways to publish and understand changes.",
+      technologies: [
+        "WordPress",
+        "Custom Gutenberg blocks",
+        "PHP",
+        "JavaScript",
+        "SCSS",
+      ],
+      links: [],
+      image: "",
+      video: "",
+    },
+    {
+      title: "SMTP & DNS Health Monitor",
+      href: "#",
+      dates: "2023 – 2024",
+      active: true,
+      description:
+        "Lightweight WordPress utility that surfaces SMTP and DNS status inside the admin: test emails, SPF/DKIM/DMARC checks and simple traffic-light indicators for common misconfigurations. Used when bringing new domains online or debugging why contact forms and notifications are not reaching inboxes.",
+      technologies: ["WordPress", "PHP", "DNS", "SMTP"],
+      links: [],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Analytics Snapshot Dashboard Widget",
+      href: "#",
+      dates: "2023 – 2025",
+      active: true,
+      description:
+        "Custom dashboard widget that pulls high-level metrics from GA4 and Search Console into WordPress. Shows traffic trends, top content and key search queries so content, comms and leadership can see what’s working without logging into full analytics tools.",
+      technologies: [
+        "WordPress",
+        "PHP",
+        "GA4",
+        "Google Search Console",
+        "REST APIs",
+      ],
+      links: [],
+      image: "",
+      video: "",
     },
   ],
-  hackathons: [
-    {
-      title: "Hack Western 5",
-      dates: "November 23rd - 25th, 2018",
-      location: "London, Ontario",
-      description:
-        "Developed a mobile application which delivered bedtime stories to children using augmented reality.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/hack-western.png",
-      mlh: "https://s3.amazonaws.com/logged-assets/trust-badge/2019/mlh-trust-badge-2019-white.svg",
-      links: [],
-    },
-    {
-      title: "Hack The North",
-      dates: "September 14th - 16th, 2018",
-      location: "Waterloo, Ontario",
-      description:
-        "Developed a mobile application which delivers university campus wide events in real time to all students.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/hack-the-north.png",
-      mlh: "https://s3.amazonaws.com/logged-assets/trust-badge/2019/mlh-trust-badge-2019-white.svg",
-      links: [],
-    },
-    {
-      title: "FirstNet Public Safety Hackathon",
-      dates: "March 23rd - 24th, 2018",
-      location: "San Francisco, California",
-      description:
-        "Developed a mobile application which communcicates a victims medical data from inside an ambulance to doctors at hospital.",
-      icon: "public",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/firstnet.png",
-      links: [],
-    },
-    {
-      title: "DeveloperWeek Hackathon",
-      dates: "February 3rd - 4th, 2018",
-      location: "San Francisco, California",
-      description:
-        "Developed a web application which aggregates social media data regarding cryptocurrencies and predicts future prices.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/developer-week.jpg",
-      links: [
-        {
-          title: "Github",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/cryptotrends/cryptotrends",
-        },
-      ],
-    },
-    {
-      title: "HackDavis",
-      dates: "January 20th - 21st, 2018",
-      location: "Davis, California",
-      description:
-        "Developed a mobile application which allocates a daily carbon emission allowance to users to move towards a sustainable environment.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/hack-davis.png",
-      win: "Best Data Hack",
-      mlh: "https://s3.amazonaws.com/logged-assets/trust-badge/2018/white.svg",
-      links: [
-        {
-          title: "Devpost",
-          icon: <Icons.globe className="h-4 w-4" />,
-          href: "https://devpost.com/software/my6footprint",
-        },
-        {
-          title: "ML",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/Wallet6/my6footprint-machine-learning",
-        },
-        {
-          title: "iOS",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/Wallet6/CarbonWallet",
-        },
-        {
-          title: "Server",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/Wallet6/wallet6-server",
-        },
-      ],
-    },
-    {
-      title: "ETH Waterloo",
-      dates: "October 13th - 15th, 2017",
-      location: "Waterloo, Ontario",
-      description:
-        "Developed a blockchain application for doctors and pharmacists to perform trustless transactions and prevent overdosage in patients.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/eth-waterloo.png",
-      links: [
-        {
-          title: "Organization",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/ethdocnet",
-        },
-      ],
-    },
-    {
-      title: "Hack The North",
-      dates: "September 15th - 17th, 2017",
-      location: "Waterloo, Ontario",
-      description:
-        "Developed a virtual reality application allowing users to see themselves in third person.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/hack-the-north.png",
-      mlh: "https://s3.amazonaws.com/logged-assets/trust-badge/2017/white.svg",
-      links: [
-        {
-          title: "Streamer Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/justinmichaud/htn2017",
-        },
-        {
-          title: "Client Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/RTSPClient",
-        },
-      ],
-    },
-    {
-      title: "Hack The 6ix",
-      dates: "August 26th - 27th, 2017",
-      location: "Toronto, Ontario",
-      description:
-        "Developed an open platform for people shipping items to same place to combine shipping costs and save money.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/hack-the-6ix.jpg",
-      mlh: "https://s3.amazonaws.com/logged-assets/trust-badge/2017/white.svg",
-      links: [
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/ShareShip/ShareShip",
-        },
-        {
-          title: "Site",
-          icon: <Icons.globe className="h-4 w-4" />,
-          href: "https://share-ship.herokuapp.com/",
-        },
-      ],
-    },
-    {
-      title: "Stupid Hack Toronto",
-      dates: "July 23rd, 2017",
-      location: "Toronto, Ontario",
-      description:
-        "Developed a chrome extension which tracks which facebook profiles you have visited and immediately texts your girlfriend if you visited another girls page.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/stupid-hackathon.png",
-      links: [
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/nsagirlfriend/nsagirlfriend",
-        },
-      ],
-    },
-    {
-      title: "Global AI Hackathon - Toronto",
-      dates: "June 23rd - 25th, 2017",
-      location: "Toronto, Ontario",
-      description:
-        "Developed a python library which can be imported to any python game and change difficulty of the game based on real time emotion of player. Uses OpenCV and webcam for facial recognition, and a custom Machine Learning Model trained on a [Kaggle Emotion Dataset](https://www.kaggle.com/c/challenges-in-representation-learning-facial-expression-recognition-challenge/leaderboard) using [Tensorflow](https://www.tensorflow.org/Tensorflow) and [Keras](https://keras.io/). This project recieved 1st place prize at the Global AI Hackathon - Toronto and was also invited to demo at [NextAI Canada](https://www.nextcanada.com/next-ai).",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/global-ai-hackathon.jpg",
-      win: "1st Place Winner",
-      links: [
-        {
-          title: "Article",
-          icon: <Icons.globe className="h-4 w-4" />,
-          href: "https://syncedreview.com/2017/06/26/global-ai-hackathon-in-toronto/",
-        },
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/TinySamosas/",
-        },
-      ],
-    },
-    {
-      title: "McGill AI for Social Innovation Hackathon",
-      dates: "June 17th - 18th, 2017",
-      location: "Montreal, Quebec",
-      description:
-        "Developed realtime facial microexpression analyzer using AI",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/ai-for-social-good.jpg",
-      links: [],
-    },
-    {
-      title: "Open Source Circular Economy Days Hackathon",
-      dates: "June 10th, 2017",
-      location: "Toronto, Ontario",
-      description:
-        "Developed a custom admin interface for food waste startup <a href='http://genecis.co/'>Genecis</a> to manage their data and provide analytics.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/open-source-circular-economy-days.jpg",
-      win: "1st Place Winner",
-      links: [
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/genecis",
-        },
-      ],
-    },
-    {
-      title: "Make School's Student App Competition 2017",
-      dates: "May 19th - 21st, 2017",
-      location: "International",
-      description: "Improved PocketDoc and submitted to online competition",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/make-school-hackathon.png",
-      win: "Top 10 Finalist | Honourable Mention",
-      links: [
-        {
-          title: "Medium Article",
-          icon: <Icons.globe className="h-4 w-4" />,
-          href: "https://medium.com/make-school/the-winners-of-make-schools-student-app-competition-2017-a6b0e72f190a",
-        },
-        {
-          title: "Devpost",
-          icon: <Icons.globe className="h-4 w-4" />,
-          href: "https://devpost.com/software/pocketdoc-react-native",
-        },
-        {
-          title: "YouTube",
-          icon: <Icons.youtube className="h-4 w-4" />,
-          href: "https://www.youtube.com/watch?v=XwFdn5Rmx68",
-        },
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/pocketdoc-react-native",
-        },
-      ],
-    },
-    {
-      title: "HackMining",
-      dates: "May 12th - 14th, 2017",
-      location: "Toronto, Ontario",
-      description: "Developed neural network to optimize a mining process",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/hack-mining.png",
-      links: [],
-    },
-    {
-      title: "Waterloo Equithon",
-      dates: "May 5th - 7th, 2017",
-      location: "Waterloo, Ontario",
-      description:
-        "Developed Pocketdoc, an app in which you take a picture of a physical wound, and the app returns common solutions or cures to the injuries or diseases.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/waterloo-equithon.png",
-      links: [
-        {
-          title: "Devpost",
-          icon: <Icons.globe className="h-4 w-4" />,
-          href: "https://devpost.com/software/pocketdoc-react-native",
-        },
-        {
-          title: "YouTube",
-          icon: <Icons.youtube className="h-4 w-4" />,
-          href: "https://www.youtube.com/watch?v=XwFdn5Rmx68",
-        },
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/pocketdoc-react-native",
-        },
-      ],
-    },
-    {
-      title: "SpaceApps Waterloo",
-      dates: "April 28th - 30th, 2017",
-      location: "Waterloo, Ontario",
-      description:
-        "Developed Earthwatch, a web application which allows users in a plane to virtually see important points of interest about the world below them. They can even choose to fly away from their route and then fly back if they choose. Special thanks to CesiumJS for providing open source world and plane models.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/space-apps.png",
-      links: [
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/earthwatch",
-        },
-      ],
-    },
-    {
-      title: "MHacks 9",
-      dates: "March 24th - 26th, 2017",
-      location: "Ann Arbor, Michigan",
-      description:
-        "Developed Super Graphic Air Traffic, a VR website made to introduce people to the world of air traffic controlling. This project was built completely using THREE.js as well as a node backend server.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/mhacks-9.png",
-      mlh: "https://s3.amazonaws.com/logged-assets/trust-badge/2017/white.svg",
-      links: [
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/threejs-planes",
-        },
-      ],
-    },
-    {
-      title: "StartHacks I",
-      dates: "March 4th - 5th, 2017",
-      location: "Waterloo, Ontario",
-      description:
-        "Developed at StartHacks 2017, Recipic is a mobile app which allows you to take pictures of ingredients around your house, and it will recognize those ingredients using ClarifAI image recognition API and return possible recipes to make. Recipic recieved 1st place at the hackathon for best pitch and hack.",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/starthacks.png",
-      win: "1st Place Winner",
-      mlh: "https://s3.amazonaws.com/logged-assets/trust-badge/2017/white.svg",
-      links: [
-        {
-          title: "Source (Mobile)",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/mattBlackDesign/recipic-ionic",
-        },
-        {
-          title: "Source (Server)",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/mattBlackDesign/recipic-rails",
-        },
-      ],
-    },
-    {
-      title: "QHacks II",
-      dates: "February 3rd - 5th, 2017",
-      location: "Kingston, Ontario",
-      description:
-        "Developed a mobile game which enables city-wide manhunt with random lobbies",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/qhacks.png",
-      mlh: "https://s3.amazonaws.com/logged-assets/trust-badge/2017/white.svg",
-      links: [
-        {
-          title: "Source (Mobile)",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/dillionverma/human-huntr-react-native",
-        },
-        {
-          title: "Source (API)",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/mattBlackDesign/human-huntr-rails",
-        },
-      ],
-    },
-    {
-      title: "Terrible Hacks V",
-      dates: "November 26th, 2016",
-      location: "Waterloo, Ontario",
-      description:
-        "Developed a mock of Windows 11 with interesting notifications and functionality",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/terrible-hacks-v.png",
-      links: [
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/justinmichaud/TerribleHacks2016-Windows11",
-        },
-      ],
-    },
-    {
-      title: "Portal Hackathon",
-      dates: "October 29, 2016",
-      location: "Kingston, Ontario",
-      description:
-        "Developed an internal widget for uploading assignments using Waterloo's portal app",
-      image:
-        "https://pub-83c5db439b40468498f97946200806f7.r2.dev/hackline/portal-hackathon.png",
-      links: [
-        {
-          title: "Source",
-          icon: <Icons.github className="h-4 w-4" />,
-          href: "https://github.com/UWPortalSDK/crowmark",
-        },
-      ],
-    },
-  ],
+
+
+  hackathons: [],
 } as const;
