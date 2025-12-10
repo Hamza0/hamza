@@ -16,7 +16,7 @@ interface BlurFadeProps {
   delay?: number;
   yOffset?: number;
   inView?: boolean;
-  inViewMargin?: string; // keep as string
+  inViewMargin?: string; // string is fine here
   blur?: string;
 }
 
@@ -35,8 +35,7 @@ const BlurFade = ({
 
   const inViewResult = useInView(ref, {
     once: true,
-    // framer-motion's types expect an internal MarginType
-    // which isn't exported, so we cast here to avoid TS complaining.
+    // important: cast to any so TS stops complaining about MarginType
     margin: inViewMargin as any,
   });
 
