@@ -16,7 +16,7 @@ interface BlurFadeProps {
   delay?: number;
   yOffset?: number;
   inView?: boolean;
-  inViewMargin?: string; // string is fine here
+  inViewMargin?: string;
   blur?: string;
 }
 
@@ -35,8 +35,7 @@ const BlurFade = ({
 
   const inViewResult = useInView(ref, {
     once: true,
-    // important: cast to any so TS stops complaining about MarginType
-    margin: inViewMargin as any,
+    margin: inViewMargin as any, // <-- THIS "as any" MUST BE HERE
   });
 
   const isInView = !inView || inViewResult;
