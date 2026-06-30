@@ -25,8 +25,13 @@ export default function Page() {
                 text={`Hi, I'm ${DATA.name.split(" ")[2]} 👋`}
               />
               <BlurFadeText
-                className="max-w-[600px] md:text-xl"
-                delay={BLUR_FADE_DELAY}
+                className="max-w-[600px] text-lg font-medium md:text-xl"
+                delay={BLUR_FADE_DELAY * 2}
+                text={DATA.headline}
+              />
+              <BlurFadeText
+                className="max-w-[600px] md:text-xl text-muted-foreground"
+                delay={BLUR_FADE_DELAY * 3}
                 text={DATA.description}
               />
             </div>
@@ -125,12 +130,12 @@ export default function Page() {
                   My Projects
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                  Check out my latest work
+                  Selected Work
                 </h2>
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  I&apos;ve worked on a variety of projects, from simple
-                  websites to complex web applications. Here are a few of my
-                  favorites.
+                  A selection of websites, landing pages, content systems,
+                  marketing pages, and digital tools I have designed, built,
+                  supported, or improved.
                 </p>
               </div>
             </div>

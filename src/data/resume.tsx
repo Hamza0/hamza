@@ -7,54 +7,58 @@ export const DATA = {
   url: "https://hamzashakeel.com",
   location: "Mississauga, Ontario, Canada",
   locationLink: "https://www.google.com/maps/place/Mississauga,+ON",
+  headline:
+    "Digital Designer & Web Specialist building accessible websites and marketing experiences.",
   description:
-  "WordPress & web developer building fast, reliable sites for healthcare, security and data-driven teams.",
+    "I create responsive websites, landing pages, content systems, and digital experiences with a focus on clean layout, accessibility, performance, and practical implementation.",
 
   summary:
   "7+ years of experience building fast, accessible, SEO-driven sites for healthcare, security, and data-driven teams. Recent work includes data dashboards and a digital front door for Health Workforce Canada, a marketing and custom WordPress site for Plurilock Security, and web experiences ranging from lean landing pages to large-scale content sites. I like building sharp, practical things—custom Gutenberg blocks, lightweight internal plugins, and integrations that help non-technical teams move faster instead of fighting their tools.",
   avatarUrl: "/me.jpeg", // put your headshot at /public/me.jpeg
 
   skills: [
-    // WordPress-heavy stuff first
+    "Digital Design",
+    "Layout & Typography",
+    "Accessibility / WCAG / AODA",
+    "Adobe Creative Suite",
+    "Canva",
+    "Landing Pages",
+    "Campaign Assets",
     "WordPress (Gutenberg / Elementor)",
     "Custom WordPress themes",
     "Custom WordPress plugins",
-    "WooCommerce",
-    "Advanced Custom Fields (ACF)",
-    "Headless WordPress (REST API)",
     "WordPress performance optimization (caching / images / CDNs)",
-    "WordPress security & hardening",
     "WordPress migrations & maintenance",
-    "Multisite & multi-language (WPML / Polylang)",
-
-    // Frontend / JS stack
-    "Next.js",
-    "React",
-    "TypeScript",
-    "Node.js",
-    "Tailwind CSS",
-    "Drupal",
     "Shopify",
-    "Webflow",
-
-    // Infra / data / tooling
-    "AWS (Kendra, Lambda, S3, CloudFront)",
+    "Salesforce",
     "Google Analytics 4",
     "Google Tag Manager",
     "Google Search Console",
     "SEO",
+    "HTML/CSS",
+    "React",
+    "Next.js",
+    "PHP",
+    "REST APIs",
+    "TypeScript",
+    "Node.js",
+    "Tailwind CSS",
+    "WooCommerce",
+    "Advanced Custom Fields (ACF)",
+    "Headless WordPress (REST API)",
+    "WordPress security & hardening",
+    "Multisite & multi-language (WPML / Polylang)",
+    "Drupal",
+    "Webflow",
+    "AWS (Kendra, Lambda, S3, CloudFront)",
     "Mailchimp / Drip",
     "n8n",
     "DNS / SMTP / SPF / DKIM / DMARC",
-
-    // Design / content
-    "Adobe Creative Suite",
-    "Canva",
   ],
 
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
-    { href: "/blog", icon: NotebookIcon, label: "Blog" },
+    { href: "/blog", icon: NotebookIcon, label: "Notes" },
   ],
   contact: {
     email: "mianmuhammadhamza@gmail.com",
@@ -101,6 +105,18 @@ export const DATA = {
 
   // Put logo files in /public/logos with these filenames
   work: [
+    {
+      company: "Sparked Digital",
+      href: "https://sparkeddigital.ca/",
+      badges: ["Agency", "Contract"],
+      location: "Remote",
+      title: "Full Stack Engineer, Contract",
+      logoUrl: "/logos/Sparked-Logo.webp",
+      start: "Apr 2026",
+      end: "Present",
+      description:
+        "Contract Full Stack Engineer at Sparked Digital, an agency environment supporting client websites, WordPress development, migrations, production troubleshooting, hosting/server coordination, performance improvements, plugin and theme work, and ongoing technical delivery across client projects.",
+    },
     {
       company: "Health Workforce Canada",
       href: "https://healthworkforce.ca",
@@ -214,6 +230,30 @@ export const DATA = {
       video: "",
     },
     {
+      title: "Health Workforce Canada - The Pulse",
+      href: "https://healthworkforce.ca/the-pulse/",
+      dates: "2024 – 2025",
+      active: true,
+      description:
+        "Public-facing newsletter and content experience for Health Workforce Canada, supporting structured article presentation, newsletter archive access, accessible page layouts, and sign-up flow support.",
+      technologies: [
+        "Newsletter",
+        "Content System",
+        "Accessibility",
+        "WordPress",
+        "Digital Communications",
+      ],
+      links: [
+        {
+          type: "View Work Sample",
+          href: "https://healthworkforce.ca/the-pulse/",
+          icon: <Icons.globe className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+    {
       title: "Health Workforce Canada – Resource Library & Content Patterns",
       href: "https://healthworkforce.ca",
       dates: "2024 – 2025",
@@ -257,7 +297,7 @@ export const DATA = {
     },
     {
       title: "Aurora IT – Security Services Web Platform",
-      href: "#",
+      href: "https://www.aurorait.com/",
       dates: "2023 – 2024",
       active: true,
       description:
@@ -270,7 +310,13 @@ export const DATA = {
         "GA4",
         "GTM",
       ],
-      links: [],
+      links: [
+        {
+          type: "Visit Website",
+          href: "https://www.aurorait.com/",
+          icon: <Icons.globe className="size-3" />,
+        },
+      ],
       image: "",
       video: "",
     },
