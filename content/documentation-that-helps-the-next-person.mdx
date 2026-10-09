@@ -1,0 +1,23 @@
+---
+title: "Documentation That Helps the Next Person"
+publishedAt: "2026-10-09"
+summary: "Useful technical documentation explains dependencies, decisions and recovery steps close to the work they support."
+---
+
+The documentation I value most answers a question someone is likely to have while working on the system. It explains where something lives, what depends on it or why a decision was made. It does not need to be long to be useful.
+
+In web and systems work, the visible application is only part of the picture. A website may depend on hosting configuration, a database, an API, analytics settings and a CRM workflow. Knowing the codebase is helpful, but it may not tell the next person where a submission goes or which configuration controls a production feature.
+
+I prefer to document those boundaries explicitly. What triggers the workflow? Which service receives the information? What does a successful result look like? Where can someone find a relevant log or check the connection? A short description of that path can save a lot of searching.
+
+Decisions need context as well. If a field accepts a particular format because another system requires it, that is worth recording. Otherwise, a reasonable-looking cleanup can accidentally break the integration. Documenting the reason helps someone judge whether the constraint still applies.
+
+Operational instructions should be specific enough to follow without relying on someone's memory. A release note can identify the affected services, the order of changes and the checks that confirm the release worked. Recovery guidance should explain what can be reverted and what needs separate attention, especially when data has changed.
+
+Credentials belong in an appropriate secret store, not in documentation. The useful detail is where an authorised team member obtains access and which configuration is required. The same care applies to logs and examples: they should explain the system without copying unnecessary personal or sensitive information into a document.
+
+Documentation also needs a sensible location. Setup instructions usually belong near the repository. Content editing guidance belongs where editors can find it. A scattered collection of documents can be as difficult to use as no documentation at all.
+
+I try to update the relevant instructions alongside the change that makes them outdated. That is easier than reconstructing the details later, and it gives the reviewer a chance to check whether the implementation and the explanation agree.
+
+The test is practical: could another person understand the dependency, make a routine update or investigate a problem using what is written? If they still need an unwritten explanation for every step, the document has not yet done its job.

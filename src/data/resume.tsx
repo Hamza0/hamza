@@ -11,15 +11,13 @@ export const DATA = {
     "Full-Stack Engineer building data-driven systems and digital platforms.",
   description:
     "I work across web applications, analytics and forecasting, CRM integrations, databases, cloud infrastructure, and production delivery.",
-  strengthsIntro:
-    "Full-stack engineering and practical delivery, grounded in web development, data, accessibility, and digital design.",
   projectsTitle: "Selected Work",
   projectsIntro:
     "A selection of websites, applications, dashboards, data tools, content systems, and digital platforms I have built, supported, or improved.",
 
   summary:
     "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I focus on building reliable systems that are clear for users, maintainable for teams and dependable in production.",
-  avatarUrl: "/hamza-profile.png",
+  avatarUrl: "/hamza-portrait.png",
 
   skills: [
     "Full-Stack Development",
@@ -52,39 +50,6 @@ export const DATA = {
     "Email / Template Support",
     "Shopify",
     "Google Tag Manager",
-  ],
-
-  strengths: [
-    {
-      title: "Full-Stack Development",
-      description:
-        "Web applications and digital platforms across React, Next.js, WordPress, APIs and databases.",
-    },
-    {
-      title: "Data & Reporting",
-      description:
-        "Dashboards, workforce data experiences, reporting, forecasting tools and data-quality workflows.",
-    },
-    {
-      title: "Systems Integration",
-      description:
-        "APIs, CRM workflows, Salesforce, HubSpot, forms, search and connected digital services.",
-    },
-    {
-      title: "Production Support",
-      description:
-        "Debugging across application code, hosting, cloud services, databases and production configuration.",
-    },
-    {
-      title: "Accessibility",
-      description:
-        "Semantic interfaces, keyboard support, contrast, responsive behaviour and WCAG/AODA-aware delivery.",
-    },
-    {
-      title: "Technical Delivery",
-      description:
-        "Turning business requirements into maintainable systems, documentation, testing and reliable releases.",
-    },
   ],
 
   navbar: [

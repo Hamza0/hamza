@@ -31,13 +31,13 @@ export function HeroLanyard() {
 
   return (
     <div className="col-start-2 row-start-1 w-[88px] self-center sm:w-auto sm:shrink-0 sm:self-start">
-      <link rel="preload" as="image" href="/hamza-profile.png" media="(min-width: 640px)" />
+      <link rel="preload" as="image" href="/hamza-portrait.png" media="(min-width: 640px)" />
       <BlurFade
         initial="hidden" respectReducedMotion duration={0.4} delay={0.06}
         variant={AVATAR_VARIANT}
         className="sm:hidden motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!filter-none"
       >
-        <Image src="/hamza-profile.png" alt="Hamza Shakeel" width={88} height={88}
+        <Image src="/hamza-portrait.png" alt="Hamza Shakeel" width={88} height={88}
           priority sizes="88px" className="size-[88px] rounded-full object-cover" />
       </BlurFade>
       <div ref={anchorRef} className="hero-lanyard" data-ready={String(ready)}>
@@ -45,7 +45,7 @@ export function HeroLanyard() {
           <span className="lanyard-fallback-strap" aria-hidden="true" />
           {/* Keep the original portrait and badge footprint visible until WebGL is ready. */}
           <picture>
-            <source media="(min-width: 640px)" srcSet="/hamza-profile.png" />
+            <source media="(min-width: 640px)" srcSet="/hamza-portrait.png" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='900'/%3E" alt="Portrait of Hamza Shakeel" />
           </picture>
@@ -55,13 +55,14 @@ export function HeroLanyard() {
         <Lanyard
           anchorElement={anchorRef}
           onReady={() => setReady(true)}
-          frontImage="/hamza-profile.png"
+          frontImage="/hamza-portrait.png"
           orientation="portrait"
           finish="matte"
           cardColor="#faf9f6"
           strapColor="#18181b"
           metal="silver"
-          cornerRadius={0.2}
+          cornerRadius={0.4}
+          hangFromPageTop
           size={0.9}
           strapLength={0.05}
           strapWidth={0.55}

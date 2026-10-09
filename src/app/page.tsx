@@ -1,4 +1,3 @@
-import { PixelCard } from "@/components/ui/pixel-card";
 import BlurFade from "@/components/magicui/blur-fade";
 import { DiaTextReveal } from "@/components/ui/dia-text-reveal";
 import { ProjectCard } from "@/components/project-card";
@@ -70,37 +69,6 @@ export default function Page() {
             {DATA.summary}
           </Markdown>
         </BlurFade>
-      </section>
-
-      <section id="strengths">
-        <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
-            <h2 className="text-xl font-bold">
-              Engineering & Delivery Strengths
-            </h2>
-          </BlurFade>
-          <BlurFade delay={BLUR_FADE_DELAY * 4.6}>
-            <p className="text-sm text-muted-foreground text-pretty">
-              {DATA.strengthsIntro}
-            </p>
-          </BlurFade>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {DATA.strengths.map((strength, id) => (
-              <BlurFade
-                key={strength.title}
-                delay={BLUR_FADE_DELAY * 5 + id * 0.05}
-                className="h-full"
-              >
-                <PixelCard labelId={`strength-${id}`} gap={9} speed={16}>
-                  <h3 id={`strength-${id}`} className="text-sm font-semibold">{strength.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground text-pretty">
-                    {strength.description}
-                  </p>
-                </PixelCard>
-              </BlurFade>
-            ))}
-          </div>
-        </div>
       </section>
 
       <section id="work">

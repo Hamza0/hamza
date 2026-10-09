@@ -52,6 +52,7 @@ interface PathLike {
 
 export interface LanyardProps {
   anchorElement: RefObject<HTMLDivElement>;
+  hangFromPageTop?: boolean;
   onReady?: () => void;
   frontImage?: string;
   backImage?: string;
@@ -78,6 +79,7 @@ export interface LanyardProps {
 }
 
 interface Settings {
+  hangFromPageTop: boolean;
   frontImage?: string;
   backImage?: string;
   imageFit: ImageFit;
@@ -626,7 +628,7 @@ const drawFitted = (
   ctx.drawImage(image, (width - w) / 2, (height - h) / 2, w, h);
 };
 
-const paintFace = (canvas: HTMLCanvasElement, image: HTMLImageElement | null, color: Rgb, fit: ImageFit) => {
+const paintFace = (canvas: HTMLCanvasElement, image: HTMLImageElement | null, color: Rgb, fit: ImageFit, radius: number) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   ctx.fillStyle = toCss(color);
@@ -638,7 +640,7 @@ const paintFace = (canvas: HTMLCanvasElement, image: HTMLImageElement | null, co
     ctx.save();
     ctx.translate(margin, margin);
     ctx.beginPath();
-    ctx.rect(0, 0, width, height);
+    traceRoundedRect(ctx, 0, 0, width, height, Math.max(0, radius - margin));
     ctx.clip();
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
@@ -919,6 +921,7 @@ const stepSimulation = (sim: Simulation, dt: number, physics: Physics, time: num
 
 const Lanyard = ({
   anchorElement,
+  hangFromPageTop = false,
   onReady,
   frontImage,
   backImage,
@@ -954,6 +957,7 @@ const Lanyard = ({
   const applyRef = useRef<(() => void) | null>(null);
 
   settingsRef.current = {
+    hangFromPageTop,
     frontImage,
     backImage,
     imageFit: imageFit === 'contain' ? 'contain' : 'cover',
@@ -1131,8 +1135,9 @@ const Lanyard = ({
         backCanvas.width = width;
         backCanvas.height = height;
       }
-      paintFace(frontCanvas, images.front, color, s.imageFit);
-      paintFace(backCanvas, images.back, color, s.imageFit);
+      const radius = (layout.radius / layout.width) * width;
+      paintFace(frontCanvas, images.front, color, s.imageFit, radius);
+      paintFace(backCanvas, images.back, color, s.imageFit, radius);
       frontTexture.needsUpdate = true;
       backTexture.needsUpdate = true;
       start();
@@ -1165,7 +1170,9 @@ const Lanyard = ({
       foilUniforms.foilFill.value.set(3, -1, 4).normalize().transformDirection(camera.matrixWorldInverse);
       foilUniforms.foilTop.value.set(0.5, 4.5, 8).normalize().transformDirection(camera.matrixWorldInverse);
       const anchorX = (rect.left + rect.width / 2 - view.width / 2) / pixelsPerUnit;
-      const anchorY = (view.height / 2 - rect.top) / pixelsPerUnit;
+      // Extend the strap above the document without moving the resting badge.
+      const anchorTop = s.hangFromPageTop ? -12 - window.scrollY : rect.top;
+      const anchorY = (view.height / 2 - anchorTop) / pixelsPerUnit;
       const cardTop = (view.height / 2 - rect.top - rect.height * mix(0.12, 0.42, clamp(s.strapLength, 0, 1))) / pixelsPerUnit;
       const hangTop = cardTop + (layout.hangY - layout.height / 2);
       const delta = new THREE.Vector3(anchorX, anchorY, 0).sub(sim.anchor);
@@ -1203,7 +1210,7 @@ const Lanyard = ({
         applied.framingKey = '';
       }
       const rect = anchorNode.getBoundingClientRect();
-      const framingKey = `${layoutKey}|${s.size}|${s.strapLength}|${view.width}|${view.height}|${rect.left}|${rect.top}|${rect.width}|${rect.height}`;
+      const framingKey = `${layoutKey}|${s.size}|${s.strapLength}|${s.hangFromPageTop}|${view.width}|${view.height}|${rect.left}|${rect.top}|${rect.width}|${rect.height}`;
       if (framingKey !== applied.framingKey) {
         frameView();
         if (!placed) {
