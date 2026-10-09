@@ -19,7 +19,7 @@ export const DATA = {
 
   summary:
     "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I focus on building reliable systems that are clear for users, maintainable for teams and dependable in production.",
-  avatarUrl: "/me.jpeg", // put your headshot at /public/me.jpeg
+  avatarUrl: "/hamza-profile.png",
 
   skills: [
     "Full-Stack Development",

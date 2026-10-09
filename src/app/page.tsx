@@ -28,14 +28,16 @@ export default function Page() {
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <section id="hero">
         <div className="mx-auto w-full max-w-2xl space-y-8">
-          <div className="gap-2 flex flex-col sm:flex-row justify-between">
-            <div className="flex-col flex min-w-0 flex-1 space-y-1.5">
-              <BlurFade {...HERO_REVEAL_PROPS} delay={0.02}>
+          <div className="grid grid-cols-[minmax(0,1fr)_88px] items-center gap-x-3 gap-y-1.5 sm:flex sm:items-start sm:gap-2 sm:justify-between">
+            <div className="contents sm:flex sm:flex-col min-w-0 flex-1 sm:space-y-1.5">
+              <BlurFade {...HERO_REVEAL_PROPS} delay={0.02}
+                className={`${HERO_REVEAL_PROPS.className} col-start-1 row-start-1 min-w-0`}>
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                   Hi, I&apos;m Hamza 👋
                 </h1>
               </BlurFade>
-              <BlurFade {...HERO_REVEAL_PROPS} delay={0.03}>
+              <BlurFade {...HERO_REVEAL_PROPS} delay={0.03}
+                className={`${HERO_REVEAL_PROPS.className} col-span-2`}>
                 <p className="max-w-[600px] text-base font-medium sm:text-lg md:text-xl">
                   <DiaTextReveal
                     text={DATA.headline}
@@ -49,7 +51,8 @@ export default function Page() {
                   />
                 </p>
               </BlurFade>
-              <BlurFade {...HERO_REVEAL_PROPS} delay={0.06}>
+              <BlurFade {...HERO_REVEAL_PROPS} delay={0.06}
+                className={`${HERO_REVEAL_PROPS.className} col-span-2`}>
                 <p className="max-w-[600px] text-sm sm:text-base md:text-xl">{DATA.description}</p>
               </BlurFade>
             </div>

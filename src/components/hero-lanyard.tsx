@@ -30,7 +30,7 @@ export function HeroLanyard() {
   }, []);
 
   return (
-    <div className="shrink-0 self-center sm:self-start">
+    <div className="col-start-2 row-start-1 w-[88px] self-center sm:w-auto sm:shrink-0 sm:self-start">
       <link rel="preload" as="image" href="/images/hamza-id-front.svg" media="(min-width: 640px)" />
       <link rel="preload" as="image" href="/images/hamza-id-back.svg" media="(min-width: 640px)" />
       <BlurFade
@@ -38,8 +38,8 @@ export function HeroLanyard() {
         variant={AVATAR_VARIANT}
         className="sm:hidden motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!filter-none"
       >
-        <Image src="/me.jpeg" alt="Hamza Shakeel" width={104} height={104}
-          priority unoptimized className="size-[104px] rounded-full object-cover" />
+        <Image src="/hamza-profile.png" alt="Hamza Shakeel" width={88} height={88}
+          priority sizes="88px" className="size-[88px] rounded-full object-cover" />
       </BlurFade>
       <div ref={anchorRef} className="hero-lanyard" data-ready={String(ready)}>
         <div className="lanyard-fallback">
