@@ -1,4 +1,4 @@
-import { SystemsCapabilities } from "@/components/systems-capabilities";
+import { PixelCard } from "@/components/ui/pixel-card";
 import BlurFade from "@/components/magicui/blur-fade";
 import { DiaTextReveal } from "@/components/ui/dia-text-reveal";
 import { ProjectCard } from "@/components/project-card";
@@ -55,13 +55,6 @@ export default function Page() {
         </BlurFade>
       </section>
 
-      <section id="capabilities" aria-labelledby="capabilities-title">
-        <h2 id="capabilities-title" className="text-xl font-bold">
-          Systems & Delivery
-        </h2>
-        <SystemsCapabilities />
-      </section>
-
       <section id="strengths">
         <div className="flex min-h-0 flex-col gap-y-3">
           <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
@@ -79,13 +72,14 @@ export default function Page() {
               <BlurFade
                 key={strength.title}
                 delay={BLUR_FADE_DELAY * 5 + id * 0.05}
+                className="h-full"
               >
-                <div className="rounded-lg border bg-card p-4 h-full">
-                  <h3 className="text-sm font-semibold">{strength.title}</h3>
+                <PixelCard labelId={`strength-${id}`} gap={9} speed={16}>
+                  <h3 id={`strength-${id}`} className="text-sm font-semibold">{strength.title}</h3>
                   <p className="mt-2 text-sm text-muted-foreground text-pretty">
                     {strength.description}
                   </p>
-                </div>
+                </PixelCard>
               </BlurFade>
             ))}
           </div>
@@ -213,7 +207,7 @@ export default function Page() {
                 Want to chat? The best way to reach me is on{" "}
                 <Link
                   href={DATA.contact.social.LinkedIn.url}
-                  className="text-blue-500 hover:underline"
+                  className="text-blue-600 dark:text-blue-400 underline underline-offset-4"
                 >
                   LinkedIn
                 </Link>

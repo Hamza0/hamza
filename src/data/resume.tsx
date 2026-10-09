@@ -58,42 +58,32 @@ export const DATA = {
     {
       title: "Full-Stack Development",
       description:
-        "Websites and applications built with React, Next.js and WordPress, connecting interfaces with application logic, databases and APIs.",
+        "Web applications and digital platforms across React, Next.js, WordPress, APIs and databases.",
     },
     {
       title: "Data & Reporting",
       description:
-        "Dashboards, workforce data experiences and forecasting tools, with attention to data quality, useful context and clear reporting.",
+        "Dashboards, workforce data experiences, reporting, forecasting tools and data-quality workflows.",
     },
     {
       title: "Systems Integration",
       description:
-        "APIs, CRM-connected forms and workflows, Salesforce, HubSpot and search integrations that connect digital services.",
+        "APIs, CRM workflows, Salesforce, HubSpot, forms, search and connected digital services.",
     },
     {
       title: "Production Support",
       description:
-        "Practical troubleshooting across application code, hosting, cloud services and configuration, backed by testing and QA.",
+        "Debugging across application code, hosting, cloud services, databases and production configuration.",
     },
     {
       title: "Accessibility",
       description:
-        "Semantic structure, keyboard use, readable typography, color contrast and responsive layouts considered throughout the build.",
+        "Semantic interfaces, keyboard support, contrast, responsive behaviour and WCAG/AODA-aware delivery.",
     },
     {
       title: "Technical Delivery",
       description:
-        "Maintainable implementations, migrations and ongoing improvements, working with clients, developers and stakeholders through review and release.",
-    },
-    {
-      title: "Digital Design & Web Experiences",
-      description:
-        "Marketing websites, campaign landing pages and reusable layouts, with attention to brand consistency, spacing and usability.",
-    },
-    {
-      title: "Content & Marketing Systems",
-      description:
-        "Newsletter hubs, resource libraries, sign-up flows and structured content, supported by analytics, tracking and campaign workflows.",
+        "Turning business requirements into maintainable systems, documentation, testing and reliable releases.",
     },
   ],
 
