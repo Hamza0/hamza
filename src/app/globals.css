@@ -67,6 +67,9 @@
   }
 
   @layer base {
+    html {
+      scrollbar-gutter: stable;
+    }
     * {
       @apply border-border;
     }
@@ -318,7 +321,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   display: none;
   position: relative;
   width: 176px;
-  height: 250px;
+  height: 208px;
 }
 
 @media (min-width: 640px) {
@@ -367,10 +370,13 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   top: 13.5%;
   left: 50%;
   transform: translateX(-50%);
-  height: auto;
+  height: 86%;
   width: 72%;
+  object-fit: cover;
+  padding: 3px;
+  background: #faf9f6;
   border: 0;
-  border-radius: 0;
+  border-radius: 8px;
 }
 
 .lanyard-fallback-strap {

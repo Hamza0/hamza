@@ -31,8 +31,7 @@ export function HeroLanyard() {
 
   return (
     <div className="col-start-2 row-start-1 w-[88px] self-center sm:w-auto sm:shrink-0 sm:self-start">
-      <link rel="preload" as="image" href="/images/hamza-id-front.svg" media="(min-width: 640px)" />
-      <link rel="preload" as="image" href="/images/hamza-id-back.svg" media="(min-width: 640px)" />
+      <link rel="preload" as="image" href="/hamza-profile.png" media="(min-width: 640px)" />
       <BlurFade
         initial="hidden" respectReducedMotion duration={0.4} delay={0.06}
         variant={AVATAR_VARIANT}
@@ -44,11 +43,11 @@ export function HeroLanyard() {
       <div ref={anchorRef} className="hero-lanyard" data-ready={String(ready)}>
         <div className="lanyard-fallback">
           <span className="lanyard-fallback-strap" aria-hidden="true" />
-          {/* The same asset and footprint stay visible until WebGL is ready. */}
+          {/* Keep the original portrait and badge footprint visible until WebGL is ready. */}
           <picture>
-            <source media="(min-width: 640px)" srcSet="/images/hamza-id-front.svg" />
+            <source media="(min-width: 640px)" srcSet="/hamza-profile.png" />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='900'/%3E" alt="Hamza Shakeel, Full-Stack Engineer, Mississauga, Canada." />
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='900'/%3E" alt="Portrait of Hamza Shakeel" />
           </picture>
         </div>
       </div>
@@ -56,15 +55,14 @@ export function HeroLanyard() {
         <Lanyard
           anchorElement={anchorRef}
           onReady={() => setReady(true)}
-          frontImage="/images/hamza-id-front.svg"
-          backImage="/images/hamza-id-back.svg"
+          frontImage="/hamza-profile.png"
           orientation="portrait"
           finish="matte"
           cardColor="#faf9f6"
           strapColor="#18181b"
           metal="silver"
           cornerRadius={0.2}
-          size={0.76}
+          size={0.9}
           strapLength={0.05}
           strapWidth={0.55}
           breeze={0.2}
