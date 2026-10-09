@@ -1028,12 +1028,18 @@ const Lanyard = ({
     const frontMaterial = new THREE.MeshPhysicalMaterial({
       map: frontTexture,
       normalMap: grain,
-      normalScale: new THREE.Vector2(0.06, 0.06)
+      normalScale: new THREE.Vector2(0.06, 0.06),
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2
     });
     const backMaterial = new THREE.MeshPhysicalMaterial({
       map: backTexture,
       normalMap: grain,
-      normalScale: new THREE.Vector2(0.06, 0.06)
+      normalScale: new THREE.Vector2(0.06, 0.06),
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2
     });
     frontMaterial.onBeforeCompile = injectFoil;
     backMaterial.onBeforeCompile = injectFoil;
@@ -1108,8 +1114,6 @@ const Lanyard = ({
         frontCanvas.height = height;
         backCanvas.width = width;
         backCanvas.height = height;
-        frontTexture.dispose();
-        backTexture.dispose();
       }
       paintFace(frontCanvas, images.front, color, s.imageFit);
       paintFace(backCanvas, images.back || images.front, color, s.imageFit);
@@ -1176,9 +1180,9 @@ const Lanyard = ({
         bodyMesh.geometry = geometry.body;
         frontMesh.geometry = geometry.face;
         backMesh.geometry = geometry.face.clone();
-        frontMesh.position.z = THICKNESS / 2 + BEVEL + 0.0006;
+        frontMesh.position.z = THICKNESS / 2 + BEVEL + 0.004;
         backMesh.rotation.y = Math.PI;
-        backMesh.position.z = -(THICKNESS / 2 + BEVEL + 0.0006);
+        backMesh.position.z = -(THICKNESS / 2 + BEVEL + 0.004);
         ring.position.set(0, layout.ringY, 0);
         applied.framingKey = '';
       }
