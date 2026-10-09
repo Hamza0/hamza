@@ -110,10 +110,6 @@ export default async function Blog({
         dangerouslySetInnerHTML={{ __html: post.source }}
       ></article>
       <div className="mt-10 flex items-center gap-3 border-t pt-5">
-        <div className="text-sm text-muted-foreground">
-          <p>Enjoyed this note?</p>
-          <p className="mt-1 text-xs">Your like is saved on this device only.</p>
-        </div>
         <PulseHeart key={post.slug} noteSlug={post.slug} icon="heart" showCount={true} size={26} />
       </div>
       <nav aria-label="Note navigation" className="mt-6 grid grid-cols-2 gap-5 border-t pt-5 pb-16">

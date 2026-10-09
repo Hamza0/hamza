@@ -30,7 +30,7 @@ export function HeroLanyard() {
       } else {
         setReady(true);
       }
-    }, 1900);
+    }, 1500);
     return () => {
       clearTimeout(timer);
       if (idle !== undefined) window.cancelIdleCallback(idle);
@@ -49,8 +49,8 @@ export function HeroLanyard() {
           strapColor="#18181b"
           metal="silver"
           cornerRadius={0.2}
-          size={0.64}
-          strapLength={0.16}
+          size={0.76}
+          strapLength={0.05}
           strapWidth={0.55}
           breeze={0.2}
           damping={0.65}
