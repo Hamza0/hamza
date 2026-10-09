@@ -3,7 +3,7 @@ import BlurFade from "@/components/magicui/blur-fade";
 import { DiaTextReveal } from "@/components/ui/dia-text-reveal";
 import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { HeroLanyard } from "@/components/hero-lanyard";
 import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
 import Link from "next/link";
@@ -28,7 +28,7 @@ export default function Page() {
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <section id="hero">
         <div className="mx-auto w-full max-w-2xl space-y-8">
-          <div className="gap-2 flex justify-between">
+          <div className="gap-2 flex flex-col sm:flex-row justify-between">
             <div className="flex-col flex min-w-0 flex-1 space-y-1.5">
               <BlurFade {...HERO_REVEAL_PROPS} delay={BLUR_FADE_DELAY}>
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
@@ -53,11 +53,9 @@ export default function Page() {
                 <p className="max-w-[600px] text-sm sm:text-base md:text-xl">{DATA.description}</p>
               </BlurFade>
             </div>
-            <BlurFade {...HERO_REVEAL_PROPS} delay={BLUR_FADE_DELAY * 2}>
-              <Avatar className="size-16 border sm:size-28">
-                <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
-                <AvatarFallback>{DATA.initials}</AvatarFallback>
-              </Avatar>
+            <BlurFade {...HERO_REVEAL_PROPS} delay={BLUR_FADE_DELAY * 2}
+              className={`${HERO_REVEAL_PROPS.className} shrink-0 self-center sm:self-start`}>
+              <HeroLanyard />
             </BlurFade>
           </div>
         </div>

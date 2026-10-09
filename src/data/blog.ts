@@ -66,5 +66,9 @@ async function getAllPosts(dir: string) {
 }
 
 export async function getBlogPosts() {
-  return getAllPosts(path.join(process.cwd(), "content"));
+  const posts = await getAllPosts(path.join(process.cwd(), "content"));
+  return posts.sort((a, b) =>
+    b.metadata.publishedAt.localeCompare(a.metadata.publishedAt) ||
+    a.metadata.title.localeCompare(b.metadata.title)
+  );
 }

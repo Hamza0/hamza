@@ -1,0 +1,25 @@
+---
+title: "APIs Are Where Systems Start Talking"
+publishedAt: "2026-10-09"
+summary: "Connecting digital services means thinking beyond the request: validation, failures and useful feedback matter just as much as the response."
+---
+
+A form on a website can look like a small feature. Someone enters a few details, presses submit and sees a confirmation. Behind that interaction, several systems may need to agree on what happened.
+
+The submission might create a CRM record, trigger an email, update a database or become part of a report. An API is often the boundary where one part of that workflow hands information to another.
+
+In my web and systems work, those boundaries deserve as much attention as the interface. A page can look finished while the connection behind it still has unanswered questions.
+
+What information does the receiving system need? Which fields are required? Does an empty value mean unknown, not applicable or something went wrong? A shared field name does not guarantee that two systems interpret it the same way.
+
+I prefer to make those assumptions explicit before connecting the pieces. Validate the input, map the fields deliberately and check the response. Where an external service accepts a request, it is useful to understand whether that means the work is complete or simply waiting to be processed.
+
+Reliability also means planning for ordinary failures. Credentials expire. Requests time out. A service may reject a value that previously passed through a form. Search results can arrive without the fields the interface expects.
+
+The important question is what the user and the team can do next. A useful error message should explain the immediate problem without exposing internal details. Logs should provide enough context to trace the failure without collecting unnecessary personal information.
+
+Retries need some care too. Sending the same request again may be harmless when reading information. Repeating a request that creates a record or sends a notification can produce duplicates. The integration needs a clear way to distinguish a failed attempt from a completed action whose confirmation was lost.
+
+Testing should follow the whole path. I want to know that a valid submission reaches the right destination, that invalid data is handled clearly, and that an unavailable service does not leave someone staring at an unexplained spinner.
+
+APIs connect websites, CRMs, analytics, search and business systems. The useful work is in making those connections understandable and dependable. When the handoff is clear, the interface can stay simple without hiding a fragile workflow behind it.

@@ -19,7 +19,7 @@ function swellOf(t: number, overshoot: number) {
 type PulseHeartProps = {
   noteSlug: string;
   icon?: "heart";
-  showCount?: false;
+  showCount?: boolean;
   size?: number;
   label?: string;
   className?: string;
@@ -48,6 +48,8 @@ export function PulseHeart({
   const rafRef = useRef(0);
   const logicalLikedRef = useRef(false);
   const storageKey = `portfolio-note-liked:${noteSlug}`;
+  const countKey = `portfolio-note-count:${noteSlug}`;
+  const descriptionId = `note-like-preference-${noteSlug}`;
 
   const stopAnimation = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
@@ -61,6 +63,7 @@ export function PulseHeart({
     let savedLiked = false;
     try {
       savedLiked = localStorage.getItem(storageKey) === "true";
+      localStorage.setItem(countKey, savedLiked ? "1" : "0");
     } catch {
       // Storage may be unavailable; the button still works for this visit.
     }
@@ -81,7 +84,7 @@ export function PulseHeart({
       stopAnimation();
       media.removeEventListener("change", handleMotionChange);
     };
-  }, [storageKey, stopAnimation]);
+  }, [storageKey, countKey, stopAnimation]);
 
   const handleClick = () => {
     const nextLiked = !logicalLikedRef.current;
@@ -89,6 +92,7 @@ export function PulseHeart({
     setLiked(nextLiked);
     try {
       localStorage.setItem(storageKey, String(nextLiked));
+      localStorage.setItem(countKey, nextLiked ? "1" : "0");
     } catch {
       // Keep the local interaction available even when persistence is blocked.
     }
@@ -130,8 +134,9 @@ export function PulseHeart({
     <button
       ref={rootRef}
       type="button"
-      aria-label={label}
+      aria-label={showCount ? `${label}: ${liked ? 1 : 0}` : label}
       aria-pressed={liked}
+      aria-describedby={descriptionId}
       disabled={!ready}
       data-liked={String(shownLiked)}
       data-no-count={showCount ? undefined : ""}
@@ -152,7 +157,9 @@ export function PulseHeart({
             </g>
           </svg>
         </span>
+        {showCount && <span className="pulse-heart__count" aria-hidden="true">{liked ? 1 : 0}</span>}
       </span>
+      <span id={descriptionId} className="sr-only">Your like on this device: {liked ? 1 : 0}. This is not a count of other readers.</span>
     </button>
   );
 }

@@ -1,0 +1,25 @@
+---
+title: "Why Production Support Changes How You Build"
+publishedAt: "2026-10-09"
+summary: "Supporting live systems changes the questions you ask about failure states, visibility, maintainability and safe releases."
+---
+
+Building a feature and supporting it in production involve different kinds of attention. During development, the focus is often on getting the intended path to work. In a live system, you also see the paths that were easy to overlook.
+
+Real content is less tidy than a sample. People use different devices and connections. A form may depend on an external service, and a deployment may run with configuration that differs from the local environment.
+
+Production troubleshooting has made me more deliberate about those details when I build websites and applications. I try to think about how someone would investigate a problem before there is one.
+
+That starts with useful visibility. If an operation fails, can the team tell which part failed? Is there a meaningful error message? Can a request be followed across application code, an API and the service receiving it? Logging is most useful when it answers a specific question, rather than producing a large volume of unrelated output.
+
+Monitoring should support that same purpose. A page being reachable does not necessarily mean its forms, search or integrations are working. Checks need to reflect the features people depend on, and alerts should point toward something a team can investigate.
+
+Failure states matter in the interface as well. A missing result, delayed response or rejected submission should leave the user with useful context. They should not have to guess whether an action completed or whether pressing the button again will create another request.
+
+Supporting live systems also changes how I think about releases. A smaller change is usually easier to understand, verify and reverse. Before releasing, I want to know which behaviour should change, what could be affected and how to confirm the result in the production environment.
+
+A rollback plan does not have to be elaborate, but it does need to be realistic. Reverting application code may be straightforward. Reversing a data change or an action already sent to another system may need a different approach. That distinction belongs in the release decision.
+
+Maintainability becomes practical rather than abstract when someone has to investigate unfamiliar code under pressure. Clear naming, documented configuration and a visible boundary between responsibilities make that work easier. So does recording why a change was made and how it was checked.
+
+Production support keeps the people using the system in view. It encourages builds that explain their failures, give teams useful evidence and allow improvements to be released with confidence. Those are qualities I want in the implementation from the beginning.

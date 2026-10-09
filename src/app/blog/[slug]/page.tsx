@@ -4,6 +4,7 @@ import { DATA } from "@/data/resume";
 import { formatDate } from "@/lib/utils";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import { Suspense } from "react";
 
 export async function generateStaticParams() {
@@ -65,6 +66,11 @@ export default async function Blog({
     notFound();
   }
 
+  const posts = await getBlogPosts();
+  const index = posts.findIndex(entry => entry.slug === post.slug);
+  const previous = posts[index + 1];
+  const next = posts[index - 1];
+
   return (
     <section id="blog">
       <script
@@ -103,10 +109,27 @@ export default async function Blog({
         className="prose dark:prose-invert"
         dangerouslySetInnerHTML={{ __html: post.source }}
       ></article>
-      <div className="mt-10 flex items-center gap-3 border-t pt-5 pb-16">
-        <p className="text-sm text-muted-foreground">Enjoyed this note?</p>
-        <PulseHeart key={post.slug} noteSlug={post.slug} icon="heart" showCount={false} size={26} />
+      <div className="mt-10 flex items-center gap-3 border-t pt-5">
+        <div className="text-sm text-muted-foreground">
+          <p>Enjoyed this note?</p>
+          <p className="mt-1 text-xs">Your like is saved on this device only.</p>
+        </div>
+        <PulseHeart key={post.slug} noteSlug={post.slug} icon="heart" showCount={true} size={26} />
       </div>
+      <nav aria-label="Note navigation" className="mt-6 grid grid-cols-2 gap-5 border-t pt-5 pb-16">
+        {previous && (
+          <Link href={`/blog/${previous.slug}`} rel="prev" className="min-w-0 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">
+            <span className="block text-xs text-muted-foreground">← Previous note</span>
+            <span className="mt-2 block text-sm font-medium break-words hover:underline underline-offset-4">{previous.metadata.title}</span>
+          </Link>
+        )}
+        {next && (
+          <Link href={`/blog/${next.slug}`} rel="next" className="col-start-2 min-w-0 rounded-sm text-right focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">
+            <span className="block text-xs text-muted-foreground">Next note →</span>
+            <span className="mt-2 block text-sm font-medium break-words hover:underline underline-offset-4">{next.metadata.title}</span>
+          </Link>
+        )}
+      </nav>
     </section>
   );
 }
