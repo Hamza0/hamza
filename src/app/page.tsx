@@ -10,6 +10,18 @@ import Link from "next/link";
 import Markdown from "react-markdown";
 
 const BLUR_FADE_DELAY = 0.04;
+const HERO_REVEAL_DURATION = 0.4;
+const HERO_REVEAL_VARIANT = {
+  hidden: { y: 6, opacity: 0, filter: "blur(6px)" },
+  visible: { y: 0, opacity: 1, filter: "blur(0px)" },
+};
+const HERO_REVEAL_PROPS = {
+  initial: "hidden" as const,
+  respectReducedMotion: true,
+  variant: HERO_REVEAL_VARIANT,
+  duration: HERO_REVEAL_DURATION,
+  className: "motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!filter-none",
+};
 
 export default function Page() {
   return (
@@ -18,23 +30,30 @@ export default function Page() {
         <div className="mx-auto w-full max-w-2xl space-y-8">
           <div className="gap-2 flex justify-between">
             <div className="flex-col flex min-w-0 flex-1 space-y-1.5">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                Hi, I&apos;m Hamza 👋
-              </h1>
-              <p className="max-w-[600px] text-base font-medium sm:text-lg md:text-xl">
-                <DiaTextReveal
-                  text={DATA.headline}
-                  repeat={false}
-                  once={true}
-                  duration={1.35}
-                  colors={["#64748b", "#94a3b8", "hsl(var(--foreground))"]}
-                  textColor="hsl(var(--foreground))"
-                  className="motion-reduce:!bg-none motion-reduce:!text-foreground"
-                />
-              </p>
-              <p className="max-w-[600px] text-sm sm:text-base md:text-xl">{DATA.description}</p>
+              <BlurFade {...HERO_REVEAL_PROPS} delay={BLUR_FADE_DELAY}>
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                  Hi, I&apos;m Hamza 👋
+                </h1>
+              </BlurFade>
+              <BlurFade {...HERO_REVEAL_PROPS} delay={BLUR_FADE_DELAY * 2}>
+                <p className="max-w-[600px] text-base font-medium sm:text-lg md:text-xl">
+                  <DiaTextReveal
+                    text={DATA.headline}
+                    repeat={false}
+                    once={true}
+                    duration={1.35}
+                    delay={BLUR_FADE_DELAY * 2 + HERO_REVEAL_DURATION}
+                    colors={["#64748b", "#94a3b8", "hsl(var(--foreground))"]}
+                    textColor="hsl(var(--foreground))"
+                    className="motion-reduce:!bg-none motion-reduce:!text-foreground"
+                  />
+                </p>
+              </BlurFade>
+              <BlurFade {...HERO_REVEAL_PROPS} delay={BLUR_FADE_DELAY * 3}>
+                <p className="max-w-[600px] text-sm sm:text-base md:text-xl">{DATA.description}</p>
+              </BlurFade>
             </div>
-            <BlurFade delay={BLUR_FADE_DELAY}>
+            <BlurFade {...HERO_REVEAL_PROPS} delay={BLUR_FADE_DELAY * 2}>
               <Avatar className="size-16 border sm:size-28">
                 <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
                 <AvatarFallback>{DATA.initials}</AvatarFallback>

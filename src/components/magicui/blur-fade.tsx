@@ -4,6 +4,7 @@ import {
   AnimatePresence,
   motion,
   useInView,
+  useReducedMotion,
   type Variants,
 } from "framer-motion";
 import { useRef } from "react";
@@ -18,6 +19,8 @@ interface BlurFadeProps {
   inView?: boolean;
   inViewMargin?: string;
   blur?: string;
+  initial?: "hidden" | false;
+  respectReducedMotion?: boolean;
 }
 
 const BlurFade = ({
@@ -30,8 +33,12 @@ const BlurFade = ({
   inView = false,
   inViewMargin = "-50px",
   blur = "6px",
+  initial,
+  respectReducedMotion = false,
 }: BlurFadeProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const reduceMotion = respectReducedMotion && prefersReducedMotion;
 
   const inViewResult = useInView(ref, {
     once: true,
@@ -52,9 +59,9 @@ const BlurFade = ({
       <motion.div
         ref={ref}
         variants={combinedVariants}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        transition={{ duration, delay }}
+        initial={reduceMotion ? false : initial ?? "hidden"}
+        animate={reduceMotion ? { y: 0, opacity: 1, filter: "blur(0px)" } : isInView ? "visible" : "hidden"}
+        transition={{ duration: reduceMotion ? 0 : duration, delay: reduceMotion ? 0 : delay }}
         className={className}
       >
         {children}
