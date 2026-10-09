@@ -4,56 +4,92 @@ import { HomeIcon, NotebookIcon } from "lucide-react";
 export const DATA = {
   name: "Mian Muhammad Hamza Shakeel",
   initials: "HS",
-  url: "https://hamzashakeel.com",
+  url: "https://hamzashakeel.ca",
   location: "Mississauga, Ontario, Canada",
   locationLink: "https://www.google.com/maps/place/Mississauga,+ON",
   headline:
-    "Digital Designer & Web Specialist building accessible websites and marketing experiences.",
+    "Full-Stack Developer & Data-Focused Systems Professional.",
   description:
-    "I create responsive websites, landing pages, content systems, and digital experiences with a focus on clean layout, accessibility, performance, and practical implementation.",
+    "I build websites, applications, data tools, and digital systems across full-stack development, analytics, forecasting, CRM integrations, databases, and production support.",
+  strengthsIntro:
+    "A blend of design, web production, accessibility, and marketing operations experience across client-facing digital projects.",
+  projectsTitle: "Selected Work",
+  projectsIntro:
+    "A selection of websites, applications, dashboards, data tools, content systems, and digital platforms I have built, supported, or improved.",
 
   summary:
-  "7+ years of experience building fast, accessible, SEO-driven sites for healthcare, security, and data-driven teams. Recent work includes data dashboards and a digital front door for Health Workforce Canada, a marketing and custom WordPress site for Plurilock Security, and web experiences ranging from lean landing pages to large-scale content sites. I like building sharp, practical things—custom Gutenberg blocks, lightweight internal plugins, and integrations that help non-technical teams move faster instead of fighting their tools.",
+    "I bring 7+ years of website and application development experience, working across WordPress, Next.js, databases, APIs, and CRM integrations. My work at Health Workforce Canada expanded that foundation into dashboards, workforce data experiences, and the Modelling & Forecasting platform. I combine full-stack development with analytics, reporting, data quality, production troubleshooting, and QA to build accessible, reliable tools for the teams that use them.",
   avatarUrl: "/me.jpeg", // put your headshot at /public/me.jpeg
 
   skills: [
+    "Full-Stack Development",
+    "Data Analysis & Reporting",
+    "Dashboards & KPI Reporting",
+    "Forecasting & Modelling",
+    "SQL / PostgreSQL / MySQL",
+    "CRM & System Integrations",
+    "React",
+    "Next.js",
+    "JavaScript / TypeScript",
+    "WordPress",
+    "REST APIs",
+    "AWS",
+    "Docker",
+    "Salesforce",
+    "HubSpot",
+    "GA4",
+    "Accessibility / WCAG / AODA",
+    "SEO",
+    "HTML/CSS",
+    "PHP",
+    "Production Troubleshooting & QA",
     "Digital Design",
     "Layout & Typography",
-    "Accessibility / WCAG / AODA",
     "Adobe Creative Suite",
     "Canva",
     "Landing Pages",
     "Campaign Assets",
-    "WordPress (Gutenberg / Elementor)",
-    "Custom WordPress themes",
-    "Custom WordPress plugins",
-    "WordPress performance optimization (caching / images / CDNs)",
-    "WordPress migrations & maintenance",
+    "Email / Template Support",
     "Shopify",
-    "Salesforce",
-    "Google Analytics 4",
     "Google Tag Manager",
-    "Google Search Console",
-    "SEO",
-    "HTML/CSS",
-    "React",
-    "Next.js",
-    "PHP",
-    "REST APIs",
-    "TypeScript",
-    "Node.js",
-    "Tailwind CSS",
-    "WooCommerce",
-    "Advanced Custom Fields (ACF)",
-    "Headless WordPress (REST API)",
-    "WordPress security & hardening",
-    "Multisite & multi-language (WPML / Polylang)",
-    "Drupal",
-    "Webflow",
-    "AWS (Kendra, Lambda, S3, CloudFront)",
-    "Mailchimp / Drip",
-    "n8n",
-    "DNS / SMTP / SPF / DKIM / DMARC",
+  ],
+
+  strengths: [
+    {
+      title: "Digital Design",
+      description:
+        "Campaign pages, marketing websites, structured content layouts, and clean digital experiences.",
+    },
+    {
+      title: "Landing Pages & Campaign Support",
+      description:
+        "Responsive landing pages, reusable sections, forms, tracking, and campaign-focused web updates.",
+    },
+    {
+      title: "Content & Newsletter Systems",
+      description:
+        "Newsletter hubs, archive pages, resource libraries, sign-up flows, and structured content experiences.",
+    },
+    {
+      title: "Marketing Workflow Support",
+      description:
+        "Experience supporting forms, CRM-connected workflows, analytics, tracking, and campaign operations.",
+    },
+    {
+      title: "Accessibility & Usability",
+      description:
+        "Readable typography, color contrast, semantic structure, responsive layouts, and accessibility-conscious QA.",
+    },
+    {
+      title: "Cross-Functional Delivery",
+      description:
+        "Comfortable working with clients, marketers, developers, stakeholders, and approval cycles.",
+    },
+    {
+      title: "Quality Control",
+      description:
+        "Strong attention to spacing, layout, responsiveness, brand consistency, and final polish.",
+    },
   ],
 
   navbar: [
@@ -127,7 +163,7 @@ export const DATA = {
       start: "Jun 2024",
       end: "Jul 2025",
       description:
-        "Lead developer for healthworkforce.ca. Built and iterated on the Digital Front Door (AI-powered intelligent search), the Dashboards landing and use-case experience, and the Modelling & Forecasting microsite. Implemented AWS Kendra + Lambda integration in WordPress, designed Gutenberg block-based layouts for pages and resource hubs, integrated third-party APIs/plugins, managed domain and DNS, and configured SPF/DKIM/DMARC + SMTP relays. Supported analytics, campaigns and emergency communications content while keeping the site accessible and maintainable.",
+        "Developed and maintained public digital services for healthworkforce.ca, including the Digital Front Door, dashboard landing pages and data experiences, and the Modelling & Forecasting platform's web experience. Built accessible WordPress and Gutenberg interfaces that help teams find and use workforce information and planning tools. Implemented AWS Kendra and Lambda integrations for intelligent search, connected third-party APIs and plugins, and supported analytics, testing, accessibility, and data quality checks. Managed domain, DNS, and email configuration, and handled production troubleshooting and QA to keep these services reliable and maintainable.",
     },
     {
       company: "Stratomer IT",
@@ -198,16 +234,14 @@ export const DATA = {
       dates: "2024 – 2025",
       active: true,
       description:
-        "End-to-end web experience for Health Workforce Canada’s digital front door and data tools. Built the Digital Front Door (AI-powered intelligent search), the Dashboards landing and use-case flows, and the Modelling & Forecasting microsite. Implemented AWS Kendra + Lambda in WordPress, designed Gutenberg block-based layouts, and wired in analytics, feedback and tutorials so non-technical teams can actually find, understand and use workforce data.",
+        "Developed public web experiences connecting the Digital Front Door, dashboards, workforce data, and Modelling & Forecasting tools. Built accessible WordPress and Gutenberg interfaces for exploring workforce information and planning resources, integrated AWS Kendra and Lambda for intelligent search, and connected APIs and analytics. Supported testing and data quality across these digital services so non-technical teams could find, understand, and use the tools.",
       technologies: [
         "WordPress",
-        "Custom Gutenberg blocks",
-        "PHP",
-        "AWS Kendra",
-        "AWS Lambda",
-        "Tailwind CSS",
+        "Digital Front Door",
+        "Dashboards",
+        "Accessibility",
+        "Gutenberg",
         "GA4",
-        "GSC",
       ],
       links: [
         {
@@ -230,12 +264,12 @@ export const DATA = {
       video: "",
     },
     {
-      title: "Health Workforce Canada - The Pulse",
+      title: "Health Workforce Canada – The Pulse",
       href: "https://healthworkforce.ca/the-pulse/",
       dates: "2024 – 2025",
       active: true,
       description:
-        "Public-facing newsletter and content experience for Health Workforce Canada, supporting structured article presentation, newsletter archive access, accessible page layouts, and sign-up flow support.",
+        "A public-facing newsletter and content experience for Health Workforce Canada, supporting structured article presentation, newsletter archive access, accessible page layouts, and sign-up flow support.",
       technologies: [
         "Newsletter",
         "Content System",
@@ -259,13 +293,13 @@ export const DATA = {
       dates: "2024 – 2025",
       active: true,
       description:
-        "Designed and implemented Gutenberg-based content patterns for resource hubs, FAQs, explainers and tutorials. Focused on accessible typography, consistent layouts and reusable blocks so policy, research and comms teams can publish complex workforce content without needing a developer every time.",
+        "Built reusable Gutenberg content patterns for resource hubs, FAQs, explainers, and tutorials. Focused on accessible typography, consistent spacing, and editor-friendly workflows so teams could update structured content without developer support.",
       technologies: [
         "WordPress",
-        "Custom Gutenberg blocks",
-        "block.json",
-        "SCSS",
+        "Content System",
         "Accessibility",
+        "Gutenberg",
+        "Resource Pages",
       ],
       links: [
         {
@@ -283,8 +317,14 @@ export const DATA = {
       dates: "2022",
       active: false,
       description:
-        "Maintained and extended Plurilock’s WordPress marketing site and related dashboard/reporting views. Delivered new templates and landing pages for product and investor content, refactored legacy CSS/JS, improved performance and stability, and supported marketing campaigns without breaking core conversion funnels.",
-      technologies: ["WordPress", "PHP", "JavaScript", "CSS", "WP Engine"],
+        "Supported Plurilock’s marketing website and dashboard/reporting views in WordPress. Maintained structured content templates, improved brand consistency across pages, and collaborated with product, UX, and marketing teams on responsive updates.",
+      technologies: [
+        "WordPress",
+        "Marketing Website",
+        "Dashboards",
+        "Brand Consistency",
+        "PHP",
+      ],
       links: [
         {
           type: "Website",
@@ -301,14 +341,14 @@ export const DATA = {
       dates: "2023 – 2024",
       active: true,
       description:
-        "Web experience for a security and IT services provider, focused on clearly explaining complex offerings to non-technical buyers. Defined page structure, service landing templates and a reusable component system so new pages can be shipped quickly while staying on-brand and performance-friendly.",
+        "Supported a marketing web platform for security and IT services, with service landing templates and reusable sections. Structured content for non-technical buyers, implemented responsive layouts, and integrated SEO and analytics foundations.",
       technologies: [
         "WordPress",
-        "Next.js",
-        "Tailwind CSS",
+        "Landing Pages",
         "SEO",
         "GA4",
         "GTM",
+        "Responsive Layout",
       ],
       links: [
         {
@@ -326,8 +366,8 @@ export const DATA = {
       dates: "2023 – 2025",
       active: true,
       description:
-        "Planned and executed the main Stratomer IT website for cloud, networking and security services. Structured information architecture, implemented SEO-first templates, integrated GA4, GSC and Tag Manager, and optimized performance so paid and organic traffic both land on fast, clear pages.",
-      technologies: ["WordPress", "Elementor", "SEO", "GA4", "GSC", "GTM"],
+        "Built Stratomer IT’s core marketing website with SEO-first page structure, reusable templates, and integrated GA4, Search Console, and Tag Manager. Improved content hierarchy and responsive layouts for clearer service pages.",
+      technologies: ["WordPress", "SEO", "GA4", "GTM", "Marketing Website"],
       links: [
         {
           type: "Website",
@@ -340,29 +380,36 @@ export const DATA = {
     },
     {
       title: "Stratomer IT – Lead Gen Landing Page System",
-      href: "#",
+      href: "",
       dates: "2023 – 2024",
       active: true,
       description:
-        "A system of reusable landing page templates for campaigns around security assessments, cloud migrations and managed services. Built with modular sections, integrated forms and tracking pixels so marketing can spin up, clone and A/B test pages without developer involvement.",
-      technologies: ["WordPress", "Landing pages", "SEO", "GA4", "GTM"],
+        "Built a reusable landing page system for lead generation around security assessments, cloud migrations, and managed services. Implemented modular sections, forms, and tracking so new pages could be launched with less developer dependency.",
+      technologies: [
+        "Landing Pages",
+        "Lead Generation",
+        "Forms",
+        "GA4",
+        "GTM",
+        "Salesforce",
+      ],
       links: [],
       image: "",
       video: "",
     },
     {
       title: "Multi-Clinic Healthcare Websites",
-      href: "#",
+      href: "",
       dates: "2021 – 2024",
       active: true,
       description:
-        "Designed and developed WordPress sites for medical clinics and healthcare groups, focusing on accessibility, clear appointment flows and mobile performance. Implemented booking/forms integrations, location-based pages and SEO foundations so clinics show up where patients actually search.",
+        "Built WordPress websites for medical clinics with accessible layouts, clear appointment flows, and mobile-first responsive pages. Supported content structure, forms integrations, and SEO for patient-facing service pages.",
       technologies: [
         "WordPress",
-        "Gutenberg / Elementor",
+        "Accessibility",
         "Forms",
         "SEO",
-        "Performance",
+        "Responsive Layout",
       ],
       links: [],
       image: "",
@@ -370,17 +417,17 @@ export const DATA = {
     },
     {
       title: "WordPress Editor Toolkit – Blocks, Tours & Health Checks",
-      href: "#",
+      href: "",
       dates: "2022 – 2025",
       active: true,
       description:
-        "Internal toolkit used across sites: guided tours for complex dashboards and flows, reusable Gutenberg patterns for FAQs and explainers, and quick health checks for analytics and forms. Built to reduce handholding and support tickets by giving editors obvious, repeatable ways to publish and understand changes.",
+        "Internal toolkit with reusable Gutenberg patterns, guided editor tours, and content health checks. Built to improve publishing quality and give teams clearer, repeatable ways to maintain structured content.",
       technologies: [
         "WordPress",
-        "Custom Gutenberg blocks",
-        "PHP",
-        "JavaScript",
-        "SCSS",
+        "Gutenberg",
+        "Content System",
+        "Editor Support",
+        "QA",
       ],
       links: [],
       image: "",
@@ -388,29 +435,29 @@ export const DATA = {
     },
     {
       title: "SMTP & DNS Health Monitor",
-      href: "#",
+      href: "",
       dates: "2023 – 2024",
       active: true,
       description:
-        "Lightweight WordPress utility that surfaces SMTP and DNS status inside the admin: test emails, SPF/DKIM/DMARC checks and simple traffic-light indicators for common misconfigurations. Used when bringing new domains online or debugging why contact forms and notifications are not reaching inboxes.",
-      technologies: ["WordPress", "PHP", "DNS", "SMTP"],
+        "WordPress utility for checking email and DNS configuration during domain setup and site launches. Surfaces SPF, DKIM, and DMARC status with simple indicators to help troubleshoot form and notification delivery issues.",
+      technologies: ["WordPress", "Email Deliverability", "DNS", "QA"],
       links: [],
       image: "",
       video: "",
     },
     {
       title: "Analytics Snapshot Dashboard Widget",
-      href: "#",
+      href: "",
       dates: "2023 – 2025",
       active: true,
       description:
-        "Custom dashboard widget that pulls high-level metrics from GA4 and Search Console into WordPress. Shows traffic trends, top content and key search queries so content, comms and leadership can see what’s working without logging into full analytics tools.",
+        "Dashboard widget that surfaces GA4 and Search Console metrics inside WordPress. Provides a readable summary of traffic trends and top content so teams can review site performance without navigating full analytics platforms.",
       technologies: [
         "WordPress",
-        "PHP",
         "GA4",
         "Google Search Console",
-        "REST APIs",
+        "Reporting",
+        "APIs",
       ],
       links: [],
       image: "",

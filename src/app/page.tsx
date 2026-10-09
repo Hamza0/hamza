@@ -22,16 +22,11 @@ export default function Page() {
                 delay={BLUR_FADE_DELAY}
                 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
                 yOffset={8}
-                text={`Hi, I'm ${DATA.name.split(" ")[2]} 👋`}
-              />
-              <BlurFadeText
-                className="max-w-[600px] text-lg font-medium md:text-xl"
-                delay={BLUR_FADE_DELAY * 2}
                 text={DATA.headline}
               />
               <BlurFadeText
-                className="max-w-[600px] md:text-xl text-muted-foreground"
-                delay={BLUR_FADE_DELAY * 3}
+                className="max-w-[600px] md:text-xl"
+                delay={BLUR_FADE_DELAY}
                 text={DATA.description}
               />
             </div>
@@ -54,6 +49,36 @@ export default function Page() {
             {DATA.summary}
           </Markdown>
         </BlurFade>
+      </section>
+
+      <section id="strengths">
+        <div className="flex min-h-0 flex-col gap-y-3">
+          <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
+            <h2 className="text-xl font-bold">
+              Digital Design & Delivery Strengths
+            </h2>
+          </BlurFade>
+          <BlurFade delay={BLUR_FADE_DELAY * 4.6}>
+            <p className="text-sm text-muted-foreground text-pretty">
+              {DATA.strengthsIntro}
+            </p>
+          </BlurFade>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {DATA.strengths.map((strength, id) => (
+              <BlurFade
+                key={strength.title}
+                delay={BLUR_FADE_DELAY * 5 + id * 0.05}
+              >
+                <div className="rounded-lg border bg-card p-4 h-full">
+                  <h3 className="text-sm font-semibold">{strength.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground text-pretty">
+                    {strength.description}
+                  </p>
+                </div>
+              </BlurFade>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section id="work">
@@ -130,12 +155,10 @@ export default function Page() {
                   My Projects
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                  Selected Work
+                  {DATA.projectsTitle}
                 </h2>
                 <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  A selection of websites, landing pages, content systems,
-                  marketing pages, and digital tools I have designed, built,
-                  supported, or improved.
+                  {DATA.projectsIntro}
                 </p>
               </div>
             </div>

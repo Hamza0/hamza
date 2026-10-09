@@ -67,6 +67,7 @@ function createHeading(level: number) {
       [
         React.createElement("a", {
           href: `#${slug}`,
+          "aria-label": `Link to ${children}`,
           key: `link-${slug}`,
           className: "anchor",
         }),
