@@ -1,0 +1,27 @@
+---
+title: "Data Quality Comes Before the Dashboard"
+publishedAt: "2026-10-09"
+summary: "Reliable reporting starts with understanding sources, missing information, definitions, and validation before choosing how to display the results."
+---
+
+Before deciding how to display a result, I want to understand what went into it.
+
+A clean dashboard does not tell us whether its source records are complete, whether categories mean the same thing across files, or whether the latest update arrived. Presentation can make information easier to read, but it cannot resolve those questions on its own.
+
+I start with the source and the shape of the data. What does one record represent? Where did it come from? Which period does it cover? Is the information a current snapshot, a history of changes, or a mixture of both?
+
+Those distinctions affect the reporting. Counting records is only useful when we understand what we are counting. Joining two sources also requires more than matching a column name. The identifiers and the relationships between records need to make sense.
+
+Missing information deserves its own review. A blank value might mean something was not collected, was not applicable, or could not be matched. It should not automatically become zero. A report needs a deliberate way to handle that absence and, where it matters, explain it to the reader.
+
+Consistency is another part of the work. Dates may arrive in different formats. Categories may use different names for the same concept. A field may contain values that do not belong in it. These issues can look small in a spreadsheet and become confusing once they are grouped into a chart.
+
+I prefer validation that is easy to inspect. Check required fields, look for repeated records, review unexpected categories, and compare totals before and after a transformation. If a process changes or removes information, there should be a clear reason for it.
+
+Source differences should remain visible until they are understood. Two reports can disagree because they use different definitions, update schedules, or inclusion rules. Combining them too quickly can conceal a useful distinction. Sometimes the right response is to document the difference rather than force the numbers to match.
+
+The reporting pipeline needs checks over time as well. An import can succeed technically while bringing in an empty file. A column can keep its name while its meaning changes. A dashboard needs a way to show freshness and avoid presenting an incomplete update as a normal result.
+
+This work is usually less visible than the final chart, but it affects how much confidence people can place in the tool.
+
+My aim is a report whose sources and decisions are understandable. Once that foundation is clear, visualization becomes a better way to explain the information.

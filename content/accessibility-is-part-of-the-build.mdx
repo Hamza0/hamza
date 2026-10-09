@@ -1,0 +1,27 @@
+---
+title: "Accessibility Is Part of the Build"
+publishedAt: "2026-10-09"
+summary: "Semantic HTML, useful link names, keyboard behavior, and readable layouts are everyday development decisions, not just final review tasks."
+---
+
+Accessibility comes up in ordinary development decisions long before a site is ready for review.
+
+Choosing a heading, building a navigation link, styling a focus state, or deciding how a layout behaves on a narrow screen all affect whether someone can use the result. I find it more practical to consider those decisions while building the feature.
+
+Semantic HTML is a good starting point. A heading describes the structure of the page. A link takes someone to a destination. A button performs an action. Using those elements for their intended purpose gives the browser and assistive technology useful information without requiring extra behavior to be invented.
+
+The visible design can remain minimal. An icon-only link still needs a meaningful accessible name. A phone icon can look exactly the same while its label explains that it starts a call. A tooltip can help visually, but the control should have a name even when that tooltip is not showing.
+
+Links also need real destinations. If a project has no public URL, a plain project card is more useful than a link that goes nowhere. It lets the content stay visible without suggesting an action that the site cannot provide.
+
+Keyboard use is another check I like to make during implementation. Can I reach the controls in a sensible order? Can I tell where focus is? Can I operate the feature and move away from it? Those checks often reveal problems that are easy to miss when using only a pointer.
+
+Contrast and responsive behavior need attention with real content. A muted caption may be readable on one background and difficult on another. A layout that looks tidy with a short title may overflow when the title wraps. Testing both themes and a smaller screen helps expose those differences.
+
+Motion needs a purpose too. A small animation can clarify a transition, but it should not make information harder to read or become a requirement for understanding the page. When someone prefers reduced motion, the content should remain clear and the feature should still work in a static form.
+
+Automated checks are useful for finding issues such as unnamed controls or some contrast problems. I use them alongside a manual review because a passing audit does not tell me whether the wording is understandable or the interaction feels clear.
+
+Accessibility work also continues after launch. New content, different labels, and small component changes can affect an experience that previously worked well.
+
+For me, the aim is a site people can navigate, understand, and maintain. Building those qualities into the structure is more dependable than trying to attach them at the end.

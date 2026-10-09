@@ -1,3 +1,4 @@
+import { PulseHeart } from "@/components/ui/pulse-heart";
 import { getBlogPosts, getPost } from "@/data/blog";
 import { DATA } from "@/data/resume";
 import { formatDate } from "@/lib/utils";
@@ -102,6 +103,10 @@ export default async function Blog({
         className="prose dark:prose-invert"
         dangerouslySetInnerHTML={{ __html: post.source }}
       ></article>
+      <div className="mt-10 flex items-center gap-3 border-t pt-5 pb-16">
+        <p className="text-sm text-muted-foreground">Enjoyed this note?</p>
+        <PulseHeart key={post.slug} noteSlug={post.slug} icon="heart" showCount={false} size={26} />
+      </div>
     </section>
   );
 }

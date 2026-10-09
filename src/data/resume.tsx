@@ -8,17 +8,17 @@ export const DATA = {
   location: "Mississauga, Ontario, Canada",
   locationLink: "https://www.google.com/maps/place/Mississauga,+ON",
   headline:
-    "Full-Stack Developer & Data-Focused Systems Professional.",
+    "Full-Stack Engineer building data-driven systems and digital platforms.",
   description:
-    "I build websites, applications, data tools, and digital systems across full-stack development, analytics, forecasting, CRM integrations, databases, and production support.",
+    "I work across web applications, analytics and forecasting, CRM integrations, databases, cloud infrastructure, and production delivery.",
   strengthsIntro:
-    "A blend of design, web production, accessibility, and marketing operations experience across client-facing digital projects.",
+    "Full-stack engineering and practical delivery, grounded in web development, data, accessibility, and digital design.",
   projectsTitle: "Selected Work",
   projectsIntro:
     "A selection of websites, applications, dashboards, data tools, content systems, and digital platforms I have built, supported, or improved.",
 
   summary:
-    "I bring 7+ years of website and application development experience, working across WordPress, Next.js, databases, APIs, and CRM integrations. My work at Health Workforce Canada expanded that foundation into dashboards, workforce data experiences, and the Modelling & Forecasting platform. I combine full-stack development with analytics, reporting, data quality, production troubleshooting, and QA to build accessible, reliable tools for the teams that use them.",
+    "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I focus on building reliable systems that are clear for users, maintainable for teams and dependable in production.",
   avatarUrl: "/me.jpeg", // put your headshot at /public/me.jpeg
 
   skills: [
@@ -56,39 +56,44 @@ export const DATA = {
 
   strengths: [
     {
-      title: "Digital Design",
+      title: "Full-Stack Development",
       description:
-        "Campaign pages, marketing websites, structured content layouts, and clean digital experiences.",
+        "Websites and applications built with React, Next.js and WordPress, connecting interfaces with application logic, databases and APIs.",
     },
     {
-      title: "Landing Pages & Campaign Support",
+      title: "Data & Reporting",
       description:
-        "Responsive landing pages, reusable sections, forms, tracking, and campaign-focused web updates.",
+        "Dashboards, workforce data experiences and forecasting tools, with attention to data quality, useful context and clear reporting.",
     },
     {
-      title: "Content & Newsletter Systems",
+      title: "Systems Integration",
       description:
-        "Newsletter hubs, archive pages, resource libraries, sign-up flows, and structured content experiences.",
+        "APIs, CRM-connected forms and workflows, Salesforce, HubSpot and search integrations that connect digital services.",
     },
     {
-      title: "Marketing Workflow Support",
+      title: "Production Support",
       description:
-        "Experience supporting forms, CRM-connected workflows, analytics, tracking, and campaign operations.",
+        "Practical troubleshooting across application code, hosting, cloud services and configuration, backed by testing and QA.",
     },
     {
-      title: "Accessibility & Usability",
+      title: "Accessibility",
       description:
-        "Readable typography, color contrast, semantic structure, responsive layouts, and accessibility-conscious QA.",
+        "Semantic structure, keyboard use, readable typography, color contrast and responsive layouts considered throughout the build.",
     },
     {
-      title: "Cross-Functional Delivery",
+      title: "Technical Delivery",
       description:
-        "Comfortable working with clients, marketers, developers, stakeholders, and approval cycles.",
+        "Maintainable implementations, migrations and ongoing improvements, working with clients, developers and stakeholders through review and release.",
     },
     {
-      title: "Quality Control",
+      title: "Digital Design & Web Experiences",
       description:
-        "Strong attention to spacing, layout, responsiveness, brand consistency, and final polish.",
+        "Marketing websites, campaign landing pages and reusable layouts, with attention to brand consistency, spacing and usability.",
+    },
+    {
+      title: "Content & Marketing Systems",
+      description:
+        "Newsletter hubs, resource libraries, sign-up flows and structured content, supported by analytics, tracking and campaign workflows.",
     },
   ],
 

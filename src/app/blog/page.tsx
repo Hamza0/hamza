@@ -26,15 +26,10 @@ export default async function BlogPage() {
       </BlurFade>
       <div className="flex flex-col gap-6">
         {posts
-          .sort((a, b) => {
-            if (
-              new Date(a.metadata.publishedAt) >
-              new Date(b.metadata.publishedAt)
-            ) {
-              return -1;
-            }
-            return 1;
-          })
+          .sort((a, b) =>
+            b.metadata.publishedAt.localeCompare(a.metadata.publishedAt) ||
+            a.metadata.title.localeCompare(b.metadata.title)
+          )
           .map((post, id) => (
             <BlurFade delay={BLUR_FADE_DELAY * 2 + id * 0.05} key={post.slug}>
               <Link

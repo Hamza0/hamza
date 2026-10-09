@@ -1,6 +1,6 @@
-import { HackathonCard } from "@/components/hackathon-card";
+import { SystemsCapabilities } from "@/components/systems-capabilities";
 import BlurFade from "@/components/magicui/blur-fade";
-import BlurFadeText from "@/components/magicui/blur-fade-text";
+import { DiaTextReveal } from "@/components/ui/dia-text-reveal";
 import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,21 +17,25 @@ export default function Page() {
       <section id="hero">
         <div className="mx-auto w-full max-w-2xl space-y-8">
           <div className="gap-2 flex justify-between">
-            <div className="flex-col flex flex-1 space-y-1.5">
-              <BlurFadeText
-                delay={BLUR_FADE_DELAY}
-                className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
-                yOffset={8}
-                text={DATA.headline}
-              />
-              <BlurFadeText
-                className="max-w-[600px] md:text-xl"
-                delay={BLUR_FADE_DELAY}
-                text={DATA.description}
-              />
+            <div className="flex-col flex min-w-0 flex-1 space-y-1.5">
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                Hi, I&apos;m Hamza 👋
+              </h1>
+              <p className="max-w-[600px] text-base font-medium sm:text-lg md:text-xl">
+                <DiaTextReveal
+                  text={DATA.headline}
+                  repeat={false}
+                  once={true}
+                  duration={1.35}
+                  colors={["#64748b", "#94a3b8", "hsl(var(--foreground))"]}
+                  textColor="hsl(var(--foreground))"
+                  className="motion-reduce:!bg-none motion-reduce:!text-foreground"
+                />
+              </p>
+              <p className="max-w-[600px] text-sm sm:text-base md:text-xl">{DATA.description}</p>
             </div>
             <BlurFade delay={BLUR_FADE_DELAY}>
-              <Avatar className="size-28 border">
+              <Avatar className="size-16 border sm:size-28">
                 <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
                 <AvatarFallback>{DATA.initials}</AvatarFallback>
               </Avatar>
@@ -51,11 +55,18 @@ export default function Page() {
         </BlurFade>
       </section>
 
+      <section id="capabilities" aria-labelledby="capabilities-title">
+        <h2 id="capabilities-title" className="text-xl font-bold">
+          Systems & Delivery
+        </h2>
+        <SystemsCapabilities />
+      </section>
+
       <section id="strengths">
         <div className="flex min-h-0 flex-col gap-y-3">
           <BlurFade delay={BLUR_FADE_DELAY * 4.5}>
             <h2 className="text-xl font-bold">
-              Digital Design & Delivery Strengths
+              Engineering & Delivery Strengths
             </h2>
           </BlurFade>
           <BlurFade delay={BLUR_FADE_DELAY * 4.6}>

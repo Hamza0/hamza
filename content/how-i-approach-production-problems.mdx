@@ -1,0 +1,29 @@
+---
+title: "How I Approach Production Problems"
+publishedAt: "2026-10-09"
+summary: "A practical debugging sequence: clarify the symptom, follow the system boundaries, make a focused change, and verify the result."
+---
+
+When something stops working in production, I try to make the problem specific before changing anything.
+
+“The website is broken” is a useful signal that someone needs help, but it is not yet a diagnosis. Which page or action is affected? What was expected? What happened instead? Does the issue affect everyone, a particular account, or one browser?
+
+Understanding the symptom helps define the scope. It also gives me a concrete way to check whether the eventual change worked.
+
+Next, I try to reproduce the problem with the smallest set of steps I can. I note the relevant environment, inputs, and timing. If the issue is intermittent, I look for what the failing attempts have in common rather than assuming that a successful attempt proves it has gone away.
+
+Recent changes can provide useful context. A deployment, content update, configuration change, or external service update may be relevant. I treat those as leads to investigate, not proof of the cause.
+
+Then I follow the request or information through the system. What does the browser send? What does the application receive? Does the API return what the interface expects? Is the stored information consistent with the response? Where does the behavior first differ from what should happen?
+
+Logs can help connect those steps, but they need context. A timestamp, request path, and clear error message are more useful than a large collection of unrelated output. I also check system boundaries: permissions, field mappings, configuration, caching, and dependencies between services.
+
+The goal is to identify a cause that explains the symptom. A plausible explanation is not enough if it does not match the evidence. I want to understand why the issue happens and why the proposed change should address it.
+
+Once that is clear, I prefer the smallest safe change. Production troubleshooting is rarely a good moment to combine a fix with a broad cleanup. A focused change is easier to review, verify, and reverse if the result is not what was expected.
+
+Verification should cover the original failing path and nearby behavior that the change could affect. I check the actual outcome, including stored data or downstream actions where relevant, rather than stopping at a successful response code.
+
+Finally, I leave a short record of the cause, the change, and what was checked. That helps the next person understand the decision and gives the team something useful if the symptom returns.
+
+This approach keeps debugging tied to evidence. It gives each step a purpose and helps avoid changing several things before knowing which one mattered.

@@ -1,0 +1,27 @@
+---
+title: "When a Website Becomes a System"
+publishedAt: "2026-10-09"
+summary: "A website often connects forms, data, content, and business workflows. Those connections need as much care as the pages people see."
+---
+
+A website can look simple and still have a lot happening behind it.
+
+A visitor fills out a form. That information needs to be checked, stored, and sent somewhere useful. A team may need it in a CRM. Someone may expect a confirmation email. Analytics may need to record the interaction without collecting information that does not belong there.
+
+At that point, the work extends beyond building a page. It includes the connections between the page and the systems around it.
+
+This is one reason I see web development as systems work. The visible experience matters, but so do the APIs, databases, hosting, content tools, and workflows that support it. A good interface depends on those pieces agreeing about what should happen.
+
+I find it useful to follow one interaction through the whole process. Where does the information start? What changes it? Which system is responsible for the next step? What should the user see if something fails?
+
+Those questions can expose gaps that a visual review will miss. A form can look finished while sending the wrong fields. A page can load correctly while an API response is incomplete. A content update can be easy for a developer and awkward for the person who has to publish it every week.
+
+The details at each boundary deserve attention. Field names need to be consistent. Required information needs a clear definition. Errors need to be understandable. If two systems store the same value differently, the integration needs an explicit way to handle that difference.
+
+Ownership matters too. Someone needs to know which system holds the authoritative record, who can change it, and where to look when the connection stops working. Without that clarity, a small issue can travel between teams without anyone having enough context to resolve it.
+
+None of this means every website needs a complicated architecture. A small site may only need a dependable publishing setup and a working contact form. Adding more tools creates more things to maintain, so each connection should serve a real purpose.
+
+My preference is to keep the experience clear and the implementation practical. Build the pages people need, connect the systems that support the work, and make those connections understandable to the next person maintaining them.
+
+That is often what makes a website useful long after its launch. The design gets people to the right place. The system behind it helps their next step happen reliably.
