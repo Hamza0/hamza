@@ -30,7 +30,8 @@ SOFTWARE.
 
 // Adapted from React Bits (MIT + Commons Clause): https://github.com/DavidHDev/react-bits
 import { useEffect, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import * as THREE from 'three';
 
 
@@ -50,6 +51,8 @@ interface PathLike {
 }
 
 export interface LanyardProps {
+  anchorElement: RefObject<HTMLDivElement>;
+  onReady?: () => void;
   frontImage?: string;
   backImage?: string;
   imageFit?: ImageFit;
@@ -899,6 +902,8 @@ const stepSimulation = (sim: Simulation, dt: number, physics: Physics, time: num
 };
 
 const Lanyard = ({
+  anchorElement,
+  onReady,
   frontImage,
   backImage,
   imageFit = 'cover',
@@ -924,6 +929,10 @@ const Lanyard = ({
 }: LanyardProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const flipRef = useRef<(() => void) | null>(null);
+  const hitAreaRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const onReadyRef = useRef(onReady);
+  onReadyRef.current = onReady;
   const [showBack, setShowBack] = useState(false);
   const settingsRef = useRef<Settings | null>(null);
   const applyRef = useRef<(() => void) | null>(null);
@@ -957,7 +966,9 @@ const Lanyard = ({
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return undefined;
+    const hitArea = hitAreaRef.current;
+    const anchorNode = anchorElement.current;
+    if (!container || !hitArea || !anchorNode) return undefined;
 
     let renderer: THREE.WebGLRenderer;
     try {
@@ -1079,6 +1090,10 @@ const Lanyard = ({
     let hovering = false;
     let press: Press | null = null;
     let imageToken = 0;
+    let layoutRaf = 0;
+    let activePointer: number | null = null;
+    let ready = false;
+    let savedUserSelect = "";
     const motionMedia = window.matchMedia('(prefers-reduced-motion: reduce)');
     let reducedMotion = motionMedia.matches;
     container.dataset.motion = reducedMotion ? 'static' : 'animated';
@@ -1114,12 +1129,14 @@ const Lanyard = ({
 
     const frameView = () => {
       const s = settingsRef.current!;
-      const aspect = view.width / view.height;
-      let viewHeight = layout.height / clamp(s.size, 0.15, 0.9);
-      const minimumWidth = layout.width / 0.72;
-      if (viewHeight * aspect < minimumWidth) viewHeight = minimumWidth / aspect;
-      const viewWidth = viewHeight * aspect;
-      camera.aspect = aspect;
+      const rect = anchorNode.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const pixelsPerUnit = Math.min(
+        rect.height * clamp(s.size, 0.15, 0.9) / layout.height,
+        rect.width * 0.72 / layout.width
+      );
+      const viewHeight = view.height / Math.max(1, pixelsPerUnit);
+      camera.aspect = view.width / view.height;
       camera.position.set(0, 0, viewHeight / 2 / Math.tan((FOV * Math.PI) / 360));
       camera.lookAt(0, 0, 0);
       camera.updateProjectionMatrix();
@@ -1127,14 +1144,24 @@ const Lanyard = ({
       foilUniforms.foilKey.value.set(-2.5, 4, 6).normalize().transformDirection(camera.matrixWorldInverse);
       foilUniforms.foilFill.value.set(3, -1, 4).normalize().transformDirection(camera.matrixWorldInverse);
       foilUniforms.foilTop.value.set(0.5, 4.5, 8).normalize().transformDirection(camera.matrixWorldInverse);
-      const anchorX = ((ANCHORS[s.anchor] ?? 0.5) - 0.5) * viewWidth;
-      const anchorY = viewHeight / 2 + 0.2;
-      const cardTop = viewHeight / 2 - viewHeight * mix(0.12, 0.42, clamp(s.strapLength, 0, 1));
+      const anchorX = (rect.left + rect.width / 2 - view.width / 2) / pixelsPerUnit;
+      const anchorY = (view.height / 2 - rect.top) / pixelsPerUnit;
+      const cardTop = (view.height / 2 - rect.top - rect.height * mix(0.12, 0.42, clamp(s.strapLength, 0, 1))) / pixelsPerUnit;
       const hangTop = cardTop + (layout.hangY - layout.height / 2);
+      const delta = new THREE.Vector3(anchorX, anchorY, 0).sub(sim.anchor);
+      if (placed && !sim.grab) {
+        sim.body.position.add(delta);
+        sim.nodes.forEach(node => node.add(delta));
+        sim.previous.forEach(node => node.add(delta));
+      }
       sim.anchor.set(anchorX, anchorY, 0);
       configureSimulation(sim, layout, anchorY - hangTop);
       sim.nodes[0].copy(sim.anchor);
       sim.previous[0].copy(sim.anchor);
+      if (buttonRef.current) {
+        buttonRef.current.style.left = `${rect.right - 44}px`;
+        buttonRef.current.style.top = `${rect.bottom - 44}px`;
+      }
     };
 
     const apply = () => {
@@ -1155,7 +1182,8 @@ const Lanyard = ({
         ring.position.set(0, layout.ringY, 0);
         applied.framingKey = '';
       }
-      const framingKey = `${layoutKey}|${s.size}|${s.anchor}|${s.strapLength}|${view.width}|${view.height}`;
+      const rect = anchorNode.getBoundingClientRect();
+      const framingKey = `${layoutKey}|${s.size}|${s.strapLength}|${view.width}|${view.height}|${rect.left}|${rect.top}|${rect.width}|${rect.height}`;
       if (framingKey !== applied.framingKey) {
         frameView();
         if (!placed) {
@@ -1210,7 +1238,7 @@ const Lanyard = ({
         clampMesh.geometry.dispose();
         clampMesh.geometry = buildClampGeometry(strapScale);
       }
-      canvas.style.touchAction = s.interactive ? 'pan-y' : 'auto';
+      hitArea.style.touchAction = s.interactive ? 'none' : 'auto';
 
       applied = { layoutKey, framingKey, imageKey, faceKey, strapColor: s.strapColor, strapScale };
       start();
@@ -1295,12 +1323,30 @@ const Lanyard = ({
       clampGroup.position.copy(hang);
     };
 
+    const cardCorners = Array.from({ length: 4 }, () => new THREE.Vector3());
     const render = () => {
       cardGroup.position.copy(sim.body.position);
       cardGroup.quaternion.copy(sim.body.quaternion);
+      cardGroup.updateMatrixWorld();
       updateBand();
       renderer.render(scene, camera);
-      if (images.front) container.dataset.rendered = 'true';
+      let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
+      cardCorners.forEach((corner, index) => {
+        corner.set((index % 2 ? 1 : -1) * layout.width / 2, (index < 2 ? 1 : -1) * layout.height / 2, 0);
+        corner.applyMatrix4(cardGroup.matrixWorld).project(camera);
+        const x = (corner.x + 1) * view.width / 2;
+        const y = (1 - corner.y) * view.height / 2;
+        left = Math.min(left, x); right = Math.max(right, x);
+        top = Math.min(top, y); bottom = Math.max(bottom, y);
+      });
+      hitArea.style.transform = `translate(${left}px, ${top}px)`;
+      hitArea.style.width = `${Math.max(1, right - left)}px`;
+      hitArea.style.height = `${Math.max(1, bottom - top)}px`;
+      if (images.front && !ready) {
+        ready = true;
+        container.dataset.rendered = 'true';
+        onReadyRef.current?.();
+      }
     };
 
     const physics = (): Physics => {
@@ -1359,6 +1405,7 @@ const Lanyard = ({
 
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
+    const dragPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
 
     const toPointer = (event: Point) => {
       const rect = canvas.getBoundingClientRect();
@@ -1376,7 +1423,7 @@ const Lanyard = ({
     };
 
     const setCursor = (value: string) => {
-      if (canvas.style.cursor !== value) canvas.style.cursor = value;
+      if (hitArea.style.cursor !== value) hitArea.style.cursor = value;
     };
 
     const flip = (point: THREE.Vector3) => {
@@ -1412,7 +1459,15 @@ const Lanyard = ({
         target: hit.point.clone()
       };
       press = { x: event.clientX, y: event.clientY, time: performance.now(), point: hit.point.clone() };
-      canvas.setPointerCapture?.(event.pointerId);
+      activePointer = event.pointerId;
+      dragPlane.constant = -hit.point.z;
+      savedUserSelect = document.body.style.userSelect;
+      document.body.style.userSelect = 'none';
+      hitArea.setPointerCapture?.(event.pointerId);
+      window.addEventListener('pointermove', onPointerMove);
+      window.addEventListener('pointerup', onPointerUp);
+      window.addEventListener('pointercancel', onPointerUp);
+      window.addEventListener('blur', cancelDrag);
       container.dataset.interaction = 'dragging';
       setCursor('grabbing');
       event.preventDefault();
@@ -1420,11 +1475,11 @@ const Lanyard = ({
     };
 
     const onPointerMove = (event: PointerEvent) => {
-      if (!settingsRef.current!.interactive) return;
+      if (!settingsRef.current!.interactive || (activePointer !== null && event.pointerId !== activePointer)) return;
       toPointer(event);
       if (sim.grab) {
         if (press && Math.hypot(event.clientX - press.x, event.clientY - press.y) > 6) press = null;
-        raycaster.ray.at(sim.grab.reach, sim.grab.target);
+        raycaster.ray.intersectPlane(dragPlane, sim.grab.target);
         start();
         return;
       }
@@ -1433,34 +1488,36 @@ const Lanyard = ({
       setCursor(hovering ? 'grab' : '');
     };
 
-    const onPointerUp = (event: PointerEvent) => {
+    const endDrag = (event?: PointerEvent) => {
       if (!sim.grab) return;
       sim.grab = null;
       container.dataset.interaction = 'idle';
-      if (press && event.type === 'pointerup' && performance.now() - press.time < 450) flip(press.point);
+      if (press && event?.type === 'pointerup' && performance.now() - press.time < 450) flip(press.point);
       press = null;
-      canvas.releasePointerCapture?.(event.pointerId);
-      setCursor(hovering && event.pointerType !== 'touch' ? 'grab' : '');
+      const pointerId = activePointer;
+      activePointer = null;
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+      window.removeEventListener('blur', cancelDrag);
+      document.body.style.userSelect = savedUserSelect;
+      if (pointerId !== null && hitArea.hasPointerCapture(pointerId)) hitArea.releasePointerCapture(pointerId);
+      setCursor('grab');
       start();
     };
-
-    const onTouchStart = (event: TouchEvent) => {
-      if (!settingsRef.current!.interactive || event.touches.length !== 1) return;
-      toPointer(event.touches[0]);
-      if (pickCard()) event.preventDefault();
+    const onPointerUp = (event: PointerEvent) => {
+      if (event.pointerId === activePointer) endDrag(event);
     };
+    const cancelDrag = () => endDrag();
 
-    canvas.addEventListener('pointerdown', onPointerDown);
-    canvas.addEventListener('pointermove', onPointerMove);
-    canvas.addEventListener('pointerup', onPointerUp);
-    canvas.addEventListener('pointercancel', onPointerUp);
-    canvas.addEventListener('lostpointercapture', onPointerUp);
-    canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    hitArea.addEventListener('pointerdown', onPointerDown);
+    hitArea.addEventListener('pointermove', onPointerMove);
+    hitArea.addEventListener('lostpointercapture', cancelDrag);
 
     const resize = () => {
       view.width = Math.max(1, container.clientWidth);
       view.height = Math.max(1, container.clientHeight);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
       renderer.setSize(view.width, view.height, false);
       apply();
       render();
@@ -1468,12 +1525,19 @@ const Lanyard = ({
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(container);
+    resizeObserver.observe(anchorNode);
+    const onScroll = () => {
+      if (layoutRaf) return;
+      layoutRaf = requestAnimationFrame(() => { layoutRaf = 0; apply(); render(); });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     const intersectionObserver = new IntersectionObserver(([entry]) => {
-      visible = entry.isIntersecting;
+      visible = entry.isIntersecting || !!sim.grab;
+      container.dataset.visible = String(visible);
       if (visible) start();
       else { cancelAnimationFrame(raf); raf = 0; }
     });
-    intersectionObserver.observe(container);
+    intersectionObserver.observe(anchorNode);
     const onVisibility = () => {
       if (!document.hidden) start();
       else { cancelAnimationFrame(raf); raf = 0; }
@@ -1483,8 +1547,7 @@ const Lanyard = ({
       container.dataset.motion = reducedMotion ? 'static' : 'animated';
       cancelAnimationFrame(raf);
       raf = 0;
-      sim.grab = null;
-      press = null;
+      endDrag();
       placeHanging(sim, layout, false);
       setShowBack(false);
       render();
@@ -1498,19 +1561,19 @@ const Lanyard = ({
 
     return () => {
       alive = false;
+      endDrag();
       cancelAnimationFrame(raf);
+      cancelAnimationFrame(layoutRaf);
+      window.removeEventListener('scroll', onScroll);
       applyRef.current = null;
       flipRef.current = null;
       motionMedia.removeEventListener('change', onMotionChange);
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
-      canvas.removeEventListener('pointerdown', onPointerDown);
-      canvas.removeEventListener('pointermove', onPointerMove);
-      canvas.removeEventListener('pointerup', onPointerUp);
-      canvas.removeEventListener('pointercancel', onPointerUp);
-      canvas.removeEventListener('lostpointercapture', onPointerUp);
-      canvas.removeEventListener('touchstart', onTouchStart);
+      hitArea.removeEventListener('pointerdown', onPointerDown);
+      hitArea.removeEventListener('pointermove', onPointerMove);
+      hitArea.removeEventListener('lostpointercapture', cancelDrag);
       [bodyMesh, frontMesh, backMesh, ring, clampMesh, eyelet, band].forEach(mesh => mesh.geometry?.dispose());
       [frontMaterial, backMaterial, edgeMaterial, metalMaterial, bandMaterial].forEach(material => material.dispose());
       [frontTexture, backTexture, strapTexture, grain, weave].forEach(texture => texture.dispose());
@@ -1518,23 +1581,19 @@ const Lanyard = ({
       renderer.dispose();
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
     };
-  }, []);
+  }, [anchorElement]);
 
-  return (
+  return createPortal(
     <div ref={containerRef} className={`lanyard ${className}`.trim()} style={style}>
-      <div className="lanyard-fallback">
-        <span className="lanyard-fallback-strap" aria-hidden="true" />
-        {/* Plain image keeps the card available if WebGL is unavailable. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={showBack ? backImage : frontImage} alt={showBack ? "hamzashakeel.ca — linkedin.com/in/mianhamza" : "Hamza Shakeel, Full-Stack Engineer, Mississauga, Canada. Web, Data, Systems."} />
-      </div>
-      <button type="button" className="lanyard-flip" aria-label="Flip ID card" aria-pressed={showBack}
+      <div ref={hitAreaRef} className="lanyard-hit-area" aria-hidden="true" />
+      <button ref={buttonRef} type="button" className="lanyard-flip" aria-label="Flip ID card" aria-pressed={showBack}
         onClick={() => flipRef.current ? flipRef.current() : setShowBack(value => !value)}>
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
           <path d="M5 7h14m-3-3 3 3-3 3M19 17H5m3-3-3 3 3 3" />
         </svg>
       </button>
-    </div>
+    </div>,
+    document.body
   );
 };
 

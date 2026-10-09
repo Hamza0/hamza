@@ -1,46 +1,61 @@
 "use client";
 
+import BlurFade from "@/components/magicui/blur-fade";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 
-function CardPlaceholder() {
-  return (
-    <div className="lanyard-fallback" aria-hidden="true">
-      <span className="lanyard-fallback-strap" />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/images/hamza-id-front.svg" alt="" />
-    </div>
-  );
-}
-
-const Lanyard = dynamic(() => import("@/components/ui/lanyard"), {
-  ssr: false,
-  loading: CardPlaceholder,
-});
+const loadLanyard = () => import("@/components/ui/lanyard");
+const Lanyard = dynamic(loadLanyard, { ssr: false, loading: () => null });
+const AVATAR_VARIANT = {
+  hidden: { y: 6, opacity: 0, filter: "blur(6px)" },
+  visible: { y: 0, opacity: 1, filter: "blur(0px)" },
+};
 
 export function HeroLanyard() {
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const [desktop, setDesktop] = useState(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    let idle: number | undefined;
-    // Let the existing hero reveal finish before requesting the 3D module.
-    const timer = setTimeout(() => {
-      if ("requestIdleCallback" in window) {
-        idle = window.requestIdleCallback(() => setReady(true), { timeout: 1000 });
-      } else {
-        setReady(true);
-      }
-    }, 1500);
-    return () => {
-      clearTimeout(timer);
-      if (idle !== undefined) window.cancelIdleCallback(idle);
+    const media = window.matchMedia("(min-width: 640px)");
+    const update = () => {
+      setDesktop(media.matches);
+      setReady(false);
+      if (media.matches) void loadLanyard();
     };
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
   }, []);
 
   return (
-    <div className="hero-lanyard">
-      {ready ? (
+    <div className="shrink-0 self-center sm:self-start">
+      <link rel="preload" as="image" href="/images/hamza-id-front.svg" media="(min-width: 640px)" />
+      <link rel="preload" as="image" href="/images/hamza-id-back.svg" media="(min-width: 640px)" />
+      <BlurFade
+        initial="hidden" respectReducedMotion duration={0.4} delay={0.06}
+        variant={AVATAR_VARIANT}
+        className="sm:hidden motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!filter-none"
+      >
+        <Image src="/me.jpeg" alt="Hamza Shakeel" width={104} height={104}
+          priority unoptimized className="size-[104px] rounded-full object-cover" />
+      </BlurFade>
+      <div ref={anchorRef} className="hero-lanyard" data-ready={String(ready)}>
+        <div className="lanyard-fallback">
+          <span className="lanyard-fallback-strap" aria-hidden="true" />
+          {/* The same asset and footprint stay visible until WebGL is ready. */}
+          <picture>
+            <source media="(min-width: 640px)" srcSet="/images/hamza-id-front.svg" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='900'/%3E" alt="Hamza Shakeel, Full-Stack Engineer, Mississauga, Canada." />
+          </picture>
+        </div>
+      </div>
+      {desktop && (
         <Lanyard
+          anchorElement={anchorRef}
+          onReady={() => setReady(true)}
           frontImage="/images/hamza-id-front.svg"
           backImage="/images/hamza-id-back.svg"
           orientation="portrait"
@@ -55,9 +70,9 @@ export function HeroLanyard() {
           breeze={0.2}
           damping={0.65}
           interactive
-          intro
+          intro={false}
         />
-      ) : <CardPlaceholder />}
+      )}
     </div>
   );
 }

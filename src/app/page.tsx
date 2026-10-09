@@ -35,7 +35,7 @@ export default function Page() {
                   Hi, I&apos;m Hamza 👋
                 </h1>
               </BlurFade>
-              <BlurFade {...HERO_REVEAL_PROPS} delay={0.04}>
+              <BlurFade {...HERO_REVEAL_PROPS} delay={0.03}>
                 <p className="max-w-[600px] text-base font-medium sm:text-lg md:text-xl">
                   <DiaTextReveal
                     text={DATA.headline}
@@ -49,14 +49,11 @@ export default function Page() {
                   />
                 </p>
               </BlurFade>
-              <BlurFade {...HERO_REVEAL_PROPS} delay={0.08}>
+              <BlurFade {...HERO_REVEAL_PROPS} delay={0.06}>
                 <p className="max-w-[600px] text-sm sm:text-base md:text-xl">{DATA.description}</p>
               </BlurFade>
             </div>
-            <BlurFade {...HERO_REVEAL_PROPS} delay={0.06}
-              className={`${HERO_REVEAL_PROPS.className} shrink-0 self-center sm:self-start`}>
-              <HeroLanyard />
-            </BlurFade>
+            <HeroLanyard />
           </div>
         </div>
       </section>
