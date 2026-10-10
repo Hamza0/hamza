@@ -33,6 +33,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import * as THREE from 'three';
+import { CSS3DObject, CSS3DRenderer } from 'three/addons/renderers/CSS3DRenderer.js';
+import { AvailableWorkBadge } from '@/components/ui/available-work-badge';
 
 
 
@@ -953,6 +955,7 @@ const Lanyard = ({
   const onReadyRef = useRef(onReady);
   onReadyRef.current = onReady;
   const [showBack, setShowBack] = useState(false);
+  const [backHost, setBackHost] = useState<HTMLDivElement | null>(null);
   const settingsRef = useRef<Settings | null>(null);
   const applyRef = useRef<(() => void) | null>(null);
 
@@ -1010,6 +1013,22 @@ const Lanyard = ({
     const environment = buildEnvironment(renderer);
     scene.environment = environment.texture;
     const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 200);
+    // A real button follows the back face without turning the canvas into a page-wide hit target.
+    const backRenderer = new CSS3DRenderer();
+    backRenderer.domElement.className = 'lanyard-back-layer';
+    backRenderer.domElement.style.overflow = 'visible';
+    container.appendChild(backRenderer.domElement);
+    const backElement = document.createElement('div');
+    const backObject = new CSS3DObject(backElement);
+    backElement.style.pointerEvents = 'none';
+    backElement.style.display = 'none';
+    backObject.visible = false;
+    const backScene = new THREE.Scene();
+    backScene.add(backObject);
+    const backRotation = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI);
+    const backNormal = new THREE.Vector3();
+    const backView = new THREE.Vector3();
+    setBackHost(backElement);
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
     keyLight.position.set(-2.5, 4, 6);
     const fillLight = new THREE.DirectionalLight(0xffffff, 0.35);
@@ -1357,6 +1376,13 @@ const Lanyard = ({
       cardGroup.updateMatrixWorld();
       updateBand();
       renderer.render(scene, camera);
+      backNormal.set(0, 0, -1).applyQuaternion(sim.body.quaternion);
+      backView.subVectors(camera.position, sim.body.position).normalize();
+      backObject.position.copy(sim.body.position).addScaledVector(backNormal, THICKNESS / 2 + BEVEL + 0.008);
+      backObject.quaternion.copy(sim.body.quaternion).multiply(backRotation);
+      backObject.scale.setScalar(layout.width * 0.94 / 134);
+      backObject.visible = ready && !sim.grab && backNormal.dot(backView) > 0.35;
+      backRenderer.render(backScene, camera);
       let left = Infinity, top = Infinity, right = -Infinity, bottom = -Infinity;
       cardCorners.forEach((corner, index) => {
         corner.set((index % 2 ? 1 : -1) * layout.width / 2, (index < 2 ? 1 : -1) * layout.height / 2, 0);
@@ -1546,6 +1572,7 @@ const Lanyard = ({
       view.height = Math.max(1, container.clientHeight);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(view.width, view.height, false);
+      backRenderer.setSize(view.width, view.height);
       apply();
       render();
     };
@@ -1606,6 +1633,8 @@ const Lanyard = ({
       [frontTexture, backTexture, strapTexture, grain, weave].forEach(texture => texture.dispose());
       environment.dispose();
       renderer.dispose();
+      backScene.remove(backObject);
+      backRenderer.domElement.remove();
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
     };
   }, [anchorElement]);
@@ -1613,6 +1642,7 @@ const Lanyard = ({
   return createPortal(
     <div ref={containerRef} className={`lanyard ${className}`.trim()} style={style}>
       <div ref={hitAreaRef} className="lanyard-hit-area" aria-hidden="true" />
+      {backHost ? createPortal(<AvailableWorkBadge />, backHost) : null}
       <button ref={buttonRef} type="button" className="lanyard-flip" aria-label="Flip ID card" aria-pressed={showBack}
         onClick={() => flipRef.current ? flipRef.current() : setShowBack(value => !value)}>
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
