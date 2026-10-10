@@ -2,6 +2,7 @@ import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
+import { SOCIAL_PREVIEW } from "@/lib/social-metadata";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
@@ -20,12 +21,13 @@ export const metadata: Metadata = {
   },
   description: DATA.description,
   openGraph: {
-    title: `${DATA.name}`,
-    description: DATA.description,
+    title: SOCIAL_PREVIEW.title,
+    description: SOCIAL_PREVIEW.description,
     url: DATA.url,
     siteName: `${DATA.name}`,
     locale: "en_US",
     type: "website",
+    images: [SOCIAL_PREVIEW.image],
   },
   robots: {
     index: true,
@@ -39,9 +41,10 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: `${DATA.name}`,
-    description: DATA.description,
+    title: SOCIAL_PREVIEW.title,
+    description: SOCIAL_PREVIEW.description,
     card: "summary_large_image",
+    images: [SOCIAL_PREVIEW.image],
   },
   verification: {
     google: "",

@@ -2,6 +2,7 @@ import { PulseHeart } from "@/components/ui/pulse-heart";
 import { getBlogPosts, getPost } from "@/data/blog";
 import { DATA } from "@/data/resume";
 import { formatDate } from "@/lib/utils";
+import { SOCIAL_PREVIEW } from "@/lib/social-metadata";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -27,7 +28,9 @@ export async function generateMetadata({
     summary: description,
     image,
   } = post.metadata;
-  let ogImage = image ? `${DATA.url}${image}` : `${DATA.url}/og?title=${title}`;
+  const ogImage = image
+    ? { url: new URL(image, DATA.url).toString(), alt: title }
+    : SOCIAL_PREVIEW.image;
 
   return {
     title,
@@ -38,11 +41,7 @@ export async function generateMetadata({
       type: "article",
       publishedTime,
       url: `${DATA.url}/blog/${post.slug}`,
-      images: [
-        {
-          url: ogImage,
-        },
-      ],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
@@ -84,9 +83,10 @@ export default async function Blog({
             datePublished: post.metadata.publishedAt,
             dateModified: post.metadata.publishedAt,
             description: post.metadata.summary,
-            image: post.metadata.image
-              ? `${DATA.url}${post.metadata.image}`
-              : `${DATA.url}/og?title=${post.metadata.title}`,
+            image: new URL(
+              post.metadata.image || SOCIAL_PREVIEW.image.url,
+              DATA.url
+            ).toString(),
             url: `${DATA.url}/blog/${post.slug}`,
             author: {
               "@type": "Person",
