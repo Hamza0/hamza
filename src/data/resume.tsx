@@ -1,10 +1,11 @@
 import { Icons } from "@/components/icons";
+import { SITE_URL } from "@/lib/site";
 import { HomeIcon, NotebookIcon } from "lucide-react";
 
 export const DATA = {
   name: "Mian Muhammad Hamza Shakeel",
   initials: "HS",
-  url: "https://hamzashakeel.ca",
+  url: SITE_URL,
   location: "Mississauga, Ontario, Canada",
   locationLink: "https://www.google.com/maps/place/Mississauga,+ON",
   headline:

@@ -8,6 +8,7 @@ export const metadata = {
   title: "Notes",
   description:
     "Practical notes on building and supporting web applications, data tools and connected digital systems.",
+  alternates: { canonical: "/blog" },
 };
 
 const BLUR_FADE_DELAY = 0.04;

@@ -1,7 +1,6 @@
 import { getBlogPosts } from "@/data/blog";
+import { SITE_URL } from "@/lib/site";
 import type { MetadataRoute } from "next";
-
-const SITE_URL = "https://hamzashakeel.ca";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = (await getBlogPosts()).filter((post) => {

@@ -5,8 +5,13 @@ import { ResumeCard } from "@/components/resume-card";
 import { HeroLanyard } from "@/components/hero-lanyard";
 import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Markdown from "react-markdown";
+
+export const metadata: Metadata = {
+  alternates: { canonical: DATA.url },
+};
 
 const BLUR_FADE_DELAY = 0.04;
 const HERO_REVEAL_DURATION = 0.4;
