@@ -1,0 +1,23 @@
+---
+title: "Software Is Becoming Agent-Ready"
+publishedAt: "2026-08-28"
+summary: "Agents need clear interfaces, useful context and controlled actions, with the same permissions and accountability expected of other software."
+---
+
+Software is increasingly being used through AI agents as well as directly by people. That creates another way into an application, with its own interaction requirements.
+
+A human can often interpret a vague label, notice an unusual page or ask a colleague what something means. An agent needs explicit context: what an operation does, which inputs it accepts and what the result represents. Clear APIs and structured data make those boundaries easier to understand and validate.
+
+An interface should distinguish between finding information and changing it. Reading a record, drafting an update and applying that update are different operations. Combining them behind an ambiguous tool makes permissions and review harder to manage.
+
+Authentication identifies the caller. Authorisation determines what that caller can do. An agent should not gain broader access simply because it sits between a user and the system. Permissions need to be checked where the operation executes, including access to the particular record or action being requested.
+
+MCP-style integrations provide a way to expose tools and context to an AI application. A useful tool has a clear description and a defined input schema. [The protocol's tool guidance](https://modelcontextprotocol.io/specification/2025-11-25/server/tools) also addresses validation and human control. Connecting a tool does not make every possible use of it appropriate.
+
+Actions need useful feedback. An error should explain whether an operation failed, whether anything changed and whether a retry is safe. Where retries could create duplicate work, the application needs a way to recognise the same request rather than blindly executing it again.
+
+Auditable actions matter too. A team should be able to determine who initiated an operation, which permissions applied and what changed, without collecting unnecessary sensitive information in the logs.
+
+The ordinary interface still matters. People need to inspect results, resolve ambiguity and intervene when an action needs judgement. Agent access should work alongside those controls.
+
+Preparing software for agents is practical interface work: make capabilities explicit, keep access bounded and make the effects of an action understandable.

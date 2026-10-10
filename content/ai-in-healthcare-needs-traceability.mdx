@@ -1,0 +1,21 @@
+---
+title: "AI in Healthcare Needs Traceability"
+publishedAt: "2026-07-17"
+summary: "Useful AI output needs a traceable relationship to its sources, permissions and review, especially when healthcare information is involved."
+---
+
+A fluent summary can make information feel settled even when the source is incomplete or the interpretation is uncertain. In healthcare, convincing output is not enough.
+
+The system needs a traceable path from the information used to the result produced. Which records were retrieved? Which versions were available? What transformations happened before the information reached the model? Keeping that context makes it possible to investigate an output instead of treating it as an isolated answer.
+
+Provenance and audit trails answer related but different questions. Provenance describes the origin and processing of information. An audit trail records relevant activity, including access and actions. FHIR includes resources for [provenance](https://hl7.org/fhir/provenance.html) and [audit events](https://hl7.org/fhir/auditevent.html). Those records support investigation; they do not, by themselves, establish that a generated conclusion is correct.
+
+Permissions need to follow the information into the AI workflow. A user being able to access one record does not imply access to every related record. Retrieval, generation and any proposed write-back should operate within the permissions of the task and the person using the system.
+
+Data quality remains part of the problem. Missing information, inconsistent units, stale records and conflicting sources can all affect the result. Interoperability helps information move between systems, but the workflow still needs to preserve its meaning and identify limitations.
+
+Traceability should also include the configuration used to produce an output, such as the model version and relevant processing steps. Logs need appropriate protection and retention. An audit mechanism should not become a second uncontrolled copy of sensitive information.
+
+Human oversight needs to be usable. A reviewer should be able to see the supporting information, identify what is uncertain and correct or reject the result before it drives a consequential action. That requires an interface with clear sources and meaningful controls, not just an approval button.
+
+The engineering question is whether an output can be checked and its use controlled. A credible healthcare AI workflow makes room for uncertainty, investigation and human judgement throughout that path.

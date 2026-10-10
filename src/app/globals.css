@@ -321,7 +321,16 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   display: none;
   position: relative;
   width: 176px;
-  height: 208px;
+  height: 240px;
+}
+
+.hero-lanyard-anchor {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 202px;
+  height: 240px;
 }
 
 @media (min-width: 640px) {

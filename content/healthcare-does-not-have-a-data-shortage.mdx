@@ -1,0 +1,21 @@
+---
+title: "Healthcare Does Not Have a Data Shortage"
+publishedAt: "2026-08-12"
+summary: "The difficulty is often connecting existing information while preserving its meaning, quality and appropriate access."
+---
+
+Healthcare already produces records, observations, documents and operational information. Having a lot of data does not mean the information needed for a particular task is available, complete or easy to use.
+
+The difficulty often sits between systems. A record may exist in one application but be difficult to locate elsewhere. Two sources may use different identifiers, definitions or formats. Information can arrive without enough context to determine whether it describes the same event or an updated version of it.
+
+Moving a value successfully is only one part of interoperability. Its meaning needs to survive the move. Units, dates, terminology and the distinction between missing and negative information can affect how a receiving system interprets it. A technically valid message can still be unsuitable for the intended use.
+
+FHIR provides a standard way to represent and exchange healthcare information through defined resources. [Its structure and exchange model](https://hl7.org/fhir/overview.html) help applications work with a common foundation. Implementations still need to agree on the relevant profiles, terminology and workflow. Using the same format does not automatically resolve every difference between the underlying systems.
+
+Trust also depends on knowing where information came from and when it was recorded or changed. A copied value should retain enough context for someone to understand its origin. Conflicting records need an explicit way to be investigated rather than an arbitrary rule that hides the disagreement.
+
+Safe movement requires appropriate access. The ability to retrieve information is separate from permission to use it for a particular purpose. Integrations need to preserve those boundaries as data moves between services.
+
+There are real gaps in healthcare data, and they deserve attention. But collecting more information will not fix an unclear definition, a broken connection or an inaccessible record.
+
+The engineering work is to make the available information understandable, interoperable and trustworthy enough for its intended use. That starts with the structure and agreements around the data, before another dashboard or AI layer is added.

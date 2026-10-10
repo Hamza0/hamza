@@ -1,0 +1,23 @@
+---
+title: "AI Changes the Development Process, Not Just the Code"
+publishedAt: "2026-09-22"
+summary: "AI-assisted development puts more weight on clear requirements, bounded delegation and evidence that a change works."
+---
+
+The useful change in AI-assisted development extends beyond writing code faster. It changes how work is defined, delegated and checked.
+
+The workflow becomes: understand → delegate → verify → test → review → ship. Those steps can overlap, but none of them disappears because an assistant can produce an implementation.
+
+Understanding comes first. What should the system do? Which constraints matter? What behaviour must stay the same? An unclear requirement can produce a polished solution to the wrong problem. A useful task includes the relevant context, a manageable scope and a way to recognise success.
+
+Architecture becomes part of that context. The boundaries between application code, databases and external services determine where a change belongs. An assistant may propose a plausible implementation without understanding why a boundary exists. That is a reason to explain the constraint and review the decision, rather than judging the result by how complete it looks.
+
+Verification needs evidence. A statement that a build passed should correspond to a completed build. A claim about the interface should be checked in the rendered page. Tests should cover the intended behaviour and meaningful failure cases; tests generated alongside the code can repeat the same mistaken assumption.
+
+Debugging still benefits from a controlled approach. Reproduce the symptom, check the relevant logs and inputs, and isolate the cause before expanding the change. Generating several possible fixes does not establish which one addresses the problem.
+
+Security also belongs in the workflow. Tool access should be limited to what the task needs. Secrets and unnecessary sensitive data should stay out of the context. Authentication, permissions, dependencies and error handling need deliberate review. [Reviewing and testing generated changes](https://docs.github.com/en/copilot/responsible-use/agents) remains an engineering responsibility.
+
+The release decision comes after those checks. Someone still needs to understand the change, its impact and how to recover if it behaves differently in production.
+
+AI can help with implementation, investigation and review. The value depends on whether the process turns that assistance into work the team can explain, verify and maintain.

@@ -1,7 +1,7 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { getBlogPosts } from "@/data/blog";
 import { formatDate } from "@/lib/utils";
-import { Accessibility, BarChart3, Database, FormInput, Layers, LineChart, ListChecks, Network, Table2, Terminal, Workflow, type LucideIcon } from "lucide-react";
+import { Accessibility, BarChart3, Bot, ClipboardCheck, Database, FormInput, GitPullRequest, Layers, LineChart, ListChecks, Network, Table2, Terminal, Workflow, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = {
@@ -25,13 +25,17 @@ const NOTE_ICONS: Record<string, LucideIcon> = {
   "database-changes-need-a-delivery-plan": Table2,
   "forms-are-part-of-the-workflow": FormInput,
   "documentation-that-helps-the-next-person": ListChecks,
+  "ai-changes-the-development-process-not-just-the-code": GitPullRequest,
+  "software-is-becoming-agent-ready": Bot,
+  "healthcare-does-not-have-a-data-shortage": Database,
+  "ai-in-healthcare-needs-traceability": ClipboardCheck,
 };
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();
 
   return (
-    <section className="max-w-2xl">
+    <section className="max-w-2xl lg:-mx-4 lg:w-[calc(100%+2rem)] lg:max-w-none">
       <BlurFade delay={BLUR_FADE_DELAY}>
         <h1 className="font-semibold text-3xl mb-3 tracking-tight">Notes</h1>
         <p className="max-w-lg text-sm text-muted-foreground mb-8 leading-relaxed">
@@ -59,7 +63,7 @@ export default async function BlogPage() {
                   </span>
                   <div className="min-w-0 flex-1 space-y-2">
                     <div className="flex flex-col gap-1.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                      <h2 className="font-semibold leading-snug tracking-tight group-hover:underline underline-offset-4">
+                      <h2 className="text-base sm:text-[17px] font-semibold leading-snug tracking-tight text-pretty group-hover:underline underline-offset-4">
                         {post.metadata.title}
                       </h2>
                       <time

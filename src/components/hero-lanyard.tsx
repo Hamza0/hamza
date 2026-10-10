@@ -40,15 +40,17 @@ export function HeroLanyard() {
         <Image src="/hamza-portrait.png" alt="Hamza Shakeel" width={88} height={88}
           priority sizes="88px" className="size-[88px] rounded-full object-cover" />
       </BlurFade>
-      <div ref={anchorRef} className="hero-lanyard" data-ready={String(ready)}>
-        <div className="lanyard-fallback">
-          <span className="lanyard-fallback-strap" aria-hidden="true" />
-          {/* Keep the original portrait and badge footprint visible until WebGL is ready. */}
-          <picture>
-            <source media="(min-width: 640px)" srcSet="/hamza-portrait.png" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='900'/%3E" alt="Portrait of Hamza Shakeel" />
-          </picture>
+      <div className="hero-lanyard" data-ready={String(ready)}>
+        <div ref={anchorRef} className="hero-lanyard-anchor">
+          <div className="lanyard-fallback">
+            <span className="lanyard-fallback-strap" aria-hidden="true" />
+            {/* Keep the original portrait and badge footprint visible until WebGL is ready. */}
+            <picture>
+              <source media="(min-width: 640px)" srcSet="/hamza-portrait.png" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='900'/%3E" alt="Portrait of Hamza Shakeel" />
+            </picture>
+          </div>
         </div>
       </div>
       {desktop && (
