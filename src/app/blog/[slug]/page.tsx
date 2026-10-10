@@ -8,6 +8,10 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
 
+// Notes are published from local content at build time. Unknown slugs must 404
+// before metadata generation tries to read a file that does not exist.
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const posts = await getBlogPosts();
   return posts.map((post) => ({ slug: post.slug }));
