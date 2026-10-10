@@ -50,6 +50,7 @@ export default function Page() {
                 url: DATA.url,
                 jobTitle: "Software Engineer",
                 image: new URL(DATA.avatarUrl, DATA.url).toString(),
+                sameAs: [DATA.contact.social.LinkedIn.url],
               },
             ],
           }).replace(/</g, "\\u003c"),

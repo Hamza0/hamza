@@ -95,7 +95,9 @@ export default async function Blog({
             url: `${DATA.url}/blog/${post.slug}`,
             author: {
               "@type": "Person",
+              "@id": `${DATA.url}/#person`,
               name: DATA.name,
+              url: DATA.url,
             },
           }),
         }}
