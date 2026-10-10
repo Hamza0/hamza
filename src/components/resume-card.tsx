@@ -15,6 +15,7 @@ interface ResumeCardProps {
   title: string;
   subtitle?: string;
   href?: string;
+  externalLink?: boolean;
   badges?: readonly string[];
   period: string;
   description?: string;
@@ -25,6 +26,7 @@ export const ResumeCard = ({
   title,
   subtitle,
   href,
+  externalLink = false,
   badges,
   period,
   description,
@@ -32,7 +34,7 @@ export const ResumeCard = ({
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    if (description) {
+    if (description && !externalLink) {
       e.preventDefault();
       setIsExpanded(!isExpanded);
     }
@@ -41,7 +43,10 @@ export const ResumeCard = ({
   return (
     <Link
       href={href || "#"}
-      className="block cursor-pointer"
+      className="block cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-4"
+      target={externalLink ? "_blank" : undefined}
+      rel={externalLink ? "noopener noreferrer" : undefined}
+      aria-label={externalLink ? `${title} website (opens in a new tab)` : undefined}
       onClick={handleClick}
     >
       <Card className="flex">
@@ -86,7 +91,9 @@ export const ResumeCard = ({
             </div>
             {subtitle && <div className="font-sans text-xs">{subtitle}</div>}
           </CardHeader>
-          {description && (
+          {description && (externalLink ? (
+            <div className="mt-2 text-xs sm:text-sm">{description}</div>
+          ) : (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{
@@ -102,7 +109,7 @@ export const ResumeCard = ({
             >
               {description}
             </motion.div>
-          )}
+          ))}
         </div>
       </Card>
     </Link>

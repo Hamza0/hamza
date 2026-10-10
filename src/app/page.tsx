@@ -84,10 +84,11 @@ export default function Page() {
               <ResumeCard
                 key={work.company}
                 logoUrl={work.logoUrl}
-                altText={work.company}
+                altText={`${work.company} logo`}
                 title={work.company}
                 subtitle={work.title}
                 href={work.href}
+                externalLink={"externalLink" in work && work.externalLink}
                 badges={work.badges}
                 period={`${work.start} - ${work.end ?? "Present"}`}
                 description={work.description}

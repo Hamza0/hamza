@@ -16,7 +16,7 @@ export const DATA = {
     "A selection of websites, applications, dashboards, data tools, content systems, and digital platforms I have built, supported, or improved.",
 
   summary:
-    "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I focus on building reliable systems that are clear for users, maintainable for teams and dependable in production.",
+    "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. I focus on building reliable systems that are clear for users, maintainable for teams and dependable in production.",
   avatarUrl: "/hamza-portrait.png",
 
   skills: [
@@ -101,6 +101,18 @@ export const DATA = {
 
   // Put logo files in /public/logos with these filenames
   work: [
+    {
+      company: "Coded Square",
+      href: "https://codedsquare.com",
+      externalLink: true,
+      badges: ["Software Development"],
+      title: "Founder / Full Stack Developer",
+      logoUrl: "/logos/coded-square.png",
+      start: "Jul 2021",
+      end: "Present",
+      description:
+        "Founded and operate Coded Square, building websites, custom software and digital tools for businesses and organizations. Lead projects from requirements and architecture through development, integrations, QA, deployment and ongoing production support.",
+    },
     {
       company: "Sparked Digital",
       href: "https://sparkeddigital.ca/",
