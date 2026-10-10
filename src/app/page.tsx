@@ -30,6 +30,31 @@ const HERO_REVEAL_PROPS = {
 export default function Page() {
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebSite",
+                "@id": `${DATA.url}/#website`,
+                name: DATA.name,
+                url: DATA.url,
+                publisher: { "@id": `${DATA.url}/#person` },
+              },
+              {
+                "@type": "Person",
+                "@id": `${DATA.url}/#person`,
+                name: DATA.name,
+                url: DATA.url,
+                jobTitle: "Software Engineer",
+                image: new URL(DATA.avatarUrl, DATA.url).toString(),
+              },
+            ],
+          }).replace(/</g, "\\u003c"),
+        }}
+      />
       <section id="hero">
         <div className="mx-auto w-full max-w-2xl space-y-8">
           <div className="grid grid-cols-[minmax(0,1fr)_88px] items-center gap-x-3 gap-y-1.5 sm:flex sm:items-start sm:gap-2 sm:justify-between">

@@ -3,7 +3,7 @@ import { SITE_URL } from "@/lib/site";
 import { HomeIcon, NotebookIcon } from "lucide-react";
 
 export const DATA = {
-  name: "Mian Muhammad Hamza Shakeel",
+  name: "Hamza Shakeel",
   initials: "HS",
   url: SITE_URL,
   location: "Mississauga, Ontario, Canada",
