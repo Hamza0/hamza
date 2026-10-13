@@ -1,4 +1,7 @@
 import Navbar from "@/components/navbar";
+import { AnalyticsPreferences } from "@/components/analytics-preferences";
+import fs from "node:fs";
+import path from "node:path";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DATA } from "@/data/resume";
@@ -13,6 +16,8 @@ const fontSans = FontSans({
   variable: "--font-sans",
   display: "swap",
 });
+
+const analyticsPaths = ["/", "/blog", "/privacy", ...fs.readdirSync(path.join(process.cwd(), "content")).filter(file => file.endsWith(".mdx")).map(file => `/blog/${file.slice(0, -4)}`)];
 
 export const metadata: Metadata = {
   metadataBase: new URL(DATA.url),
@@ -70,6 +75,7 @@ export default function RootLayout({
           <TooltipProvider delayDuration={0}>
             {children}
             <Navbar />
+            <AnalyticsPreferences production={process.env.NODE_ENV === "production" && (!process.env.VERCEL_ENV || process.env.VERCEL_ENV === "production")} paths={analyticsPaths} />
           </TooltipProvider>
         </ThemeProvider>
       </body>
