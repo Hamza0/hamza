@@ -117,6 +117,7 @@ export default function Page() {
             >
               <ResumeCard
                 key={work.company}
+                variant="experience"
                 logoUrl={work.logoUrl}
                 altText={`${work.company} logo`}
                 title={work.company}
