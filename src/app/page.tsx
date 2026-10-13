@@ -3,6 +3,8 @@ import { DiaTextReveal } from "@/components/ui/dia-text-reveal";
 import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
 import { HeroLanyard } from "@/components/hero-lanyard";
+import { ContactButton } from "@/components/contact-provider";
+import { contactFormAvailable } from "@/lib/contact/config";
 import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
 import type { Metadata } from "next";
@@ -27,6 +29,7 @@ const HERO_REVEAL_PROPS = {
 };
 
 export default function Page() {
+  const contactReady = contactFormAvailable();
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <script
@@ -224,6 +227,7 @@ export default function Page() {
                 Get in Touch
               </h2>
               <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                {contactReady ? <>Have a project, role, or collaboration in mind? Tell me a little about it.</> : <>
                 Want to chat? The best way to reach me is on{" "}
                 <Link
                   href={DATA.contact.social.LinkedIn.url}
@@ -233,7 +237,10 @@ export default function Page() {
                 </Link>
                 . Send me a connection request or message with a clear question,
                 and I&apos;ll respond whenever I can.
+                </>}
               </p>
+              <ContactButton />
+              {contactReady && <p className="text-sm text-muted-foreground">Or connect on <Link href={DATA.contact.social.LinkedIn.url} className="underline underline-offset-4">LinkedIn</Link>.</p>}
             </div>
           </BlurFade>
         </div>

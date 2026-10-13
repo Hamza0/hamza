@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import { copyContactEmail } from "@/lib/copy-contact-email";
+import { useContact } from "@/components/contact-provider";
 
 export function AvailableWorkBadge() {
+  const { available, openContact } = useContact();
   const [copied, setCopied] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const busy = useRef(false);
@@ -43,9 +45,9 @@ export function AvailableWorkBadge() {
       <button
         type="button"
         className="available-work-badge"
-        aria-label={`${copied ? "Email copied" : "Available for work"} — copy contact email`}
+        aria-label={available ? "Available for work — contact Hamza" : `${copied ? "Email copied" : "Available for work"} — copy contact email`}
         aria-disabled={copied}
-        onClick={copy}
+        onClick={event => available ? openContact("lanyard", event.currentTarget) : void copy()}
       >
         {copied ? (
           <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">

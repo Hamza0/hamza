@@ -1,5 +1,7 @@
 import Navbar from "@/components/navbar";
 import { AnalyticsPreferences } from "@/components/analytics-preferences";
+import { ContactProvider } from "@/components/contact-provider";
+import { contactFormAvailable } from "@/lib/contact/config";
 import fs from "node:fs";
 import path from "node:path";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -73,9 +75,11 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <TooltipProvider delayDuration={0}>
+            <ContactProvider available={contactFormAvailable()}>
             {children}
             <Navbar />
             <AnalyticsPreferences production={process.env.NODE_ENV === "production" && (!process.env.VERCEL_ENV || process.env.VERCEL_ENV === "production")} paths={analyticsPaths} />
+            </ContactProvider>
           </TooltipProvider>
         </ThemeProvider>
       </body>

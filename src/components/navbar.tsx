@@ -1,5 +1,8 @@
 import { Dock, DockIcon } from "@/components/magicui/dock";
 import { ModeToggle } from "@/components/mode-toggle";
+import { DockContactButton } from "@/components/contact-provider";
+import { contactFormAvailable } from "@/lib/contact/config";
+import { Mail } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -65,6 +68,7 @@ export default function Navbar() {
               </Tooltip>
             </DockIcon>
           ))}
+        {contactFormAvailable() && <DockIcon><Tooltip><TooltipTrigger asChild><DockContactButton className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "size-12")}><Mail className="size-4" aria-hidden="true" /></DockContactButton></TooltipTrigger><TooltipContent>Contact Hamza</TooltipContent></Tooltip></DockIcon>}
         <Separator orientation="vertical" className="h-full py-2" />
         <DockIcon>
           <Tooltip>

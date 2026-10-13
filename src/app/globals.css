@@ -479,3 +479,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 @media (prefers-reduced-motion: reduce) {
   .lanyard-canvas, .lanyard-fallback, .available-work-badge { transition: none; }
 }
+
+.contact-step { animation: contact-step-in 120ms ease-out; }
+@keyframes contact-step-in { from { opacity: 0.8; transform: translateY(3px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .contact-step { animation: none; } }
