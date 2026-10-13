@@ -8,10 +8,10 @@ export const DATA = {
   url: SITE_URL,
   location: "Mississauga, Ontario, Canada",
   locationLink: "https://www.google.com/maps/place/Mississauga,+ON",
-  headline:
-    "Full-Stack Engineer building data-driven systems and digital platforms.",
-  description:
-    "I work across web applications, analytics and forecasting, CRM integrations, databases, cloud infrastructure, and production delivery.",
+  professionalLabel: "Full-Stack Engineer",
+  heroHeadline: "I turn complex problems into software people love to use.",
+  heroDescription:
+    "I design, build, and ship full-stack applications, from data dashboards and forecasting experiences to connected business systems, APIs, and cloud infrastructure.",
   projectsTitle: "Selected Work",
   projectsIntro:
     "A selection of websites, applications, dashboards, data tools, content systems, and digital platforms I have built, supported, or improved.",

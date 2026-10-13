@@ -65,12 +65,15 @@ export default function Page() {
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                   Hi, I&apos;m Hamza 👋
                 </h1>
+                <p className="mt-1 text-sm font-medium text-muted-foreground">
+                  {DATA.professionalLabel}
+                </p>
               </BlurFade>
               <BlurFade {...HERO_REVEAL_PROPS} delay={0.03}
                 className={`${HERO_REVEAL_PROPS.className} col-span-2`}>
                 <p className="max-w-[600px] text-base font-medium sm:text-lg md:text-xl">
                   <DiaTextReveal
-                    text={DATA.headline}
+                    text={DATA.heroHeadline}
                     repeat={false}
                     once={true}
                     duration={1.35}
@@ -83,7 +86,7 @@ export default function Page() {
               </BlurFade>
               <BlurFade {...HERO_REVEAL_PROPS} delay={0.06}
                 className={`${HERO_REVEAL_PROPS.className} col-span-2`}>
-                <p className="max-w-[600px] text-sm sm:text-base md:text-xl">{DATA.description}</p>
+                <p className="max-w-[600px] text-sm sm:text-base md:text-xl">{DATA.heroDescription}</p>
               </BlurFade>
             </div>
             <HeroLanyard />
