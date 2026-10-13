@@ -40,7 +40,7 @@ function buildGradient(pos: number, colors: string[], textColor: string) {
   });
 
   if (bandEnd < 100)
-    parts.push(`transparent ${bandEnd.toFixed(2)}%`, `transparent 100%`);
+    parts.push(`${textColor} ${bandEnd.toFixed(2)}%`, `${textColor} 100%`);
 
   return `linear-gradient(90deg, ${parts.join(", ")})`;
 }

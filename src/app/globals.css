@@ -402,6 +402,9 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 .hero-lanyard[data-ready="true"] .lanyard-fallback { opacity: 0; }
 .lanyard[data-rendered="true"] .lanyard-canvas { opacity: 1; }
 .lanyard[data-visible="false"] { visibility: hidden; }
+.lanyard:not([data-rendered="true"]) .lanyard-flip,
+.lanyard:not([data-rendered="true"]) .lanyard-hit-area,
+.lanyard:not([data-rendered="true"]) .lanyard-back-layer { visibility: hidden; }
 
 .lanyard-hit-area {
   position: absolute;

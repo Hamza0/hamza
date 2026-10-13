@@ -56,6 +56,7 @@ export interface LanyardProps {
   anchorElement: RefObject<HTMLDivElement>;
   hangFromPageTop?: boolean;
   onReady?: () => void;
+  onUnavailable?: () => void;
   frontImage?: string;
   backImage?: string;
   imageFit?: ImageFit;
@@ -925,6 +926,7 @@ const Lanyard = ({
   anchorElement,
   hangFromPageTop = false,
   onReady,
+  onUnavailable,
   frontImage,
   backImage,
   imageFit = 'cover',
@@ -954,6 +956,8 @@ const Lanyard = ({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const onReadyRef = useRef(onReady);
   onReadyRef.current = onReady;
+  const onUnavailableRef = useRef(onUnavailable);
+  onUnavailableRef.current = onUnavailable;
   const [showBack, setShowBack] = useState(false);
   const [backHost, setBackHost] = useState<HTMLDivElement | null>(null);
   const settingsRef = useRef<Settings | null>(null);
@@ -1254,6 +1258,9 @@ const Lanyard = ({
           images.strap = strap;
           paintFaces();
           repaintStrap();
+          // Reduced motion may have stopped the frame loop before the image arrived.
+          render();
+          start();
         });
       }
       const faceKey = `${layoutKey}|${s.cardColor}|${s.imageFit}`;
@@ -1371,6 +1378,7 @@ const Lanyard = ({
 
     const cardCorners = Array.from({ length: 4 }, () => new THREE.Vector3());
     const render = () => {
+      if (renderer.getContext().isContextLost()) return;
       cardGroup.position.copy(sim.body.position);
       cardGroup.quaternion.copy(sim.body.quaternion);
       cardGroup.updateMatrixWorld();
@@ -1431,7 +1439,7 @@ const Lanyard = ({
 
     const tick = (now: number) => {
       raf = 0;
-      if (!alive) return;
+      if (!alive || !visible || document.hidden) return;
       if (reducedMotion) { render(); return; }
       const dt = Math.min(1 / 30, Math.max(1 / 240, (now - last) / 1000));
       last = now;
@@ -1445,7 +1453,7 @@ const Lanyard = ({
       }
       render();
       const resting = sim.calm > 1.2 && !sim.grab && current.breeze === 0;
-      if (visible && !resting) raf = requestAnimationFrame(tick);
+      if (visible && !document.hidden && !resting) raf = requestAnimationFrame(tick);
     };
 
     const start = () => {
@@ -1581,19 +1589,19 @@ const Lanyard = ({
     resizeObserver.observe(container);
     resizeObserver.observe(anchorNode);
     const onScroll = () => {
-      if (layoutRaf) return;
-      layoutRaf = requestAnimationFrame(() => { layoutRaf = 0; apply(); render(); });
+      if (layoutRaf || !visible || document.hidden) return;
+      layoutRaf = requestAnimationFrame(() => { layoutRaf = 0; if (visible && !document.hidden) { apply(); render(); } });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     const intersectionObserver = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting || !!sim.grab;
       container.dataset.visible = String(visible);
-      if (visible) start();
+      if (visible) { apply(); render(); start(); }
       else { cancelAnimationFrame(raf); raf = 0; }
     });
     intersectionObserver.observe(anchorNode);
     const onVisibility = () => {
-      if (!document.hidden) start();
+      if (!document.hidden) { apply(); render(); start(); }
       else { cancelAnimationFrame(raf); raf = 0; }
     };
     const onMotionChange = () => {
@@ -1609,6 +1617,17 @@ const Lanyard = ({
     };
     motionMedia.addEventListener('change', onMotionChange);
     document.addEventListener('visibilitychange', onVisibility);
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
+      cancelAnimationFrame(raf);
+      raf = 0;
+      ready = false;
+      container.dataset.rendered = 'false';
+      onUnavailableRef.current?.();
+    };
+    const onContextRestored = () => { paintFaces(); repaintStrap(); render(); start(); };
+    canvas.addEventListener('webglcontextlost', onContextLost);
+    canvas.addEventListener('webglcontextrestored', onContextRestored);
 
     applyRef.current = apply;
     resize();
@@ -1625,6 +1644,8 @@ const Lanyard = ({
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
+      canvas.removeEventListener('webglcontextlost', onContextLost);
+      canvas.removeEventListener('webglcontextrestored', onContextRestored);
       hitArea.removeEventListener('pointerdown', onPointerDown);
       hitArea.removeEventListener('pointermove', onPointerMove);
       hitArea.removeEventListener('lostpointercapture', cancelDrag);

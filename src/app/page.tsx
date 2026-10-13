@@ -20,7 +20,6 @@ const HERO_REVEAL_VARIANT = {
   visible: { y: 0, opacity: 1, filter: "blur(0px)" },
 };
 const HERO_REVEAL_PROPS = {
-  initial: "hidden" as const,
   respectReducedMotion: true,
   variant: HERO_REVEAL_VARIANT,
   duration: HERO_REVEAL_DURATION,

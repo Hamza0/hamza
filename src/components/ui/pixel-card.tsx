@@ -68,6 +68,7 @@ export function PixelCard({
     let height = 0;
     let pixels: Pixel[] = [];
     let palette = "";
+    let visible = false;
     const spacing = Math.max(8, Math.min(10, gap));
     const animationSpeed = Math.max(1, Math.min(25, speed));
 
@@ -77,6 +78,7 @@ export function PixelCard({
     };
     const animate = (mode: AnimationMode) => {
       stop();
+      if (!visible || document.hidden) return;
       if (media.matches) {
         context.clearRect(0, 0, width, height);
         container.dataset.pixelAnimation = "disabled";
@@ -107,6 +109,7 @@ export function PixelCard({
 
     const initPixels = () => {
       stop();
+      if (!visible || document.hidden) return;
       const rect = container.getBoundingClientRect();
       width = Math.floor(rect.width);
       height = Math.floor(rect.height);
@@ -132,10 +135,18 @@ export function PixelCard({
     };
 
     animateRef.current = animate;
-    initPixels();
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) initPixels();
+      else stop();
+    }, { rootMargin: "100px" });
+    intersectionObserver.observe(container);
+    const onVisibility = () => { if (document.hidden) stop(); else initPixels(); };
+    document.addEventListener("visibilitychange", onVisibility);
     const resizeObserver = new ResizeObserver(initPixels);
     resizeObserver.observe(container);
     const themeObserver = new MutationObserver(() => {
+      if (!visible || document.hidden) return;
       const nextPalette = getComputedStyle(container).getPropertyValue("--pixel-card-colors").trim();
       if (nextPalette !== palette) initPixels();
     });
@@ -145,6 +156,8 @@ export function PixelCard({
       stop();
       resizeObserver.disconnect();
       themeObserver.disconnect();
+      intersectionObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       media.removeEventListener("change", initPixels);
       animateRef.current = () => {};
     };

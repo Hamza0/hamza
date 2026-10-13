@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  AnimatePresence,
   motion,
+  useAnimationControls,
   useInView,
   useReducedMotion,
   type Variants,
 } from "framer-motion";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface BlurFadeProps {
   children: React.ReactNode;
@@ -17,9 +17,8 @@ interface BlurFadeProps {
   delay?: number;
   yOffset?: number;
   inView?: boolean;
-  inViewMargin?: string;
+  inViewMargin?: NonNullable<Parameters<typeof useInView>[1]>["margin"];
   blur?: string;
-  initial?: "hidden" | false;
   respectReducedMotion?: boolean;
 }
 
@@ -30,19 +29,20 @@ const BlurFade = ({
   duration = 0.4,
   delay = 0,
   yOffset = 6,
-  inView = false,
+  inView = true,
   inViewMargin = "-50px",
   blur = "6px",
-  initial,
-  respectReducedMotion = false,
+  respectReducedMotion = true,
 }: BlurFadeProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const reduceMotion = respectReducedMotion && prefersReducedMotion;
+  const controls = useAnimationControls();
+  const played = useRef(false);
 
   const inViewResult = useInView(ref, {
     once: true,
-    margin: inViewMargin as any, // <-- THIS "as any" MUST BE HERE
+    margin: inViewMargin,
   });
 
   const isInView = !inView || inViewResult;
@@ -54,19 +54,29 @@ const BlurFade = ({
 
   const combinedVariants = variant || defaultVariants;
 
+  useEffect(() => {
+    if (reduceMotion) { controls.stop(); controls.set("visible"); return; }
+    if (!isInView || played.current) return;
+    played.current = true;
+    // The HTML starts in its settled, readable state. Hydration adds a small
+    // lift and blur without ever hiding essential content or queuing long delays.
+    const hidden = combinedVariants.hidden;
+    if (typeof hidden === "object") {
+      controls.set({ ...hidden, opacity: 1, filter: "blur(1px)" });
+    }
+    void controls.start("visible", { duration, delay: Math.min(delay, 0.15) });
+  }, [isInView, reduceMotion, controls, combinedVariants, duration, delay]);
+
   return (
-    <AnimatePresence>
       <motion.div
         ref={ref}
         variants={combinedVariants}
-        initial={reduceMotion ? false : initial ?? "hidden"}
-        animate={reduceMotion ? { y: 0, opacity: 1, filter: "blur(0px)" } : isInView ? "visible" : "hidden"}
-        transition={{ duration: reduceMotion ? 0 : duration, delay: reduceMotion ? 0 : delay }}
+        initial="visible"
+        animate={controls}
         className={className}
       >
         {children}
       </motion.div>
-    </AnimatePresence>
   );
 };
 
