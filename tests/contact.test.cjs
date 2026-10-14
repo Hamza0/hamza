@@ -97,7 +97,7 @@ test('provider acceptance, escaped HTML and matching text, private destination a
   assert.equal(body.headers, undefined); assert.equal(body.bcc, undefined);
   const timestamp = `${new Date(Number(data.submissionId.split('.')[0])).toISOString().slice(0, 19).replace('T', ' ')} UTC`;
   assert.ok(body.html.includes(timestamp)); assert.ok(body.text.includes(timestamp));
-  assert.ok(body.text.includes(`Project type: ${data.context}`));
+  assert.ok(body.text.includes(`Project type\n${data.context}`));
   assert.equal(mock.calls.filter(c => c.url.includes('resend'))[0].init.body, mock.calls.filter(c => c.url.includes('resend'))[1].init.body);
   assert.ok(body.text.includes(data.message));
   const conflict = await handleContact(request({ ...data, token: randomUUID(), message: 'Different message content here.' }), config, mock.transport);
@@ -133,7 +133,7 @@ test('all categories use fixed subjects and contextual labels in accessible emai
     assert.equal((await handleContact(request(data), config, mock.transport)).status, 200);
     const body = JSON.parse(mock.calls.find(c => c.url.includes('resend')).init.body);
     assert.equal(body.subject, `Portfolio enquiry · ${subject}`);
-    for (const content of ['New portfolio enquiry', label, contextLabel, messageLabel, data.name, data.email, data.context, data.message, 'Sent through hamzashakeel.ca']) {
+    for (const content of ['New enquiry', label, contextLabel, messageLabel, data.name, data.email, data.context, data.message, 'Received via hamzashakeel.ca']) {
       assert.ok(body.html.includes(content)); assert.ok(body.text.includes(content));
     }
     assert.ok(body.html.includes('<html lang="en" dir="ltr">'));

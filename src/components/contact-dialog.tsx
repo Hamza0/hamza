@@ -4,7 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 import { CONTACT_CATEGORIES, CONTACT_LIMITS, parseContactDetails, type ContactCategory } from "@/lib/contact/schema";
-import { X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import Script from "next/script";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 
@@ -107,7 +107,7 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus }: { op
       const data = await r.json().catch(() => ({})) as { code?: string };
       if (r.ok && data.code === "accepted") {
         setSuccess(true);
-        setStatus("Your message was accepted for sending. Thank you — I’ll respond when I can.");
+        setStatus("");
         trackEvent("contact_submit_success", { category });
       } else {
         if (!wasUncertain && [400, 403, 413, 429].includes(r.status)) attempt.current.uncertain = false;
@@ -138,10 +138,16 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus }: { op
       <Dialog.Content className="contact-dialog fixed left-1/2 top-1/2 z-[61] flex w-[calc(100%_-_2rem)] max-w-[460px] max-h-[calc(100dvh_-_2rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl border bg-background shadow-xl" style={viewport ? { maxHeight: Math.max(120, viewport.height - 32), top: viewport.top + viewport.height / 2 } : undefined} onOpenAutoFocus={event => { event.preventDefault(); title.current?.focus(); }} onCloseAutoFocus={event => { event.preventDefault(); restoreFocus(); }}>
         <Dialog.Close asChild><button type="button" aria-label="Close contact dialog" className="absolute right-3 top-3 z-10 flex size-10 items-center justify-center rounded-md bg-background hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"><X size={18} aria-hidden="true" /></button></Dialog.Close>
         <div className="contact-dialog-scroll min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-7">
+        {success ? <div className="contact-step pt-7 text-center">
+          <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-[#DDF7E9] text-[#14532d]" aria-hidden="true"><Check size={26} strokeWidth={2} /></div>
+          <Dialog.Title ref={title} tabIndex={-1} className="mt-5 text-xl font-semibold tracking-tight outline-none">Message received.</Dialog.Title>
+          <Dialog.Description className="mt-2 text-sm leading-6 text-muted-foreground">Thanks for reaching out. I&apos;ll get back to you soon.</Dialog.Description>
+          <Dialog.Close asChild><Button type="button" className="mt-7 w-full bg-black text-white hover:bg-black/85 dark:bg-black dark:text-white dark:hover:bg-black/85">Done</Button></Dialog.Close>
+        </div> : <>
         <p className="mb-2 text-xs text-muted-foreground">{step} of 2</p>
         <Dialog.Title ref={title} tabIndex={-1} className="pr-8 text-xl font-semibold tracking-tight outline-none">{step === 1 ? "What brings you here?" : selected?.title}</Dialog.Title>
-        <Dialog.Description className="mt-2 text-sm text-muted-foreground">{success ? "Thanks for getting in touch." : step === 1 ? "Have a project, role, or collaboration in mind? Tell me a little about it." : selected?.description}</Dialog.Description>
-        {success ? <div className="mt-6 space-y-4"><p role="status" className="text-sm">{status}</p><Dialog.Close asChild><Button type="button">Close</Button></Dialog.Close></div> : step === 1 ? <form className="contact-step mt-6 space-y-4" onSubmit={event => { event.preventDefault(); if (category) { setStep(2); setStatus(""); } }}>
+        <Dialog.Description className="mt-2 text-sm text-muted-foreground">{step === 1 ? "Have a project, role, or collaboration in mind? Tell me a little about it." : selected?.description}</Dialog.Description>
+        {step === 1 ? <form className="contact-step mt-6 space-y-4" onSubmit={event => { event.preventDefault(); if (category) { setStep(2); setStatus(""); } }}>
           <fieldset className="space-y-2" disabled={attempt.current.uncertain}><legend className="sr-only">Enquiry type</legend>{OPTIONS.map(option => <label key={option} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border p-3 text-sm has-[:checked]:border-foreground"><input type="radio" name="category" value={option} checked={category === option} onChange={() => { if (category !== option) setFields(value => ({ ...value, context: "" })); setCategory(option); }} required className="accent-current" />{CONTACT_CATEGORIES[option].label}</label>)}</fieldset>
           <Button type="submit" className="w-full" disabled={!category}>Continue</Button>
         </form> : <form className="contact-step mt-5 space-y-3" onSubmit={submit} onInvalid={() => setStatus("Please check the required fields.")}>
@@ -159,6 +165,7 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus }: { op
           <div className="flex gap-3"><Button type="button" variant="outline" disabled={sending} onClick={() => { setStep(1); setStatus(""); }}>Back</Button><Button type="submit" className="flex-1" disabled={sending || !token || cooldown > 0}>{sending ? "Sending…" : "Send message"}</Button></div>
           <p className="text-xs text-muted-foreground">Prefer another route? <a href="https://www.linkedin.com/in/mianhamza" className="underline">Message me on LinkedIn</a>.</p>
         </form>}
+        </>}
         </div>
       </Dialog.Content>
     </Dialog.Portal>
