@@ -53,7 +53,7 @@ interface PathLike {
 }
 
 export interface LanyardProps {
-  anchorElement: RefObject<HTMLDivElement>;
+  anchorElement: RefObject<HTMLDivElement | null>;
   hangFromPageTop?: boolean;
   onReady?: () => void;
   onUnavailable?: () => void;

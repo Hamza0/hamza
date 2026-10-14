@@ -34,10 +34,10 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus }: { op
   const [viewport, setViewport] = useState<{ height: number; top: number } | null>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const challenge = useRef<HTMLDivElement>(null);
-  const widget = useRef<string>();
+  const widget = useRef<string | undefined>(undefined);
   const attempt = useRef({ id: "", payload: "", uncertain: false });
   const busy = useRef(false);
-  const activeRequest = useRef<AbortController>();
+  const activeRequest = useRef<AbortController | undefined>(undefined);
   const wasOpen = useRef(false);
 
   useEffect(() => {
@@ -93,19 +93,20 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus }: { op
       setSending(false); busy.current = false; return;
     }
     if (!attempt.current.id || payload !== attempt.current.payload) attempt.current = { id: `${Date.now()}.${crypto.randomUUID()}`, payload, uncertain: false };
+    const wasUncertain = attempt.current.uncertain;
     attempt.current.uncertain = true;
     const controller = new AbortController();
     activeRequest.current = controller;
     const timeout = setTimeout(() => controller.abort(), 30000);
     try {
       const r = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...fields, category, token, submissionId: attempt.current.id }), signal: controller.signal });
-      const data = await r.json() as { code?: string };
+      const data = await r.json().catch(() => ({})) as { code?: string };
       if (r.ok && data.code === "accepted") {
         setSuccess(true);
         setStatus("Your message was accepted for sending. Thank you — I’ll respond when I can.");
         trackEvent("contact_submit_success", { category });
       } else {
-        if ([400, 403, 413, 429].includes(r.status)) attempt.current.uncertain = false;
+        if (!wasUncertain && [400, 403, 413, 429].includes(r.status)) attempt.current.uncertain = false;
         if (r.status === 429) {
           setCooldown(Math.max(1, Math.min(3600, Number(r.headers.get("Retry-After")) || 600)));
           setStatus("Too many attempts. Please wait before trying again, or reach me on LinkedIn.");

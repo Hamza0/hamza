@@ -9,43 +9,34 @@ const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.Modu
 const sandbox = { exports: {}, require, Response, Request, AbortSignal, TextDecoder, Uint8Array, setTimeout, clearTimeout, fetch: async () => { throw Error('Unexpected real network request'); } };
 vm.runInNewContext(compiled, sandbox);
 const { handleContact } = sandbox.exports;
-const config = { origin: 'https://www.hamzashakeel.ca', hostname: 'www.hamzashakeel.ca', resendKey: 'test-only', from: 'verified@example.com', to: 'recipient@example.com', turnstileSecret: 'test-only', redisUrl: 'https://redis.example.com', redisToken: 'test-only', hashSecret: 'test-fixture-key-not-a-real-secret-000', onVercel: true };
+const config = { origin: 'https://www.hamzashakeel.ca', hostname: 'www.hamzashakeel.ca', resendKey: 'test-only', from: 'verified@example.com', to: 'recipient@example.com', turnstileSecret: 'test-only',  };
 const input = (extra = {}) => ({ category: 'project', name: 'Test Visitor', email: 'visitor@example.com', message: 'This is a clearly labelled test message.', website: '', token: randomUUID(), submissionId: `${Date.now()}.${randomUUID()}`, ...extra });
 const request = (body, headers = {}, method = 'POST') => new Request(`${config.origin}/api/contact`, { method, headers: { origin: config.origin, 'content-type': 'application/json', 'x-forwarded-for': '192.0.2.1', ...headers }, ...(method === 'POST' ? { body: typeof body === 'string' ? body : JSON.stringify(body) } : {}) });
 
+// Provider persistence is modelled only in this test double.
 function services(options = {}) {
-  const store = new Map();
-  const calls = [];
-  let sends = 0;
+  const tokens = new Set(); const keys = new Map(); const calls = []; let sends = 0;
   const transport = async (url, init) => {
-    calls.push({ url, init });
-    assert.ok(init.signal, 'Every provider operation has a timeout');
-    if (url === config.redisUrl) {
-      if (options.redisDown) return new Response('', { status: 503 });
-      const command = JSON.parse(init.body);
-      let result;
-      if (command[0] === 'SET') {
-        if (command.includes('NX') && store.has(command[1])) result = null;
-        else { store.set(command[1], command[2]); result = 'OK'; }
-      } else if (command[0] === 'EVAL') {
-        const [_, script, count, key, arg1, arg2, arg3] = command;
-        assert.equal(count, 1);
-        if (script.includes("'INCR'")) { const n = (Number(store.get(key)) || 0) + 1; store.set(key, n); result = [options.rateLimit ? 99 : n, arg1]; }
-        else if (script.includes("'DEL'")) { result = store.get(key) === arg1 ? Number(store.delete(key)) : 0; }
-        else { const old = store.get(key); if (old && old !== arg3) result = old; else { store.set(key, arg1); result = 'new'; } }
-      } else throw Error('Unexpected Redis command');
-      return Response.json({ result });
+    calls.push({ url, init }); assert.ok(init.signal);
+    if (url.includes('/siteverify')) {
+      const token = JSON.parse(init.body).response; const used = tokens.has(token); tokens.add(token);
+      return Response.json({ success: !used, hostname: config.hostname, action: 'portfolio_contact', challenge_ts: new Date().toISOString(), ...options.verification });
     }
-    if (url.includes('/siteverify')) return Response.json({ success: true, hostname: config.hostname, action: 'portfolio_contact', challenge_ts: new Date().toISOString(), ...options.verification });
-    if (url === 'https://api.resend.com/emails') {
-      sends++;
-      if (options.onProvider) return options.onProvider(init, sends);
-      if (options.providerDown) return Response.json({ error: 'test-only' }, { status: 500 });
-      return Response.json({ id: 'provider-test-acceptance' });
-    }
-    throw Error('Unexpected service');
+    assert.equal(url, 'https://api.resend.com/emails', 'No Redis or unexpected service calls');
+    const key = init.headers['Idempotency-Key']; const old = keys.get(key);
+    if (old && old.body !== init.body) return Response.json({ name: 'invalid_idempotent_request' }, { status: 409 });
+    if (old?.pending) return Response.json({ name: 'concurrent_idempotent_requests' }, { status: 409 });
+    if (old?.id) return Response.json({ id: old.id });
+    keys.set(key, { body: init.body, pending: true }); sends++;
+    try {
+      const r = options.onProvider ? await options.onProvider(init, sends) : options.providerDown ? Response.json({}, { status: 500 }) : Response.json({ id: 'test-accepted' });
+      if (!r.ok) { keys.delete(key); return r; }
+      const data = await r.clone().json(); keys.set(key, { body: init.body, id: data.id });
+      if (options.timeoutAfterAcceptance && sends === 1) throw Error('uncertain timeout');
+      return r;
+    } catch (e) { if (!keys.get(key)?.id) keys.delete(key); throw e; }
   };
-  return { transport, calls, store, get sends() { return sends; } };
+  return { transport, calls, get sends() { return sends; } };
 }
 
 test('unconfigured contact is unavailable and POST-only', async () => {
@@ -80,14 +71,9 @@ test('Turnstile rejects missing, invalid, expired, mismatched and replayed token
   assert.equal((await handleContact(request(data), config, mock.transport)).status, 400);
   assert.equal(mock.sends, 1);
 });
-test('shared rate limiter fails closed; no provider call on limit or outage', async () => {
-  for (const [options, status] of [[{ rateLimit: true }, 429], [{ redisDown: true }, 503]]) {
-    const mock = services(options);
-    const r = await handleContact(request(input()), config, mock.transport);
-    assert.equal(r.status, status);
-    if (status === 429) assert.ok(Number(r.headers.get('retry-after')) > 0);
-    assert.equal(mock.sends, 0);
-  }
+test('verification outage and malformed provider acceptance fail closed', async () => {
+  assert.equal((await handleContact(request(input()), config, async () => { throw Error('offline'); })).status, 503);
+  assert.equal((await handleContact(request(input()), config, services({ onProvider: async () => Response.json({}) }).transport)).status, 503);
 });
 test('provider acceptance, safe plain text, private destination and idempotent retry', async () => {
   const mock = services(); const data = input({ message: '<script>alert(1)</script> This stays plain text.' });
@@ -100,22 +86,18 @@ test('provider acceptance, safe plain text, private destination and idempotent r
   assert.deepEqual(body.to, [config.to]); assert.equal(body.reply_to, data.email);
   assert.equal(body.subject, 'Portfolio: Project enquiry'); assert.equal(body.html, undefined);
   assert.ok(body.text.includes(data.message));
-  const redisBodies = mock.calls.filter(c => c.url === config.redisUrl).map(c => c.init.body).join('');
-  for (const privateValue of [data.name, data.email, data.message, data.token, config.to]) assert.ok(!redisBodies.includes(privateValue));
   const conflict = await handleContact(request({ ...data, token: randomUUID(), message: 'Different message content here.' }), config, mock.transport);
   assert.equal(conflict.status, 409); assert.equal(mock.sends, 1);
 });
-test('provider failure and uncertain timeout retry reuse the provider key', async () => {
-  const keys = [];
-  const mock = services({ onProvider: async (init, count) => { keys.push(init.headers['Idempotency-Key']); if (count === 1) throw new Error('timeout'); return Response.json({ id: 'test-accepted' }); } });
-  const data = input();
+test('provider failure and uncertain acceptance retries reuse the provider key', async () => {
+  const mock = services({ timeoutAfterAcceptance: true }); const data = input();
   assert.equal((await handleContact(request(data), config, mock.transport)).status, 503);
   assert.equal((await handleContact(request({ ...data, token: randomUUID() }), config, mock.transport)).status, 200);
-  assert.equal(keys[0], keys[1]);
-  const down = services({ providerDown: true });
-  assert.equal((await handleContact(request(input()), config, down.transport)).status, 503);
+  const calls = mock.calls.filter(c => c.url.includes('resend'));
+  assert.equal(calls[0].init.headers['Idempotency-Key'], calls[1].init.headers['Idempotency-Key']); assert.equal(mock.sends, 1);
+  assert.equal((await handleContact(request(input()), config, services({ providerDown: true }).transport)).status, 503);
 });
-test('concurrent verified submissions cannot call the provider twice', async () => {
+test('concurrent verified retries rely on provider concurrency protection', async () => {
   let release; const wait = new Promise(resolve => release = resolve);
   let started; const called = new Promise(resolve => started = resolve);
   const mock = services({ onProvider: async () => { started(); await wait; return Response.json({ id: 'test-accepted' }); } });

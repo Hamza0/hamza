@@ -10,7 +10,7 @@ export function AvailableWorkBadge() {
   const [announcement, setAnnouncement] = useState("");
   const busy = useRef(false);
   const mounted = useRef(false);
-  const reset = useRef<ReturnType<typeof setTimeout>>();
+  const reset = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     mounted.current = true;
