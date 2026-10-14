@@ -1,27 +1,26 @@
 import { createHash } from "node:crypto";
+import { parseContactDetails, type ContactDetails } from "./schema";
+import { createContactEmail } from "./email";
 
 export type ContactConfig = {
   origin: string; hostname: string; resendKey: string; from: string; to: string;
   turnstileSecret: string;
 };
-type ContactInput = { category: "job" | "project" | "collaboration"; name: string; email: string; message: string; website: string; token: string; submissionId: string };
+type ContactInput = ContactDetails & { website: string; token: string; submissionId: string };
 const MAX_BYTES = 8192;
-const CATEGORIES = { job: "Job opportunity", project: "Project enquiry", collaboration: "Collaboration" };
 const response = (status: number, code: string, extra: Record<string, string> = {}) => Response.json({ code }, { status, headers: { "Cache-Control": "no-store", ...extra } });
 
 function validate(value: unknown): ContactInput | null {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const v = value as Record<string, unknown>;
-  if (!["category", "name", "email", "message", "website", "token", "submissionId"].every(key => typeof v[key] === "string")) return null;
-  const { category, name, email, message, website, token, submissionId } = v as Record<string, string>;
-  if (!Object.hasOwn(CATEGORIES, category) || name.trim().length < 1 || name.length > 100 || /[\u0000-\u001f\u007f]/.test(name)) return null;
-  if (email.length > 254 || !/^[^\s@<>\r\n]+@[^\s@<>\r\n]+\.[^\s@<>\r\n]+$/.test(email)) return null;
-  if (message.trim().length < 10 || message.length > 3000 || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(message)) return null;
+  const details = parseContactDetails(v);
+  if (!details || !["website", "token", "submissionId"].every(key => typeof v[key] === "string")) return null;
+  const { website, token, submissionId } = v as Record<string, string>;
   if (website.length > 200 || token.length > 2048 || !/^\d{13}\.[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(submissionId)) return null;
   const age = Date.now() - Number(submissionId.split(".")[0]);
   // Refuse old attempts before the provider's 24-hour idempotency window expires.
   if (age < -30000 || age > 23 * 3600000) return null;
-  return { category: category as ContactInput["category"], name: name.trim(), email, message: message.trim(), website, token, submissionId };
+  return { ...details, website, token, submissionId };
 }
 
 async function readInput(request: Request) {
@@ -70,7 +69,7 @@ export async function handleContact(request: Request, config: ContactConfig | nu
     // email payload. Resend retains the key for 24 hours; input IDs expire at 23h.
     const provider = await send("https://api.resend.com/emails", {
       method: "POST", headers: { Authorization: `Bearer ${config.resendKey}`, "Content-Type": "application/json", "Idempotency-Key": idempotencyKey },
-      body: JSON.stringify({ from: config.from, to: [config.to], reply_to: input.email, subject: `Portfolio: ${CATEGORIES[input.category]}`, text: `Name: ${input.name}\nEnquiry: ${CATEGORIES[input.category]}\n\n${input.message}` }), signal: AbortSignal.timeout(8000), cache: "no-store",
+      body: JSON.stringify({ from: config.from, to: [config.to], reply_to: input.email, ...createContactEmail(input, Number(input.submissionId.split(".")[0])) }), signal: AbortSignal.timeout(8000), cache: "no-store",
     });
     if (!provider.ok) {
       const failure = await provider.json().catch(() => null) as { name?: string } | null;

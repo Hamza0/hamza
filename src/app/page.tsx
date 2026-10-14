@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 };
 
 const BLUR_FADE_DELAY = 0.04;
-const HERO_REVEAL_DURATION = 0.4;
+const HERO_REVEAL_DURATION = 0.6;
 const HERO_REVEAL_VARIANT = {
-  hidden: { y: 6, opacity: 0, filter: "blur(6px)" },
+  hidden: { y: 14, opacity: 0, filter: "blur(6px)" },
   visible: { y: 0, opacity: 1, filter: "blur(0px)" },
 };
 const HERO_REVEAL_PROPS = {

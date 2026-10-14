@@ -69,16 +69,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6",
+          "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <TooltipProvider delayDuration={0}>
             <ContactProvider available={contactFormAvailable()}>
+            <div className="max-w-2xl mx-auto py-12 sm:py-24 px-6">
             {children}
             <Navbar />
             <AnalyticsPreferences production={process.env.NODE_ENV === "production" && (!process.env.VERCEL_ENV || process.env.VERCEL_ENV === "production")} paths={analyticsPaths} />
+            </div>
             </ContactProvider>
           </TooltipProvider>
         </ThemeProvider>

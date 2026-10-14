@@ -70,6 +70,10 @@
     html {
       scrollbar-gutter: stable;
     }
+    @supports (scrollbar-gutter: stable) {
+      /* The root retains the gutter during Radix's scroll lock. */
+      body[data-scroll-locked] { margin-right: 0 !important; }
+    }
     * {
       @apply border-border;
     }
