@@ -1,35 +1,80 @@
 ---
-title: "I Started with GW-BASIC at 13. Java Came Next."
+title: "From GW-BASIC at 13 to Java: Learning to Think in Systems"
 publishedAt: "2026-10-15"
-summary: "How an early introduction to programming became a lasting interest in building useful software."
+dateLabel: "Retrospective · February 2026"
+summary: "From early programming to Java and Spring Boot: thinking about data modelling, transaction boundaries, and reliable APIs."
 ---
 
-My introduction to programming was GW-BASIC when I was 13. Java came later and became the first language I learned in depth.
+GW-BASIC introduced me to programming at 13. Java came later and was the first language I learned in depth. That progression took me from understanding instructions to thinking about how a program's parts fit together.
 
-Looking back, those were two different stages of learning. GW-BASIC was the beginning: getting familiar with the idea that instructions could become something a computer would do. Java was where I began thinking more deliberately about how a program should be organised.
+My current work spans web applications and business systems. Looking back, I can trace the same questions through it: what does this information mean, who can change it, and what must remain true when something fails?
 
-## Learning to think beyond the screen
+## From instructions to modelling
 
-What interests me about programming is not just what appears on the screen. It is the logic underneath: how information moves, how decisions are made, and what should happen when something goes wrong.
+Types, objects, and responsibilities help me express those questions in code. Useful object-oriented design is more than putting functions inside classes. A model should make invalid states harder to create and keep business rules somewhere I can find and explain them.
 
-That interest connects my early experience with Java to the web applications and business systems I work with today. The tools have changed, but I still care about the same questions. Does the software make sense? Can someone else maintain it? Does it make a real task easier?
+For example, an amount without a currency leaves an important assumption unstated. An invariant makes that assumption explicit: every monetary value has a currency, and a transfer must preserve the total held across its two accounts. I would rather encode that rule than expect every caller to remember it.
 
-## Why Java still interests me
+## How I would structure a Spring Boot application
 
-Java remains part of how I think about backend development. I am interested in the structure behind an application, not just its individual features.
+I would keep three responsibilities clear. The HTTP controller accepts requests, validates their shape, and returns responses. The application service coordinates business rules and the database transaction. The persistence layer handles database access and constraints.
 
-Working with Java and Spring Boot is another way to explore that structure: separating the interface from business rules, making responsibilities explicit, and thinking carefully about how an application handles data and errors.
+I would use constructor injection so a service declares the collaborators it needs. That makes dependencies visible when reading the class and lets me substitute a repository or clock in tests without starting the whole application.
+
+A transfer should not become unrelated database updates scattered through a controller. Debiting one account and crediting another are one business operation. Keeping that coordination in a service gives me one place to reason about its outcome, even if another interface eventually calls it.
 
 ## Thinking about a banking API
 
-One concept I want to explore is a banking-style operations API built with Java and Spring Boot.
+This is an independent architecture concept using synthetic data, not a production banking system or client implementation.
 
-The proposed scope is deliberately focused: account records, transaction history, and transfers using synthetic data. I would pay particular attention to transactional updates, repeated requests, and an audit trail that explains what happened.
+Consider a simulated CAD 25.00 transfer between two accounts. I would use `BigDecimal` constructed from decimal strings, or integer minor units, rather than binary floating-point arithmetic for exact decimal amounts. [Oracle's BigDecimal documentation](https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html) explains why constructing from a `double` can carry an unexpected approximation into the value.
 
-This is an independent design concept, not a production banking system or client implementation.
+Illustrative CAD value validation, with imports omitted:
 
-## The part that has stayed the same
+```java
+record CadTransferAmount(BigDecimal value) {
+    CadTransferAmount {
+        value = value.setScale(
+            2, RoundingMode.UNNECESSARY);
+        if (value.signum() <= 0) {
+            throw new IllegalArgumentException(
+                "Amount must be positive");
+        }
+    }
+    String currency() { return "CAD"; }
+}
+```
 
-I started with GW-BASIC at 13, went deeper with Java, and eventually found my way into web development and business applications.
+Here the type associates the amount with CAD. Two decimal places are specific to this example, not every currency. I would construct it with `new BigDecimal("25.00")`; refusing necessary rounding avoids silently changing the requested amount.
 
-I do not see those as disconnected chapters. They are different ways of pursuing the same interest: understanding a problem well enough to build something useful.
+Illustrative HTTP request; the token is a placeholder:
+
+```http
+POST /transfers HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer <token>
+Idempotency-Key: transfer-example-001
+
+{
+  "fromAccount": "account-a",
+  "toAccount": "account-b",
+  "amount": "25.00",
+  "currency": "CAD"
+}
+```
+
+Beyond positive amounts, I would validate distinct accounts, matching currencies, the caller's authority to debit the source, and whether the destination can receive the transfer. This no-overdraft example also requires sufficient available funds.
+
+I would place the balance updates, journal entries, and operation record inside one database transaction. Spring's [`@Transactional` guidance](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html) matters here: the service call must cross the configured transactional proxy, and rollback rules must cover the failures I expect. The annotation alone does not solve concurrency, duplicate requests, or external API failures. A database rollback cannot undo a completed remote action.
+
+For concurrency, I would lock both affected account rows in a consistent account-ID order, then check available funds and apply updates within the transaction. [PostgreSQL's locking documentation](https://www.postgresql.org/docs/current/explicit-locking.html) describes how `FOR UPDATE` blocks competing writers and why consistent lock ordering helps avoid deadlocks. Every balance-changing path must follow the same discipline.
+
+For idempotency, I would scope the request key to the authenticated caller and enforce database uniqueness on that pair. I would persist the key, normalised payload, and result with the operation. An identical retry returns the recorded result; reuse with a different payload is rejected. Concurrent duplicates must resolve through that database constraint before either can execute twice. An in-memory Map would not survive restarts or coordinate multiple instances.
+
+Balanced debit and credit journal entries, linked by an operation identifier, would explain the movement. I would commit them with the balance changes so they agree. Application logs help diagnose execution; they are not a financial ledger.
+
+## Tests I would write
+
+I would test a valid transfer and insufficient funds, then identical retries and conflicting payloads. Two simultaneous withdrawals would check that both cannot spend the same available balance. Injecting a failure after the first write would verify rollback, including the absence of partial journal entries. These would be proposed database integration tests, not evidence of a completed implementation.
+
+That is what still interests me about programming: taking a small instruction and understanding everything that must hold for it to mean what it says.
