@@ -23,7 +23,21 @@ export async function markdownToHTML(markdown: string) {
   const p = await unified()
     .use(remarkParse)
     .use(remarkGfm)
-    .use(remarkRehype)
+    .use(remarkRehype, {
+      handlers: {
+        heading(state, node) {
+          const heading = state.all(node);
+          const text = (children: typeof heading): string =>
+            children.map((child) =>
+              "value" in child ? child.value : "children" in child ? text(child.children) : ""
+            ).join("");
+          const id = text(heading).toLowerCase().trim()
+            .replace(/\s+/g, "-").replace(/&/g, "-and-")
+            .replace(/[^\w-]+/g, "").replace(/-+/g, "-");
+          return { type: "element", tagName: `h${node.depth}`, properties: { id }, children: heading };
+        },
+      },
+    })
     .use(rehypePrettyCode, {
       // https://rehype-pretty.pages.dev/#usage
       theme: {

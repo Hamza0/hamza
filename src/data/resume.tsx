@@ -14,7 +14,7 @@ export const DATA = {
     "I design, build, and ship full-stack applications, from data dashboards and forecasting experiences to connected business systems, APIs, and cloud infrastructure.",
   projectsTitle: "Selected Work",
   projectsIntro:
-    "A selection of websites, applications, dashboards, data tools, content systems, and digital platforms I have built, supported, or improved.",
+    "Selected client work, independent projects, and software architecture explorations.",
 
   summary:
     "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. I focus on building reliable systems that are clear for users, maintainable for teams and dependable in production.",
@@ -30,6 +30,8 @@ export const DATA = {
     "React",
     "Next.js",
     "JavaScript / TypeScript",
+    "Java",
+    "Spring Boot",
     "WordPress",
     "REST APIs",
     "AWS",
@@ -230,6 +232,24 @@ export const DATA = {
         {
           type: "Modelling & Forecasting",
           href: "https://healthworkforce.ca/modelling-and-forecasting/",
+          icon: <Icons.globe className="size-3" />,
+        },
+      ],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Banking Operations API",
+      href: "",
+      dates: "Architecture concept",
+      active: false,
+      description:
+        "A banking-style backend concept using Java and Spring Boot, focused on account records, transaction history, and transfer workflows. The design explores input validation, transactional updates, duplicate-request handling, and a clear audit trail.",
+      technologies: ["Java", "Spring Boot", "REST APIs", "PostgreSQL"],
+      links: [
+        {
+          type: "Read the note",
+          href: "/blog/from-gw-basic-to-java#thinking-about-a-banking-api",
           icon: <Icons.globe className="size-3" />,
         },
       ],
