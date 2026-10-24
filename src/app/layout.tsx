@@ -19,7 +19,7 @@ const fontSans = FontSans({
   display: "swap",
 });
 
-const analyticsPaths = ["/", "/blog", "/privacy", ...fs.readdirSync(path.join(process.cwd(), "content")).filter(file => file.endsWith(".mdx")).map(file => `/blog/${file.slice(0, -4)}`)];
+const analyticsPaths = ["/", "/projects/production-operations-platform", "/blog", "/privacy", ...fs.readdirSync(path.join(process.cwd(), "content")).filter(file => file.endsWith(".mdx")).map(file => `/blog/${file.slice(0, -4)}`)];
 
 export const metadata: Metadata = {
   metadataBase: new URL(DATA.url),

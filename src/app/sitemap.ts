@@ -19,9 +19,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: SITE_URL,
       // Last substantive update to the portfolio content.
-      lastModified: "2026-10-09",
+      lastModified: "2026-10-24",
       changeFrequency: "monthly",
       priority: 1,
+    },
+    {
+      url: `${SITE_URL}/projects/production-operations-platform`,
+      lastModified: "2026-10-24",
+      changeFrequency: "monthly",
+      priority: 0.8,
     },
     {
       url: `${SITE_URL}/blog`,

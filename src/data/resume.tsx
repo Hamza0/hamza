@@ -8,51 +8,40 @@ export const DATA = {
   url: SITE_URL,
   location: "Mississauga, Ontario, Canada",
   locationLink: "https://www.google.com/maps/place/Mississauga,+ON",
-  professionalLabel: "Full-Stack Engineer",
-  heroHeadline: "I turn complex problems into software people love to use.",
+  professionalLabel: "Software Developer",
+  heroHeadline: "Business Systems · Applications · Production Engineering",
   heroDescription:
-    "I design, build, and ship full-stack applications, from data dashboards and forecasting experiences to connected business systems, APIs, and cloud infrastructure.",
+    "I build, integrate and troubleshoot production applications, databases and business-critical systems, with a focus on reliability, performance and operational workflows.",
   projectsTitle: "Selected Work",
   projectsIntro:
-    "Selected client work, independent projects, and software architecture explorations.",
+    "Production systems, data platforms and commercial technical delivery.",
 
   summary:
     "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. I focus on building reliable systems that are clear for users, maintainable for teams and dependable in production.",
   avatarUrl: "/hamza-portrait.png",
 
-  skills: [
-    "Full-Stack Development",
-    "Data Analysis & Reporting",
-    "Dashboards & KPI Reporting",
-    "Forecasting & Modelling",
-    "SQL / PostgreSQL / MySQL",
-    "CRM & System Integrations",
-    "React",
-    "Next.js",
-    "JavaScript / TypeScript",
-    "Java",
-    "Spring Boot",
-    "WordPress",
-    "REST APIs",
-    "AWS",
-    "Docker",
-    "Salesforce",
-    "HubSpot",
-    "GA4",
-    "Accessibility / WCAG / AODA",
-    "SEO",
-    "HTML/CSS",
-    "PHP",
-    "Production Troubleshooting & QA",
-    "Digital Design",
-    "Layout & Typography",
-    "Adobe Creative Suite",
-    "Canva",
-    "Landing Pages",
-    "Campaign Assets",
-    "Email / Template Support",
-    "Shopify",
-    "Google Tag Manager",
+  skillGroups: [
+    {
+      title: "Core Engineering",
+      skills: [
+        "TypeScript / JavaScript", "Next.js / React", "SQL / PostgreSQL",
+        "API Development and Integrations", "Database Performance",
+        "Authentication and Authorization", "Production Debugging",
+        "Data Processing and Reporting", "Cloud Deployment", "Application Reliability",
+      ],
+    },
+    {
+      title: "Platforms and Tools",
+      skills: ["Supabase", "Vercel", "Git", "AWS", "Docker", "MySQL", "Salesforce", "HubSpot"],
+    },
+    {
+      title: "Additional Experience",
+      skills: [
+        "WordPress / WooCommerce", "Elementor", "SEO", "Web Analytics",
+        "Adobe / Canva", "Digital Experience Delivery", "Accessibility / WCAG / AODA",
+        "HTML / CSS / PHP", "Shopify",
+      ],
+    },
   ],
 
   navbar: [
@@ -203,20 +192,44 @@ export const DATA = {
 
   projects: [
     {
+      title: "Production Operations Platform",
+      featured: true,
+      href: "/projects/production-operations-platform",
+      dates: "Ongoing development & maintenance",
+      active: true,
+      description:
+        "Built and maintain a multi-tenant production SaaS platform supporting operational, transactional and financial workflows.",
+      highlights: [
+        "Eliminated repeated authorization and canonical record-resolution work in financial reads.",
+        "Reduced median full-list API response time from 4,521 ms to 94 ms (approximately 98%) in controlled local benchmarking.",
+        "Designed atomic reversal-and-replacement corrections that preserve historical transactions and auditability.",
+        "Implemented tenant-aware authorization, reporting and operational workflows.",
+        "Validated financial correctness, authorization and browser regressions, with production release checks.",
+      ],
+      technologies: ["React", "TypeScript", "PostgreSQL", "Supabase", "Vercel"],
+      links: [{
+        type: "Read the engineering case study",
+        href: "/projects/production-operations-platform",
+        icon: <Icons.globe className="size-3" />,
+      }],
+      image: "",
+      video: "",
+    },
+    {
       title:
         "Health Workforce Canada – Digital Front Door, Dashboards & Modelling",
+      featured: true,
       href: "https://healthworkforce.ca/digital-front-door/",
       dates: "2024 – 2025",
       active: true,
       description:
         "Developed public web experiences connecting the Digital Front Door, dashboards, workforce data, and Modelling & Forecasting tools. Built accessible WordPress and Gutenberg interfaces for exploring workforce information and planning resources, integrated AWS Kendra and Lambda for intelligent search, and connected APIs and analytics. Supported testing and data quality across these digital services so non-technical teams could find, understand, and use the tools.",
       technologies: [
-        "WordPress",
-        "Digital Front Door",
-        "Dashboards",
+        "AWS Kendra / Lambda",
+        "API Integrations",
+        "Data Experiences",
         "Accessibility",
-        "Gutenberg",
-        "GA4",
+        "WordPress / Gutenberg",
       ],
       links: [
         {
@@ -235,6 +248,23 @@ export const DATA = {
           icon: <Icons.globe className="size-3" />,
         },
       ],
+      image: "",
+      video: "",
+    },
+    {
+      title: "Sparked Digital – Production Support & Technical Delivery",
+      featured: true,
+      href: "https://sparkeddigital.ca/",
+      dates: "2026 – Present · Contract",
+      active: true,
+      description:
+        "Support commercial client websites in an agency environment. Troubleshoot production issues, deliver WordPress development and migrations, coordinate hosting and server work, and improve performance across plugin and theme integrations. Work spans ongoing maintenance and technical delivery across client projects.",
+      technologies: ["Production Debugging", "Integrations", "Migrations", "Hosting", "WordPress"],
+      links: [{
+        type: "Agency website",
+        href: "https://sparkeddigital.ca/",
+        icon: <Icons.globe className="size-3" />,
+      }],
       image: "",
       video: "",
     },

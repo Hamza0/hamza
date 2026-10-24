@@ -5,7 +5,6 @@ import { ResumeCard } from "@/components/resume-card";
 import { HeroLanyard } from "@/components/hero-lanyard";
 import { ContactButton } from "@/components/contact-provider";
 import { contactFormAvailable } from "@/lib/contact/config";
-import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -50,9 +49,10 @@ export default function Page() {
                 "@id": `${DATA.url}/#person`,
                 name: DATA.name,
                 url: DATA.url,
-                jobTitle: "Software Engineer",
+                jobTitle: DATA.professionalLabel,
+                knowsAbout: DATA.skillGroups[0].skills,
                 image: new URL(DATA.avatarUrl, DATA.url).toString(),
-                sameAs: [DATA.contact.social.LinkedIn.url],
+                sameAs: [DATA.contact.social.LinkedIn.url, DATA.contact.social.GitHub.url],
               },
             ],
           }).replace(/</g, "\\u003c"),
@@ -64,12 +64,10 @@ export default function Page() {
             <div className="contents sm:flex sm:flex-col min-w-0 flex-1 sm:space-y-1.5">
               <BlurFade {...HERO_REVEAL_PROPS} delay={0.02}
                 className={`${HERO_REVEAL_PROPS.className} col-start-1 row-start-1 min-w-0`}>
+                <p className="mb-2 text-sm font-medium text-muted-foreground">Hi, I&apos;m Hamza 👋</p>
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                  Hi, I&apos;m Hamza 👋
-                </h1>
-                <p className="mt-1 text-sm font-medium text-muted-foreground">
                   {DATA.professionalLabel}
-                </p>
+                </h1>
               </BlurFade>
               <BlurFade {...HERO_REVEAL_PROPS} delay={0.03}
                 className={`${HERO_REVEAL_PROPS.className} col-span-2`}>
@@ -93,6 +91,51 @@ export default function Page() {
             </div>
             <HeroLanyard />
           </div>
+        </div>
+      </section>
+
+      <section id="projects">
+        <div className="space-y-6 w-full">
+          <BlurFade delay={BLUR_FADE_DELAY * 11}>
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
+                  Engineering & Delivery
+                </div>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                  {DATA.projectsTitle}
+                </h2>
+                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  {DATA.projectsIntro}
+                </p>
+              </div>
+            </div>
+          </BlurFade>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
+            {DATA.projects.filter((project) => "featured" in project && project.featured).map((project, id) => (
+              <BlurFade
+                key={project.title}
+                delay={BLUR_FADE_DELAY * 4 + id * 0.05}
+                className={id === 0 ? "sm:col-span-2" : undefined}
+              >
+                <ProjectCard
+                  href={project.href}
+                  key={project.title}
+                  title={project.title}
+                  description={project.description}
+                  highlights={"highlights" in project ? project.highlights : undefined}
+                  dates={project.dates}
+                  tags={project.technologies}
+                  image={project.image}
+                  video={project.video}
+                  links={project.links}
+                />
+              </BlurFade>
+            ))}
+          </div>
+          <Link href="#additional-projects" className="inline-block text-sm underline underline-offset-4">
+            Explore additional projects ↓
+          </Link>
         </div>
       </section>
 
@@ -164,57 +207,40 @@ export default function Page() {
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
             <h2 className="text-xl font-bold">Skills</h2>
           </BlurFade>
-          <div className="flex flex-wrap gap-1">
-            {DATA.skills.map((skill, id) => (
-              <BlurFade key={skill} delay={BLUR_FADE_DELAY * 10 + id * 0.05}>
-                <Badge key={skill}>{skill}</Badge>
-              </BlurFade>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="projects">
-        <div className="space-y-12 w-full py-12">
-          <BlurFade delay={BLUR_FADE_DELAY * 11}>
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
-                  My Projects
-                </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
-                  {DATA.projectsTitle}
-                </h2>
-                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  {DATA.projectsIntro}
-                </p>
+          {DATA.skillGroups.map((group, index) => (
+            <BlurFade key={group.title} delay={BLUR_FADE_DELAY * 10 + index * 0.05}>
+              <div className={index === 0 ? "rounded-lg border p-4" : "pt-3"}>
+                <h3 className="mb-3 text-sm font-semibold">{group.title}</h3>
+                {index === 0 ? (
+                  <ul className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+                    {group.skills.map((skill) => <li key={skill}>{skill}</li>)}
+                  </ul>
+                ) : (
+                  <p className="text-sm leading-relaxed text-muted-foreground">{group.skills.join(" · ")}</p>
+                )}
               </div>
-            </div>
-          </BlurFade>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
-            {DATA.projects.map((project, id) => (
-              <BlurFade
-                key={project.title}
-                delay={BLUR_FADE_DELAY * 12 + id * 0.05}
-              >
-                <ProjectCard
-                  href={project.href}
-                  key={project.title}
-                  title={project.title}
-                  description={project.description}
-                  dates={project.dates}
-                  tags={project.technologies}
-                  image={project.image}
-                  video={project.video}
-                  links={project.links}
-                />
-              </BlurFade>
-            ))}
-          </div>
+            </BlurFade>
+          ))}
         </div>
       </section>
 
-     
+      <section id="additional-projects" aria-labelledby="additional-projects-title" className="scroll-mt-8">
+        <BlurFade delay={BLUR_FADE_DELAY * 11}>
+          <h2 id="additional-projects-title" className="text-xl font-bold">Additional Projects</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Earlier web, design and digital experience delivery, alongside independent architecture explorations.
+          </p>
+        </BlurFade>
+        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {DATA.projects.filter((project) => !("featured" in project && project.featured)).map((project, index) => (
+            <BlurFade key={project.title} delay={BLUR_FADE_DELAY * 12 + index * 0.05}>
+              <ProjectCard title={project.title} href={project.href} description={project.description}
+                dates={project.dates} tags={project.technologies} image={project.image}
+                video={project.video} links={project.links} />
+            </BlurFade>
+          ))}
+        </div>
+      </section>
 
       <section id="contact">
         <div className="grid items-center justify-center gap-4 px-4 text-center md:px-6 w-full py-12">

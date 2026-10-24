@@ -16,6 +16,7 @@ interface Props {
   href?: string;
   description: string;
   dates: string;
+  highlights?: readonly string[];
   tags: readonly string[];
   link?: string;
   image?: string;
@@ -33,6 +34,7 @@ export function ProjectCard({
   href,
   description,
   dates,
+  highlights,
   tags,
   link,
   image,
@@ -93,13 +95,18 @@ export function ProjectCard({
           <CardTitle className="mt-1 text-base">
             {projectHref ? <Link href={projectHref}>{title}</Link> : title}
           </CardTitle>
-          <time className="font-sans text-xs">{dates}</time>
+          <p className="font-sans text-xs">{dates}</p>
           <div className="hidden font-sans text-xs underline print:visible">
             {link?.replace("https://", "").replace("www.", "").replace("/", "")}
           </div>
           <Markdown className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
             {description}
           </Markdown>
+          {highlights && (
+            <ul className="list-disc space-y-2 pl-4 pt-2 text-sm text-muted-foreground">
+              {highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+            </ul>
+          )}
         </div>
       </CardHeader>
       <CardContent className="mt-auto flex flex-col px-2">
@@ -124,8 +131,8 @@ export function ProjectCard({
               <Link
                 href={link.href}
                 key={idx}
-                target="_blank"
-                rel="noopener noreferrer"
+                target={link.href.startsWith("https://") ? "_blank" : undefined}
+                rel={link.href.startsWith("https://") ? "noopener noreferrer" : undefined}
                 aria-label={`${link.type}: ${title}`}
               >
                 <Badge key={idx} className="flex gap-2 px-2 py-1 text-[10px]">
