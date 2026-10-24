@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     description: SOCIAL_PREVIEW.description,
     url: DATA.url,
     siteName: `${DATA.name}`,
-    locale: "en_US",
+    locale: "en_CA",
     type: "website",
     images: [SOCIAL_PREVIEW.image],
   },
@@ -53,10 +53,6 @@ export const metadata: Metadata = {
     description: SOCIAL_PREVIEW.description,
     card: "summary_large_image",
     images: [SOCIAL_PREVIEW.image],
-  },
-  verification: {
-    google: "",
-    yandex: "",
   },
 };
 

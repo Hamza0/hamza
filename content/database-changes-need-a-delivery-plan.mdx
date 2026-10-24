@@ -1,24 +1,35 @@
 ---
 title: "Database Changes Need a Delivery Plan"
 publishedAt: "2026-05-19"
-summary: "A schema change reaches beyond the database. Applications, integrations and reports need a clear path through the transition."
+updatedAt: "2026-10-24"
+summary: "Preserving authorization, financial history and application compatibility when a PostgreSQL change moves from local validation to release."
 featuredOrder: 2
 ---
 
-Adding a field to a database can look like a small change. The query is straightforward, the application needs the new value and the development environment behaves as expected. The harder questions often appear when the change reaches a live system.
+A migration can run successfully while leaving the application wrong. A function signature may still match even though its permissions, row ordering or interpretation of a corrected transaction has changed. My delivery plan starts with those observable behaviours.
 
-An application, a form integration and a report may all depend on the same record. They do not necessarily update at the same time. A database change therefore needs a delivery plan as well as a technically valid migration.
+## Define what must stay true
 
-I first look at the consumers of the data. Which parts of the application read this field? Which processes write it? Does an external system expect the current format? Are there exports or dashboards using a name that now needs to change? These questions help establish the boundaries before implementation begins.
+The [Production Operations Platform](/projects/production-operations-platform#technical-solution) includes financial corrections that retain the original transaction, record its reversal and link a replacement. The correction is atomic: if part of it fails, the operation rolls back as one unit.
 
-Existing records need particular attention. A required field for new submissions may not exist in older data. That does not automatically mean those records are invalid. The change needs an explicit decision about how to handle missing values, whether a backfill is appropriate and what the interface should show while the transition is incomplete.
+That design preserves an audit trail, but it gives readers more work to do. A list must resolve the current records without treating an original and its replacement as two unrelated current transactions. Optimizing that read path must preserve the writer contract, historical data and tenant boundaries.
 
-Where possible, I prefer a change that allows the old and new application versions to coexist briefly. Adding a new field before relying on it can be easier to manage than renaming or removing a field in one step. The right approach depends on the system, but compatibility should be a deliberate choice.
+For this change, I treated response parity and exact financial results as release requirements. The validation also covered correction and retry behaviour, permission boundaries and cross-tenant denial. Checking only a successful request from one permitted account would leave important failure paths untested.
 
-Verification should include representative existing data. An empty local database can hide issues with unusual values, older records or relationships that are present in production. Checking those conditions in an appropriate test environment is more useful than confirming that a newly created record works.
+## Separate compatibility from deployment order
 
-The release order matters too. If application code reaches production before its expected schema, an ordinary request can fail. If an integration continues sending the old format, a successful application deployment may still leave a broken workflow behind it.
+Before a database release, I identify which application calls, reports and integrations depend on the definition being changed. If a field or function contract must change, an additive transition can let old and new application versions coexist. Removing the old contract belongs after its consumers have moved.
 
-I also want to know what recovery would involve. Reverting application code does not necessarily reverse a data change, especially if records have already been transformed or removed. That is a reason to plan backups, validation and recovery steps before the release.
+This is a planning rule, not a claim that every migration needs a large compatibility framework. For a focused read optimization, preserving the existing interface can be the smaller and more reviewable choice. Changes to permissions or financial writers should not slip into an unrelated performance patch.
 
-A good database change leaves the system understandable after deployment. The schema, application behaviour and documentation should agree on what the data means. Getting the migration to run is one part of that work; getting every dependent piece safely through the transition is the rest.
+## Make recovery concrete
+
+Rolling back application code does not undo transformed data. I distinguish reversible definition changes from writes that require a recovery procedure. For data migrations, I want preflight checks, a dry run where practical, explicit write scope and validation of the resulting records. A rollback plan should say what it restores and what evidence confirms that restoration.
+
+## Check the deployed state, then the user path
+
+For the platform release, production database checks verified the intended change while preserving migration history, permissions and related definitions. Local tests and browser regressions supplied separate evidence about behaviour.
+
+Authenticated production list acceptance was unavailable for that release. That limit matters: inspecting a deployed definition is not equivalent to exercising the request as a real authorized user. The [case study’s validation section](/projects/production-operations-platform#testing-and-production-validation) records that distinction alongside the controlled local performance result.
+
+A useful release record names the change, the invariants checked and the checks still outstanding. It gives the next developer a better starting point than “migration succeeded.”

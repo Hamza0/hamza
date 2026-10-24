@@ -17,7 +17,7 @@ export const DATA = {
     "Production systems, data platforms and commercial technical delivery.",
 
   summary:
-    "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. My production support work includes diagnosing and resolving issues across application behaviour, integrations, authentication, databases, hosting and deployment workflows. I combine technical implementation with a strong eye for visual hierarchy, typography, responsive layout and intuitive user experiences.",
+    "Based in Mississauga, Ontario, I’m focused on Software Developer opportunities across Toronto and the Greater Toronto Area (GTA). I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. My production support work includes diagnosing and resolving issues across application behaviour, integrations, authentication, databases, hosting and deployment workflows. I combine technical implementation with a strong eye for visual hierarchy, typography, responsive layout and intuitive user experiences.",
   avatarUrl: "/hamza-portrait.png",
 
   skillGroups: [

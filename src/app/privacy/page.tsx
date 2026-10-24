@@ -1,6 +1,9 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Privacy", alternates: { canonical: "/privacy" } };
+export const metadata = pageMetadata({
+  title: "Privacy", path: "/privacy",
+  description: "How Hamza Shakeel’s portfolio handles optional analytics, contact enquiries, spam protection and your privacy choices.",
+});
 
 export default function PrivacyPage() {
   return <main className="space-y-5 text-sm leading-relaxed">

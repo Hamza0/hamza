@@ -1,8 +1,8 @@
 import { PulseHeart } from "@/components/ui/pulse-heart";
-import { getBlogPosts, getPost } from "@/data/blog";
-import { DATA } from "@/data/resume";
+import { getBlogPosts, getPost, getPublishedPosts } from "@/data/blog";
 import { formatDate } from "@/lib/utils";
-import { SOCIAL_PREVIEW } from "@/lib/social-metadata";
+import { articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
+import { modificationDate } from "@/lib/publication";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import { Suspense } from "react";
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const posts = await getBlogPosts();
+  const posts = await getPublishedPosts();
   return posts.map((post) => ({ slug: post.slug }));
 }
 
@@ -22,37 +22,13 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata | undefined> {
-  let post = await getPost((await params).slug);
-
-  let {
-    title,
-    publishedAt: publishedTime,
-    summary: description,
-    image,
-  } = post.metadata;
-  const ogImage = image
-    ? { url: new URL(image, DATA.url).toString(), alt: title }
-    : SOCIAL_PREVIEW.image;
-
-  return {
-    title,
-    description,
-    alternates: { canonical: `${DATA.url}/blog/${post.slug}` },
-    openGraph: {
-      title,
-      description,
-      type: "article",
-      publishedTime,
-      url: `${DATA.url}/blog/${post.slug}`,
-      images: [ogImage],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [ogImage],
-    },
-  };
+  const post = await getPost((await params).slug);
+  if (!post) notFound();
+  return pageMetadata({
+    title: post.metadata.title, description: post.metadata.summary, path: `/blog/${post.slug}`,
+    article: true, publishedAt: post.metadata.publishedAt, updatedAt: modificationDate(post.metadata),
+    image: post.metadata.image || `/og/${post.slug}`, noindex: post.metadata.noindex,
+  });
 }
 
 export default async function Blog({
@@ -77,25 +53,11 @@ export default async function Blog({
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            headline: post.metadata.title,
-            datePublished: post.metadata.publishedAt,
-            dateModified: post.metadata.publishedAt,
-            description: post.metadata.summary,
-            image: new URL(
-              post.metadata.image || SOCIAL_PREVIEW.image.url,
-              DATA.url
-            ).toString(),
-            url: `${DATA.url}/blog/${post.slug}`,
-            author: {
-              "@type": "Person",
-              "@id": `${DATA.url}/#person`,
-              name: DATA.name,
-              url: DATA.url,
-            },
-          }),
+          __html: serializeJsonLd(articleJsonLd({
+            title: post.metadata.title, description: post.metadata.summary, path: `/blog/${post.slug}`,
+            publishedAt: post.metadata.publishedAt, updatedAt: modificationDate(post.metadata),
+            image: post.metadata.image || `/og/${post.slug}`,
+          })),
         }}
       />
       <h1 className="title font-medium text-2xl tracking-tighter max-w-[650px]">
@@ -104,7 +66,8 @@ export default async function Blog({
       <div className="flex justify-between items-center mt-2 mb-8 text-sm max-w-[650px]">
         <Suspense fallback={<p className="h-5" />}>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            {post.metadata.dateLabel ?? formatDate(post.metadata.publishedAt)}
+            <time dateTime={post.metadata.publishedAt}>{post.metadata.dateLabel ?? formatDate(post.metadata.publishedAt)}</time>
+            {modificationDate(post.metadata) && <> · Updated <time dateTime={modificationDate(post.metadata)}>{modificationDate(post.metadata)}</time></>}
           </p>
         </Suspense>
       </div>

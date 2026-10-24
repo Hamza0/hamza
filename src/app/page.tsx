@@ -6,6 +6,7 @@ import { HeroLanyard } from "@/components/hero-lanyard";
 import { ContactButton } from "@/components/contact-provider";
 import { contactFormAvailable } from "@/lib/contact/config";
 import { DATA } from "@/data/resume";
+import { PERSON_ID, WEBSITE_ID, serializeJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Markdown from "react-markdown";
@@ -34,28 +35,36 @@ export default function Page() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: serializeJsonLd({
             "@context": "https://schema.org",
             "@graph": [
               {
                 "@type": "WebSite",
-                "@id": `${DATA.url}/#website`,
+                "@id": WEBSITE_ID,
                 name: DATA.name,
                 url: DATA.url,
-                publisher: { "@id": `${DATA.url}/#person` },
+                publisher: { "@id": PERSON_ID },
               },
               {
                 "@type": "Person",
-                "@id": `${DATA.url}/#person`,
+                "@id": PERSON_ID,
                 name: DATA.name,
                 url: DATA.url,
                 jobTitle: DATA.professionalLabel,
-                knowsAbout: DATA.skillGroups[0].skills,
+                description: "Software Developer based in Mississauga, Ontario, focused on business applications, systems integration and production support across the Greater Toronto Area.",
+                address: { "@type": "PostalAddress", addressLocality: "Mississauga", addressRegion: "Ontario", addressCountry: "CA" },
+                contactPoint: {
+                  "@type": "ContactPoint", contactType: "Professional enquiries", url: `${DATA.url}/#contact`,
+                  areaServed: { "@type": "Place", name: "Greater Toronto Area, Ontario, Canada" },
+                },
+                alumniOf: { "@type": "CollegeOrUniversity", name: DATA.education[0].school, url: DATA.education[0].href },
+                hasCredential: { "@type": "EducationalOccupationalCredential", name: DATA.education[0].degree, credentialCategory: "Bachelor of Computer Science" },
+                knowsAbout: [...DATA.skillGroups[0].skills, "Production Support", "WooCommerce Integrations", "Cloud Deployment", "Technical Project Delivery"],
                 image: new URL(DATA.avatarUrl, DATA.url).toString(),
                 sameAs: [DATA.contact.social.LinkedIn.url, DATA.contact.social.GitHub.url],
               },
             ],
-          }).replace(/</g, "\\u003c"),
+          }),
         }}
       />
       <section id="hero">

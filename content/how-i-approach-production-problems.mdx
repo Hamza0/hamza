@@ -1,30 +1,31 @@
 ---
 title: "How I Approach Production Problems"
 publishedAt: "2026-05-02"
-summary: "A practical debugging sequence: clarify the symptom, follow the system boundaries, make a focused change, and verify the result."
+updatedAt: "2026-10-24"
+summary: "Tracing a slow financial API through repeated authorization work, then checking response parity, tenant isolation and measured results."
 featuredOrder: 1
 ---
 
-When something stops working in production, I try to make the problem specific before changing anything.
+“The list is slow” describes a symptom. It does not tell me whether the time is spent in the browser, the API, authorization checks or the database. Before changing code, I define the request, the expected response and the conditions that reproduce the delay.
 
-“The website is broken” is a useful signal that someone needs help, but it is not yet a diagnosis. Which page or action is affected? What was expected? What happened instead? Does the issue affect everyone, a particular account, or one browser?
+## Follow the work behind one request
 
-Understanding the symptom helps define the scope. It also gives me a concrete way to check whether the eventual change worked.
+In the anonymized [Production Operations Platform case study](/projects/production-operations-platform#root-cause-investigation), a financial list repeated permission checks and resolved historical records to their current corrected versions. That work grew with the history being examined, even though the response contained only one page of results.
 
-Next, I try to reproduce the problem with the smallest set of steps I can. I note the relevant environment, inputs, and timing. If the issue is intermittent, I look for what the failing attempts have in common rather than assuming that a successful attempt proves it has gone away.
+I compared before-and-after API responses and profiled database execution using synthetic local data. Returning fewer rows would not remove the repeated work happening before pagination. The useful question was which decisions could be evaluated once while keeping tenant and record-level restrictions intact.
 
-Recent changes can provide useful context. A deployment, content update, configuration change, or external service update may be relevant. I treat those as leads to investigate, not proof of the cause.
+## Keep the change narrow
 
-Then I follow the request or information through the system. What does the browser send? What does the application receive? Does the API return what the interface expects? Is the stored information consistent with the response? Where does the behavior first differ from what should happen?
+The read path was changed to evaluate equivalent authorization decisions once, resolve the current candidate records, then filter and paginate before bounded balance aggregation. Financial writers and historical records were left intact.
 
-Logs can help connect those steps, but they need context. A timestamp, request path, and clear error message are more useful than a large collection of unrelated output. I also check system boundaries: permissions, field mappings, configuration, caching, and dependencies between services.
+This order matters. Moving pagination earlier can change which records qualify or how totals are calculated. A faster response is a regression if it drops an eligible record, exposes another tenant’s data or changes a financial result.
 
-The goal is to identify a cause that explains the symptom. A plausible explanation is not enough if it does not match the evidence. I want to understand why the issue happens and why the proposed change should address it.
+## Verify correctness before interpreting speed
 
-Once that is clear, I prefer the smallest safe change. Production troubleshooting is rarely a good moment to combine a fix with a broad cleanup. A focused change is easier to review, verify, and reverse if the result is not what was expected.
+Validation covered response parity, financial correctness, permission boundaries and cross-tenant denial. Browser checks covered pagination, refresh and error recovery. I also kept deployment verification separate from performance evidence: a successful build or migration does not demonstrate acceptable behaviour for an authenticated user.
 
-Verification should cover the original failing path and nearby behavior that the change could affect. I check the actual outcome, including stored data or downstream actions where relevant, rather than stopping at a successful response code.
+The controlled local benchmark used the same synthetic fixture for both versions: 600 historical sales, 120 customers and a 50-row response. Three HTTP samples per version gave median full-list API times of **4,521 ms and 94 ms**, approximately **98% lower**. “Full-list” means the complete API request for that page, not every historical record.
 
-Finally, I leave a short record of the cause, the change, and what was checked. That helps the next person understand the decision and gives the team something useful if the symptom returns.
+These measurements demonstrate the effect under those test conditions. They are not live production latency measurements or an uptime promise. Authenticated production list acceptance was unavailable for that release, which remains a separate validation limit.
 
-This approach keeps debugging tied to evidence. It gives each step a purpose and helps avoid changing several things before knowing which one mattered.
+The investigation is complete when I can explain the cause, the change, the correctness checks and the remaining uncertainty. I use the same discipline when planning [database delivery and recovery](/blog/database-changes-need-a-delivery-plan): make the boundary explicit before calling the release successful.

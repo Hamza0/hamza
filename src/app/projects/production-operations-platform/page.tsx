@@ -1,25 +1,21 @@
 import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
-import { SITE_URL } from "@/lib/site";
-import { SOCIAL_PREVIEW } from "@/lib/social-metadata";
-import type { Metadata } from "next";
+import { articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
+import { CASE_STUDY } from "@/lib/case-study";
 import Link from "next/link";
 
-const title = "Production Operations Platform";
-const description = "Engineering a multi-tenant SaaS platform: database performance, tenant-aware authorization and auditable financial corrections.";
-const url = `${SITE_URL}/projects/production-operations-platform`;
-
-export const metadata: Metadata = {
-  title,
-  description,
-  alternates: { canonical: url },
-  openGraph: { title, description, url, type: "article", images: [SOCIAL_PREVIEW.image] },
-  twitter: { card: "summary_large_image", title, description, images: [SOCIAL_PREVIEW.image] },
-};
+const { title, description, slug, updatedAt } = CASE_STUDY;
+const path = `/projects/${slug}`;
+const image = `/og/${slug}`;
+export const metadata = pageMetadata({ title, description, path, article: true, updatedAt, image });
 
 export default function ProductionOperationsPlatform() {
   return (
     <main className="space-y-8 pb-16">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(articleJsonLd({
+        type: "TechArticle", title, description, path, image, updatedAt,
+        about: ["PostgreSQL query performance", "Multi-tenant authorization", "Financial transaction reliability", "Production validation"],
+      })) }} />
       <Link href="/#projects" className="inline-block text-sm underline underline-offset-4">← Selected Work</Link>
       <header className="space-y-4">
         <p className="text-sm text-muted-foreground">Engineering case study · 2 minute read</p>
@@ -39,10 +35,10 @@ export default function ProductionOperationsPlatform() {
         <h2>Engineering challenge</h2>
         <p>A financial list performed repeated authorization and record-resolution work before returning a page of results. Corrections also needed to preserve historical transactions and an audit trail. Improving response time had to retain tenant isolation, permission checks and exact financial results.</p>
 
-        <h2>Root-cause investigation</h2>
+        <h2 id="root-cause-investigation">Root-cause investigation</h2>
         <p>I compared before-and-after API responses and profiled database execution with synthetic local data. The query repeatedly checked permissions and resolved records to their current corrected version. This redundant work grew with the history being examined; returning fewer rows alone did not address the cost.</p>
 
-        <h2>Technical solution</h2>
+        <h2 id="technical-solution">Technical solution</h2>
         <ul>
           <li>Evaluated equivalent authorization decisions once per request while preserving tenant and record-level restrictions.</li>
           <li>Resolved current records once for the candidate set, then filtered and paginated before performing bounded balance aggregation.</li>
@@ -60,9 +56,11 @@ export default function ProductionOperationsPlatform() {
         <p>Three HTTP samples per version used the same synthetic fixture: 600 historical sales, 120 customers and a 50-row response. The unrounded medians were 4,520.77 ms and 94.12 ms, a 97.9% reduction. “Full-list” refers to the complete API call for that page, not downloading every historical record.</p>
         <p>These are controlled local measurements, not results under real production traffic or a production latency guarantee.</p>
 
-        <h2>Testing and production validation</h2>
+        <h2 id="testing-and-production-validation">Testing and production validation</h2>
         <p>Validation covered financial correctness, immutable history, correction and retry behavior, response parity, cross-tenant denial and permission boundaries. Desktop and mobile browser regressions checked navigation, pagination, refresh, error recovery and action accessibility.</p>
         <p>Production database checks verified the intended change and preserved migration history, permissions and related definitions. Authenticated production list acceptance was unavailable for this release; local test results do not establish live-user performance. Production deployment checks are kept separate from benchmark evidence.</p>
+        <h2>Related engineering Notes</h2>
+        <p><Link href="/blog/how-i-approach-production-problems">How I Approach Production Problems</Link> explains the investigation and validation sequence behind this work. <Link href="/blog/database-changes-need-a-delivery-plan">Database Changes Need a Delivery Plan</Link> covers compatibility and release checks, while <Link href="/blog/apis-are-where-systems-start-talking">APIs Are Where Systems Start Talking</Link> examines retries and ambiguous outcomes at application boundaries.</p>
       </article>
       <nav aria-label="Case study navigation" className="flex flex-wrap gap-4 border-t pt-5 text-sm">
         <Link href="/#projects" className="underline underline-offset-4">Back to Selected Work</Link>

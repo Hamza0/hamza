@@ -1,16 +1,16 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { getBlogPosts } from "@/data/blog";
+import { pageMetadata } from "@/lib/seo";
 import { getFeaturedNotes } from "@/lib/note-order";
 import { formatDate } from "@/lib/utils";
 import { Accessibility, BarChart3, Bot, ClipboardCheck, Database, FormInput, GitPullRequest, Layers, LineChart, ListChecks, Network, Table2, Terminal, Workflow, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "Notes",
-  description:
-    "Practical notes on production troubleshooting, database delivery, APIs and reliable business applications.",
-  alternates: { canonical: "/blog" },
-};
+  description: "Practical notes on production troubleshooting, database delivery, APIs and reliable business applications.",
+  path: "/blog",
+});
 
 const BLUR_FADE_DELAY = 0.04;
 const NOTE_ICONS: Record<string, LucideIcon> = {

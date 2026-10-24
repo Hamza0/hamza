@@ -1,4 +1,5 @@
 import fs from "fs";
+import { isPublished, isIndexable, type Publication } from "@/lib/publication";
 import matter from "gray-matter";
 import path from "path";
 import rehypePrettyCode from "rehype-pretty-code";
@@ -8,11 +9,12 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
 
-type Metadata = {
+type Metadata = Publication & {
   title: string;
-  publishedAt: string;
   summary: string;
   image?: string;
+  dateLabel?: string;
+  featuredOrder?: number;
 };
 
 function getMDXFiles(dir: string) {
@@ -53,9 +55,13 @@ export async function markdownToHTML(markdown: string) {
 }
 
 export async function getPost(slug: string) {
-  const filePath = path.join("content", `${slug}.mdx`);
-  let source = fs.readFileSync(filePath, "utf-8");
-  const { content: rawContent, data: metadata } = matter(source);
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
+  const filePath = path.join(process.cwd(), "content", `${slug}.mdx`);
+  if (!fs.existsSync(filePath)) return null;
+  const source = fs.readFileSync(filePath, "utf-8");
+  const { content: rawContent, data } = matter(source);
+  const metadata = data as Metadata;
+  if (!isPublished(metadata)) return null;
   const content = await markdownToHTML(rawContent);
   return {
     source: content,
@@ -66,23 +72,24 @@ export async function getPost(slug: string) {
 
 async function getAllPosts(dir: string) {
   let mdxFiles = getMDXFiles(dir);
-  return Promise.all(
+  const posts = await Promise.all(
     mdxFiles.map(async (file) => {
       let slug = path.basename(file, path.extname(file));
-      let { metadata, source } = await getPost(slug);
-      return {
-        metadata,
-        slug,
-        source,
-      };
+      return getPost(slug);
     }),
   );
+  return posts.filter((post): post is NonNullable<typeof post> => post !== null);
 }
 
-export async function getBlogPosts() {
+export async function getPublishedPosts() {
   const posts = await getAllPosts(path.join(process.cwd(), "content"));
   return posts.sort((a, b) =>
     b.metadata.publishedAt.localeCompare(a.metadata.publishedAt) ||
     a.metadata.title.localeCompare(b.metadata.title)
   );
+}
+
+// One indexability policy drives the archive, featured Notes and sitemap.
+export async function getBlogPosts() {
+  return (await getPublishedPosts()).filter(post => isIndexable(post.metadata));
 }

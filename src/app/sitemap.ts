@@ -1,19 +1,11 @@
 import { getBlogPosts } from "@/data/blog";
+import { modificationDate } from "@/lib/publication";
+import { CASE_STUDY } from "@/lib/case-study";
 import { SITE_URL } from "@/lib/site";
 import type { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = (await getBlogPosts()).filter((post) => {
-    const publishedAt = new Date(post.metadata.publishedAt);
-    return (
-      post.metadata.draft !== true &&
-      post.metadata.published !== false &&
-      post.metadata.private !== true &&
-      post.metadata.noindex !== true &&
-      Number.isFinite(publishedAt.getTime()) &&
-      publishedAt <= new Date()
-    );
-  });
+  const posts = await getBlogPosts();
 
   return [
     {
@@ -24,8 +16,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${SITE_URL}/projects/production-operations-platform`,
-      lastModified: "2026-10-24",
+      url: `${SITE_URL}/projects/${CASE_STUDY.slug}`,
+      lastModified: CASE_STUDY.updatedAt,
       changeFrequency: "monthly",
       priority: 0.8,
     },
@@ -33,8 +25,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${SITE_URL}/blog`,
       lastModified: posts.reduce(
         (latest, post) =>
-          post.metadata.publishedAt > latest
-            ? post.metadata.publishedAt
+          (modificationDate(post.metadata) || post.metadata.publishedAt) > latest
+            ? (modificationDate(post.metadata) || post.metadata.publishedAt)
             : latest,
         // Editorial ordering was updated without changing publication dates.
         "2026-10-24"
@@ -42,9 +34,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.7,
     },
+    {
+      url: `${SITE_URL}/privacy`,
+      // Last substantive privacy policy update, verified in Git history.
+      lastModified: "2026-10-13",
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
     ...posts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
-      lastModified: post.metadata.updatedAt || post.metadata.publishedAt,
+      lastModified: modificationDate(post.metadata) || post.metadata.publishedAt,
       changeFrequency: "yearly" as const,
       priority: 0.5,
     })),
