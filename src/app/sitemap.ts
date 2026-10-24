@@ -36,7 +36,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           post.metadata.publishedAt > latest
             ? post.metadata.publishedAt
             : latest,
-        "2026-10-09"
+        // Editorial ordering was updated without changing publication dates.
+        "2026-10-24"
       ),
       changeFrequency: "weekly",
       priority: 0.7,

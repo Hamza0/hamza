@@ -64,7 +64,7 @@ export default function Page() {
             <div className="contents sm:flex sm:flex-col min-w-0 flex-1 sm:space-y-1.5">
               <BlurFade {...HERO_REVEAL_PROPS} delay={0.02}
                 className={`${HERO_REVEAL_PROPS.className} col-start-1 row-start-1 min-w-0`}>
-                <p className="mb-2 text-sm font-medium text-muted-foreground">Hi, I&apos;m Hamza 👋</p>
+                <p className="mb-2 text-base font-medium text-muted-foreground sm:text-xl">Hi, I&apos;m Hamza 👋</p>
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                   {DATA.professionalLabel}
                 </h1>
@@ -207,20 +207,23 @@ export default function Page() {
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
             <h2 className="text-xl font-bold">Skills</h2>
           </BlurFade>
-          {DATA.skillGroups.map((group, index) => (
-            <BlurFade key={group.title} delay={BLUR_FADE_DELAY * 10 + index * 0.05}>
-              <div className={index === 0 ? "rounded-lg border p-4" : "pt-3"}>
-                <h3 className="mb-3 text-sm font-semibold">{group.title}</h3>
-                {index === 0 ? (
-                  <ul className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
-                    {group.skills.map((skill) => <li key={skill}>{skill}</li>)}
-                  </ul>
-                ) : (
-                  <p className="text-sm leading-relaxed text-muted-foreground">{group.skills.join(" · ")}</p>
-                )}
-              </div>
-            </BlurFade>
-          ))}
+          <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+            {DATA.skillGroups.map((group, index) => (
+              <BlurFade key={group.title} delay={BLUR_FADE_DELAY * 10 + index * 0.05}
+                className={index === 0 || index === DATA.skillGroups.length - 1 ? "sm:col-span-2" : undefined}>
+                <div className={index === 0 ? "rounded-lg border p-4" : undefined}>
+                  <h3 className="mb-2 text-sm font-semibold">{group.title}</h3>
+                  {index === 0 ? (
+                    <ul className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
+                      {group.skills.map((skill) => <li key={skill}>{skill}</li>)}
+                    </ul>
+                  ) : (
+                    <p className="text-xs leading-relaxed text-muted-foreground">{group.skills.join(" · ")}</p>
+                  )}
+                </div>
+              </BlurFade>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -9,26 +9,40 @@ export const DATA = {
   location: "Mississauga, Ontario, Canada",
   locationLink: "https://www.google.com/maps/place/Mississauga,+ON",
   professionalLabel: "Software Developer",
-  heroHeadline: "Business Systems · Applications · Production Engineering",
+  heroHeadline: "Business Applications · Systems Integration · Production Support",
   heroDescription:
-    "I build, integrate and troubleshoot production applications, databases and business-critical systems, with a focus on reliability, performance and operational workflows.",
+    "I build, integrate and maintain reliable business applications, complex commerce systems and production platforms, combining technical problem-solving with an eye for intuitive design.",
   projectsTitle: "Selected Work",
   projectsIntro:
     "Production systems, data platforms and commercial technical delivery.",
 
   summary:
-    "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. I focus on building reliable systems that are clear for users, maintainable for teams and dependable in production.",
+    "I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. My production support work includes diagnosing and resolving issues across application behaviour, integrations, authentication, databases, hosting and deployment workflows. I combine technical implementation with a strong eye for visual hierarchy, typography, responsive layout and intuitive user experiences.",
   avatarUrl: "/hamza-portrait.png",
 
   skillGroups: [
     {
-      title: "Core Engineering",
+      title: "Core Software Development",
       skills: [
-        "TypeScript / JavaScript", "Next.js / React", "SQL / PostgreSQL",
-        "API Development and Integrations", "Database Performance",
-        "Authentication and Authorization", "Production Debugging",
-        "Data Processing and Reporting", "Cloud Deployment", "Application Reliability",
+        "TypeScript / JavaScript", "React / Next.js", "SQL / PostgreSQL",
+        "APIs and Integrations", "Database Performance",
+        "Authentication and Authorization", "Application Troubleshooting", "Data Processing and Reporting",
       ],
+    },
+    {
+      title: "Production Systems & Support",
+      skills: [
+        "Production Debugging", "Root-Cause Analysis", "Deployment and QA",
+        "Integration Troubleshooting", "Application Maintenance", "Operational Reliability",
+      ],
+    },
+    {
+      title: "Commerce & Web Systems",
+      skills: ["WooCommerce", "WordPress", "PHP", "Third-Party Integrations", "Plugin Configuration"],
+    },
+    {
+      title: "UI/UX Implementation",
+      skills: ["Responsive Interfaces", "Accessibility", "Typography and Visual Hierarchy", "Interface Usability", "Elementor"],
     },
     {
       title: "Platforms and Tools",
@@ -36,11 +50,7 @@ export const DATA = {
     },
     {
       title: "Additional Experience",
-      skills: [
-        "WordPress / WooCommerce", "Elementor", "SEO", "Web Analytics",
-        "Adobe / Canva", "Digital Experience Delivery", "Accessibility / WCAG / AODA",
-        "HTML / CSS / PHP", "Shopify",
-      ],
+      skills: ["SEO", "Web Analytics", "Adobe / Canva", "Digital Experience Delivery"],
     },
   ],
 
@@ -115,7 +125,7 @@ export const DATA = {
       start: "Apr 2026",
       end: "Present",
       description:
-        "Contract Full Stack Engineer at Sparked Digital, an agency environment supporting client websites, WordPress development, migrations, production troubleshooting, hosting/server coordination, performance improvements, plugin and theme work, and ongoing technical delivery across client projects.",
+        "Develop and maintain commercial WordPress websites and WooCommerce workflows in an agency environment. Investigate production issues involving plugin compatibility, authentication and form-security integrations. Configure existing plugins and implement responsive interfaces with Elementor and custom HTML/CSS. Develop scoped PHP migration tooling with dry-run validation and rollback safeguards. Coordinate hosting/server work, migrations and plugin updates, with QA and production change verification.",
     },
     {
       company: "Health Workforce Canada",
@@ -252,14 +262,14 @@ export const DATA = {
       video: "",
     },
     {
-      title: "Sparked Digital – Production Support & Technical Delivery",
+      title: "Sparked Digital – Production Support & Commerce Integrations",
       featured: true,
       href: "https://sparkeddigital.ca/",
       dates: "2026 – Present · Contract",
       active: true,
       description:
-        "Support commercial client websites in an agency environment. Troubleshoot production issues, deliver WordPress development and migrations, coordinate hosting and server work, and improve performance across plugin and theme integrations. Work spans ongoing maintenance and technical delivery across client projects.",
-      technologies: ["Production Debugging", "Integrations", "Migrations", "Hosting", "WordPress"],
+        "Develop and maintain commercial web systems, including WooCommerce workflows, third-party plugin integrations, production troubleshooting and responsive user interfaces. Work combines configuration of existing tools with custom interface development and release QA.",
+      technologies: ["WooCommerce", "WordPress", "Integrations", "Production Support", "Responsive UI"],
       links: [{
         type: "Agency website",
         href: "https://sparkeddigital.ca/",
@@ -340,7 +350,7 @@ export const DATA = {
       dates: "2022",
       active: false,
       description:
-        "Supported Plurilock’s marketing website and dashboard/reporting views in WordPress. Maintained structured content templates, improved brand consistency across pages, and collaborated with product, UX, and marketing teams on responsive updates.",
+        "Developed and maintained CSS, HTML and PHP templates for Plurilock’s WordPress marketing website and dashboard/reporting views. Improved performance, responsive layouts and brand consistency, working with product, UX and marketing teams on implementation and issue resolution.",
       technologies: [
         "WordPress",
         "Marketing Website",
@@ -462,7 +472,7 @@ export const DATA = {
       dates: "2023 – 2024",
       active: true,
       description:
-        "WordPress utility for checking email and DNS configuration during domain setup and site launches. Surfaces SPF, DKIM, and DMARC status with simple indicators to help troubleshoot form and notification delivery issues.",
+        "Built a WordPress utility to check email and DNS configuration during domain setup and site launches. Surfaces SPF, DKIM and DMARC status to support investigation of form and notification delivery issues, complementing hands-on DNS, SMTP relay configuration and launch QA.",
       technologies: ["WordPress", "Email Deliverability", "DNS", "QA"],
       links: [],
       image: "",

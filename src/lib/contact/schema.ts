@@ -2,7 +2,7 @@ export const CONTACT_CATEGORIES = {
   job: {
     label: "Job opportunity", subject: "Job opportunity",
     title: "Let's talk about the opportunity.", description: "Share the role and a little about your team.",
-    contextLabel: "Company and role", contextPlaceholder: "Acme · Full-stack engineer",
+    contextLabel: "Company and role", contextPlaceholder: "Acme · Software Developer",
     messageLabel: "Opportunity details", messagePlaceholder: "Tell me about the role and your team.",
   },
   project: {
