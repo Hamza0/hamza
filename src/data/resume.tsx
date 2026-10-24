@@ -6,8 +6,8 @@ export const DATA = {
   name: "Hamza Shakeel",
   initials: "HS",
   url: SITE_URL,
-  location: "Mississauga, Ontario, Canada",
-  locationLink: "https://www.google.com/maps/place/Mississauga,+ON",
+  location: "Toronto, Ontario, Canada",
+  locationLink: "https://www.google.com/maps/place/Toronto,+ON",
   professionalLabel: "Software Developer",
   heroHeadline: "Business Applications · Systems Integration · Production Support",
   heroDescription:
@@ -17,7 +17,7 @@ export const DATA = {
     "Production systems, data platforms and commercial technical delivery.",
 
   summary:
-    "Based in Mississauga, Ontario, I’m focused on Software Developer opportunities across Toronto and the Greater Toronto Area (GTA). I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. My production support work includes diagnosing and resolving issues across application behaviour, integrations, authentication, databases, hosting and deployment workflows. I combine technical implementation with a strong eye for visual hierarchy, typography, responsive layout and intuitive user experiences.",
+    "I’m focused on Software Developer opportunities in Toronto, Ontario, Canada, and across the Greater Toronto Area (GTA). I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. My production support work includes diagnosing and resolving issues across application behaviour, integrations, authentication, databases, hosting and deployment workflows. I combine technical implementation with a strong eye for visual hierarchy, typography, responsive layout and intuitive user experiences.",
   avatarUrl: "/hamza-portrait.png",
 
   skillGroups: [

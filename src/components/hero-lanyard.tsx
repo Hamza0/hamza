@@ -13,7 +13,7 @@ class LanyardBoundary extends Component<{ children: ReactNode }, { failed: boole
 }
 const AVATAR_VARIANT = {
   hidden: { y: 6, opacity: 0, filter: "blur(6px)" },
-  visible: { y: 0, opacity: 1, filter: "blur(0px)" },
+  visible: { y: 0, opacity: 1, filter: "none", transitionEnd: { filter: "none" } },
 };
 
 export function HeroLanyard() {
