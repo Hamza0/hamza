@@ -208,13 +208,12 @@ export const DATA = {
       dates: "Ongoing development & maintenance",
       active: true,
       description:
-        "Built and maintain a multi-tenant production SaaS platform supporting operational, transactional and financial workflows.",
+        "Built, deployed and maintain a multi-tenant SaaS platform supporting operational, transactional and financial workflows.",
       highlights: [
-        "Eliminated repeated authorization and canonical record-resolution work in financial reads.",
-        "Reduced median full-list API response time from 4,521 ms to 94 ms (approximately 98%) in controlled local benchmarking.",
+        "Optimized PostgreSQL financial reads by eliminating repeated authorization and canonical record-resolution work.",
         "Designed atomic reversal-and-replacement corrections that preserve historical transactions and auditability.",
         "Implemented tenant-aware authorization, reporting and operational workflows.",
-        "Validated financial correctness, authorization and browser regressions, with production release checks.",
+        "Developed API integrations and maintain production workflows through troubleshooting, regression testing and release checks.",
       ],
       technologies: ["React", "TypeScript", "PostgreSQL", "Supabase", "Vercel"],
       links: [{
