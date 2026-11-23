@@ -6,6 +6,9 @@ import { HeroLanyard } from "@/components/hero-lanyard";
 import { ContactButton } from "@/components/contact-provider";
 import { contactFormAvailable } from "@/lib/contact/config";
 import { DATA } from "@/data/resume";
+import { getBlogPosts } from "@/data/blog";
+import { getFeaturedNotes } from "@/lib/note-order";
+import { PROFILE, SITE_UPDATED_AT } from "@/lib/site";
 import { PERSON_ID, WEBSITE_ID, serializeJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -28,8 +31,12 @@ const HERO_REVEAL_PROPS = {
   className: "motion-reduce:!opacity-100 motion-reduce:!transform-none motion-reduce:!filter-none",
 };
 
-export default function Page() {
+export default async function Page() {
   const contactReady = contactFormAvailable();
+  const posts = await getBlogPosts();
+  const editorialNotes = getFeaturedNotes(posts);
+  const featuredNotes = (posts[0] && !editorialNotes.some(note => note.slug === posts[0].slug)
+    ? [posts[0], ...editorialNotes] : editorialNotes).slice(0, 4);
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <script
@@ -44,6 +51,18 @@ export default function Page() {
                 name: DATA.name,
                 url: DATA.url,
                 publisher: { "@id": PERSON_ID },
+                inLanguage: "en-CA",
+              },
+              {
+                "@type": "ProfilePage",
+                "@id": `${DATA.url}/#profile`,
+                name: `${DATA.name} | ${DATA.professionalLabel}`,
+                url: DATA.url,
+                description: PROFILE.description,
+                dateModified: SITE_UPDATED_AT,
+                mainEntity: { "@id": PERSON_ID },
+                isPartOf: { "@id": WEBSITE_ID },
+                inLanguage: "en-CA",
               },
               {
                 "@type": "Person",
@@ -51,11 +70,12 @@ export default function Page() {
                 name: DATA.name,
                 url: DATA.url,
                 jobTitle: DATA.professionalLabel,
-                description: "Software Developer based in Mississauga, Ontario, focused on business applications, systems integration and production support across the Greater Toronto Area.",
-                address: { "@type": "PostalAddress", addressLocality: "Mississauga", addressRegion: "Ontario", addressCountry: "CA" },
+                description: PROFILE.description,
+                homeLocation: { "@type": "Place", name: PROFILE.location },
+                mainEntityOfPage: { "@id": `${DATA.url}/#profile` },
                 contactPoint: {
                   "@type": "ContactPoint", contactType: "Professional enquiries", url: `${DATA.url}/#contact`,
-                  areaServed: { "@type": "Place", name: "Greater Toronto Area, Ontario, Canada" },
+                  areaServed: { "@type": "Place", name: PROFILE.location },
                 },
                 alumniOf: { "@type": "CollegeOrUniversity", name: DATA.education[0].school, url: DATA.education[0].href },
                 hasCredential: { "@type": "EducationalOccupationalCredential", name: DATA.education[0].degree, credentialCategory: "Bachelor of Computer Science" },
@@ -73,7 +93,7 @@ export default function Page() {
             <div className="contents sm:flex sm:flex-col min-w-0 flex-1 sm:space-y-1.5">
               <BlurFade {...HERO_REVEAL_PROPS} delay={0.02}
                 className={`${HERO_REVEAL_PROPS.className} col-start-1 row-start-1 min-w-0`}>
-                <p className="mb-2 text-base font-medium text-muted-foreground sm:text-xl">Hi, I&apos;m Hamza 👋</p>
+                <p className="mb-2 text-base font-medium text-muted-foreground sm:text-xl">Hi, I&apos;m {DATA.name} 👋</p>
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                   {DATA.professionalLabel}
                 </h1>
@@ -235,6 +255,28 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      {featuredNotes.length > 0 && (
+        <section id="notes" aria-labelledby="technical-notes-title" className="scroll-mt-8">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 id="technical-notes-title" className="text-xl font-bold">Technical notes</h2>
+            <Link href="/blog" className="shrink-0 text-sm underline underline-offset-4">All notes →</Link>
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground">
+              Client work, production troubleshooting, database changes and reliable integrations.
+          </p>
+          <ul className="mt-3 divide-y divide-border/50">
+            {featuredNotes.map((note) => (
+              <li key={note.slug}>
+                <Link href={`/blog/${note.slug}`} className="group -mx-3 block rounded-lg px-3 py-4 transition-colors hover:bg-muted/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+                  <h3 className="text-sm font-semibold group-hover:underline underline-offset-4">{note.metadata.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{note.metadata.summary}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section id="additional-projects" aria-labelledby="additional-projects-title" className="scroll-mt-8">
         <BlurFade delay={BLUR_FADE_DELAY * 11}>
