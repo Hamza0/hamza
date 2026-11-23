@@ -1,7 +1,9 @@
 import { Badge } from "@/components/ui/badge";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { DATA } from "@/data/resume";
 import { articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { CASE_STUDY } from "@/lib/case-study";
+import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 
 const { title, description, slug, updatedAt } = CASE_STUDY;
@@ -16,11 +18,15 @@ export default function ProductionOperationsPlatform() {
         type: "TechArticle", title, description, path, image, updatedAt,
         about: ["PostgreSQL query performance", "Multi-tenant authorization", "Financial transaction reliability", "Production validation"],
       })) }} />
-      <Link href="/#projects" className="inline-block text-sm underline underline-offset-4">← Selected Work</Link>
+      <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: title, path }]} />
       <header className="space-y-4">
         <p className="text-sm text-muted-foreground">Engineering case study · 2 minute read</p>
         <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">{title}</h1>
         <p className="text-muted-foreground">{description}</p>
+        <p className="text-sm text-muted-foreground">
+          By <Link href="/#about" rel="author" className="underline underline-offset-4">{DATA.name}</Link>
+          {" · "}Updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time>
+        </p>
         <div className="flex flex-wrap gap-1">
           {["React", "TypeScript", "PostgreSQL", "Supabase", "Vercel"].map((technology) => (
             <Badge key={technology} variant="secondary">{technology}</Badge>
