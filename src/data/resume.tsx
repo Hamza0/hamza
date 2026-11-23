@@ -1,24 +1,24 @@
 import { Icons } from "@/components/icons";
-import { SITE_URL } from "@/lib/site";
+import { PROFILE, SITE_URL } from "@/lib/site";
 import { HomeIcon, NotebookIcon } from "lucide-react";
 
 export const DATA = {
-  name: "Hamza Shakeel",
+  name: PROFILE.name,
   initials: "HS",
   url: SITE_URL,
-  location: "Toronto, Ontario, Canada",
+  location: PROFILE.location,
   locationLink: "https://www.google.com/maps/place/Toronto,+ON",
-  professionalLabel: "Software Developer",
+  professionalLabel: PROFILE.role,
   heroHeadline: "Business Applications · Systems Integration · Production Support",
   heroDescription:
-    "I build, integrate and maintain reliable business applications, complex commerce systems and production platforms, combining technical problem-solving with an eye for intuitive design.",
+    "I’m a software developer based in the Greater Toronto Area. I build and support business applications with React, TypeScript and PostgreSQL, connect systems through APIs, and troubleshoot production issues.",
   projectsTitle: "Selected Work",
   projectsIntro:
     "Production systems, data platforms and commercial technical delivery.",
 
   summary:
     "I’m focused on Software Developer opportunities in Toronto, Ontario, Canada, and across the Greater Toronto Area (GTA). I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. My production support work includes diagnosing and resolving issues across application behaviour, integrations, authentication, databases, hosting and deployment workflows. I combine technical implementation with a strong eye for visual hierarchy, typography, responsive layout and intuitive user experiences.",
-  avatarUrl: "/hamza-portrait.png",
+  avatarUrl: "/hamza-portrait.webp",
 
   skillGroups: [
     {

@@ -128,6 +128,7 @@ test('all categories use fixed subjects and contextual labels in accessible emai
     ['job', 'Job opportunity', 'Company and role', 'Opportunity details', 'Job opportunity'],
     ['project', 'Project enquiry', 'Project type', 'Project details', 'Project'],
     ['collaboration', 'Collaboration', 'Collaboration type', 'Your idea', 'Collaboration'],
+    ['business_profile', 'Google Business Profile help', 'Business name', 'Profile issue', 'Google Business Profile'],
   ]) {
     const mock = services(); const data = input({ category });
     assert.equal((await handleContact(request(data), config, mock.transport)).status, 200);

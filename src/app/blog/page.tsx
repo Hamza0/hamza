@@ -1,14 +1,20 @@
 import BlurFade from "@/components/magicui/blur-fade";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { getBlogPosts } from "@/data/blog";
-import { pageMetadata } from "@/lib/seo";
+import { AUTHOR, WEBSITE_ID, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { getFeaturedNotes } from "@/lib/note-order";
+import { modificationDate } from "@/lib/publication";
+import { NOTES_UPDATED_AT, SITE_URL } from "@/lib/site";
 import { formatDate } from "@/lib/utils";
 import { Accessibility, BarChart3, Bot, ClipboardCheck, Database, FormInput, GitPullRequest, Layers, LineChart, ListChecks, Network, Table2, Terminal, Workflow, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 
+const title = "Software Development Notes";
+const description = "Software development notes by Hamza Shakeel on production troubleshooting, PostgreSQL, API integrations and building reliable business applications.";
+
 export const metadata = pageMetadata({
-  title: "Notes",
-  description: "Practical notes on production troubleshooting, database delivery, APIs and reliable business applications.",
+  title,
+  description,
   path: "/blog",
 });
 
@@ -73,14 +79,48 @@ function NoteList({ posts }: { posts: Awaited<ReturnType<typeof getBlogPosts>> }
 export default async function BlogPage() {
   const posts = await getBlogPosts();
   const featuredPosts = getFeaturedNotes(posts);
+  const url = `${SITE_URL}/blog`;
 
   return (
     <main className="max-w-2xl lg:-mx-4 lg:w-[calc(100%+2rem)] lg:max-w-none">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd({
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: title,
+        description,
+        author: AUTHOR,
+        isPartOf: { "@id": WEBSITE_ID },
+        inLanguage: "en-CA",
+        dateModified: NOTES_UPDATED_AT,
+        mainEntity: {
+          "@type": "ItemList",
+          "@id": `${url}#notes`,
+          numberOfItems: posts.length,
+          itemListElement: posts.map((post, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: {
+              "@type": "BlogPosting",
+              "@id": `${SITE_URL}/blog/${post.slug}#article`,
+              url: `${SITE_URL}/blog/${post.slug}`,
+              headline: post.metadata.title,
+              description: post.metadata.summary,
+              author: AUTHOR,
+              datePublished: post.metadata.publishedAt,
+              ...(modificationDate(post.metadata) ? { dateModified: modificationDate(post.metadata) } : {}),
+            },
+          })),
+        },
+      }) }} />
+      <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Notes", path: "/blog" }]} />
       <BlurFade delay={BLUR_FADE_DELAY}>
         <h1 className="font-semibold text-3xl mb-3 tracking-tight">Notes</h1>
         <p className="max-w-lg text-sm text-muted-foreground mb-4 leading-relaxed">
-          Practical notes on production troubleshooting, database delivery, APIs
-          and reliable business applications.
+          Software development notes by <Link href="/#about" rel="author" className="underline underline-offset-4">Hamza Shakeel</Link>,
+          covering production troubleshooting, PostgreSQL, API integrations and
+          building reliable business applications.
         </p>
         <Link href="#all-notes" className="inline-block mb-8 text-sm underline underline-offset-4">Browse all notes by date ↓</Link>
       </BlurFade>

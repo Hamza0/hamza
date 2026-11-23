@@ -1,6 +1,6 @@
 export const GA_ID = "G-1BKHGCCN3E";
-export type ContactCategory = "job" | "project" | "collaboration";
-export type ContactTrigger = "section" | "dock" | "lanyard";
+export type ContactCategory = "job" | "project" | "collaboration" | "business_profile";
+export type ContactTrigger = "section" | "dock" | "lanyard" | "business_profile";
 type AnalyticsEvent = "contact_open" | "contact_submit_success" | "contact_submit_error" | "linkedin_click" | "call_click";
 
 declare global {
@@ -21,8 +21,8 @@ export function trackEvent(event: AnalyticsEvent, parameters: { location?: Conta
   if (!["contact_open", "contact_submit_success", "contact_submit_error", "linkedin_click", "call_click"].includes(event)) return;
   if (!state?.enabled || !state.ready || window[`ga-disable-${GA_ID}`]) return;
   const allowed: Record<string, string> = {};
-  if (["section", "dock", "lanyard"].includes(parameters.location ?? "")) allowed.trigger_location = parameters.location!;
-  if (["job", "project", "collaboration"].includes(parameters.category ?? "")) allowed.enquiry_category = parameters.category!;
+  if (["section", "dock", "lanyard", "business_profile"].includes(parameters.location ?? "")) allowed.trigger_location = parameters.location!;
+  if (["job", "project", "collaboration", "business_profile"].includes(parameters.category ?? "")) allowed.enquiry_category = parameters.category!;
   window.gtag?.("event", event, {
     ...allowed,
     send_to: GA_ID,

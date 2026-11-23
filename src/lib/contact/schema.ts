@@ -17,6 +17,12 @@ export const CONTACT_CATEGORIES = {
     contextLabel: "Collaboration type", contextPlaceholder: "Partnership, open source, or creative work",
     messageLabel: "Your idea", messagePlaceholder: "Share your idea and how we could work together.",
   },
+  business_profile: {
+    label: "Google Business Profile help", subject: "Google Business Profile",
+    title: "Tell me about your profile.", description: "Share what is happening with your business address.",
+    contextLabel: "Business name", contextPlaceholder: "Your business name",
+    messageLabel: "Profile issue", messagePlaceholder: "Describe the address issue and include your public profile link if available.",
+  },
 } as const;
 
 export type ContactCategory = keyof typeof CONTACT_CATEGORIES;

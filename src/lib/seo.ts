@@ -1,10 +1,25 @@
 import type { Metadata } from "next";
-import { SITE_URL } from "./site";
+import { PROFILE, SITE_URL } from "./site";
 import { SOCIAL_PREVIEW } from "./social-metadata";
 
 export const PERSON_ID = `${SITE_URL}/#person`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
-export const AUTHOR = { "@type": "Person", "@id": PERSON_ID, name: "Hamza Shakeel", url: SITE_URL };
+export const AUTHOR = { "@type": "Person", "@id": PERSON_ID, name: PROFILE.name, url: SITE_URL };
+
+export type BreadcrumbItem = { name: string; path: string };
+
+export function breadcrumbJsonLd(items: readonly BreadcrumbItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: new URL(item.path, SITE_URL).toString(),
+    })),
+  };
+}
 
 export function serializeJsonLd(value: unknown) {
   return JSON.stringify(value).replace(/</g, "\\u003c").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
