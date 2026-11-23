@@ -45,3 +45,20 @@ test('custom events require production initialization and respect browser opt-ou
   s.api.trackEvent('contact_open');
   assert.equal(s.events.length, 0);
 });
+
+test('Business Profile enquiries report only fixed labels and the public page path', () => {
+  const s = setup();
+  s.window.portfolioAnalytics.paths.push('/google-business-profile-help');
+  s.window.location.pathname = '/google-business-profile-help';
+  s.api.trackEvent('contact_submit_success', {
+    category: 'business_profile', location: 'business_profile',
+    name: 'Private owner', email: 'owner@example.com',
+    profileUrl: 'https://maps.google.com/private-business', message: 'Private issue details',
+  });
+  assert.equal(s.events[0][2].enquiry_category, 'business_profile');
+  assert.equal(s.events[0][2].page_location, 'https://www.hamzashakeel.ca/google-business-profile-help');
+  assert.equal(s.events[0][2].trigger_location, 'business_profile');
+  assert.ok(!JSON.stringify(s.events).includes('Private'));
+  assert.ok(!JSON.stringify(s.events).includes('owner@example.com'));
+  assert.ok(!JSON.stringify(s.events).includes('maps.google.com'));
+});
