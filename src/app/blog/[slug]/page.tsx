@@ -1,12 +1,14 @@
 import { PulseHeart } from "@/components/ui/pulse-heart";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { BusinessProfileInquiry } from "@/components/business-profile-inquiry";
+import { contactFormAvailable } from "@/lib/contact/config";
 import { getBlogPosts, getPost, getPublishedPosts } from "@/data/blog";
 import { formatDate } from "@/lib/utils";
-import { articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
+import { AUTHOR, articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { modificationDate } from "@/lib/publication";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Suspense } from "react";
 
 // Notes are published from local content at build time. Unknown slugs must 404
 // before metadata generation tries to read a file that does not exist.
@@ -46,9 +48,10 @@ export default async function Blog({
   const index = posts.findIndex(entry => entry.slug === post.slug);
   const previous = posts[index + 1];
   const next = posts[index - 1];
+  const updatedAt = modificationDate(post.metadata);
 
   return (
-    <section id="blog">
+    <main id="blog">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -60,21 +63,37 @@ export default async function Blog({
           })),
         }}
       />
-      <h1 className="title font-medium text-2xl tracking-tighter max-w-[650px]">
-        {post.metadata.title}
-      </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm max-w-[650px]">
-        <Suspense fallback={<p className="h-5" />}>
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
-            <time dateTime={post.metadata.publishedAt}>{post.metadata.dateLabel ?? formatDate(post.metadata.publishedAt)}</time>
-            {modificationDate(post.metadata) && <> · Updated <time dateTime={modificationDate(post.metadata)}>{modificationDate(post.metadata)}</time></>}
-          </p>
-        </Suspense>
-      </div>
-      <article
-        className="prose dark:prose-invert"
-        dangerouslySetInnerHTML={{ __html: post.source }}
-      ></article>
+      <Breadcrumbs items={[
+        { name: "Home", path: "/" },
+        { name: "Notes", path: "/blog" },
+        { name: post.metadata.title, path: `/blog/${post.slug}` },
+      ]} />
+      <article>
+        <header className="mb-8 max-w-[650px]">
+          <h1 className="title font-medium text-2xl tracking-tighter">
+            {post.metadata.title}
+          </h1>
+          <div className="mt-3 space-y-2 text-sm text-neutral-600 dark:text-neutral-400">
+            <p>By <Link href="/#about" rel="author" className="underline underline-offset-4">{AUTHOR.name}</Link></p>
+            <p>
+              Published <time dateTime={post.metadata.publishedAt}>{formatDate(post.metadata.publishedAt)}</time>
+              {updatedAt && <> · Updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time></>}
+            </p>
+            {post.metadata.dateLabel && <p>{post.metadata.dateLabel}</p>}
+          </div>
+        </header>
+        <div
+          className="prose dark:prose-invert"
+          dangerouslySetInnerHTML={{ __html: post.source }}
+        />
+      </article>
+      {post.slug === "google-business-profile-address-change-help" && (
+        <section id="get-help" aria-labelledby="profile-enquiry-heading" className="mt-10 scroll-mt-6">
+          <h2 id="profile-enquiry-heading" className="mb-3 text-xl font-semibold">Have a similar address issue?</h2>
+          <p className="mb-5 text-sm leading-relaxed text-muted-foreground">Answer a few short questions so I can understand what is happening with your Google Business Profile.</p>
+          <BusinessProfileInquiry available={contactFormAvailable()} />
+        </section>
+      )}
       <div className="mt-10 flex items-center gap-3 border-t pt-5">
         <PulseHeart key={post.slug} noteSlug={post.slug} icon="heart" showCount={true} size={26} />
       </div>
@@ -92,6 +111,6 @@ export default async function Blog({
           </Link>
         )}
       </nav>
-    </section>
+    </main>
   );
 }
