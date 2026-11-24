@@ -1,0 +1,30 @@
+---
+title: "Does a Login Keep Your Customer Data Private?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Your app needs to check which records someone can use, as well as who they are."
+---
+
+A login is only part of protecting customer data. Your app also needs rules that decide what each person can see, change or download. Those rules must work even when someone opens a record directly.
+
+## Decide what each person needs
+
+Signing in identifies an account. Permissions decide what that account may do. A receptionist might need to view bookings, while only a manager should change prices or export customer records.
+
+Write down those differences before building the screens. Give each role the access it needs for its work. OWASP’s [authorization guidance](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html) recommends limiting permissions and checking them on every request.
+
+## Protect the record itself
+
+Hiding a button does not protect the action behind it. The server must check permission when someone requests data or makes a change. OWASP explains why [access checks belong in trusted server code](https://top10.owasp.org/2025/A01_2025-Broken_Access_Control/).
+
+Imagine two businesses using the same booking app. Each should see its own customer records. Being signed in should not give either business access to the other’s bookings.
+
+If your app uses Supabase, [Row Level Security](https://supabase.com/docs/guides/database/postgres/row-level-security) can apply access rules to individual database records. It needs appropriate policies and permissions; adding a login does not configure those rules for you.
+
+## Check with separate accounts
+
+In a test version of your own app, use two accounts with different roles and sample records. Check that each account can do its permitted work and cannot view or change the other account’s private records.
+
+Include downloads and direct links, as well as buttons on the page. I would repeat these checks when a new role or sharing feature is added.
+
+If you are [moving work from a spreadsheet into a web app](/blog/spreadsheet-or-custom-web-app), agree on these permissions before importing customer information.

@@ -4,7 +4,14 @@ import { SOCIAL_PREVIEW } from "./social-metadata";
 
 export const PERSON_ID = `${SITE_URL}/#person`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
-export const AUTHOR = { "@type": "Person", "@id": PERSON_ID, name: PROFILE.name, url: SITE_URL };
+export const AUTHOR = {
+  "@type": "Person",
+  "@id": PERSON_ID,
+  name: PROFILE.name,
+  url: SITE_URL,
+  jobTitle: PROFILE.role,
+  sameAs: [PROFILE.profiles.linkedin, PROFILE.profiles.github],
+};
 
 export type BreadcrumbItem = { name: string; path: string };
 

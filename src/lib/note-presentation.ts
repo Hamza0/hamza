@@ -51,9 +51,34 @@ const noteTopics: Record<string, keyof typeof topics> = {
   "wordpress-scheduled-task-missed": "web",
   "website-backup-restore-check": "web",
   "ai-chatbot-wrong-answers": "systems",
+  "website-changes-not-showing": "web",
+  "moving-website-keep-email-working": "web",
+  "french-page-opens-in-english": "web",
+  "google-product-price-mismatch": "search",
+  "customer-data-access-after-login": "systems",
 };
 
 const noteCallsToAction: Record<string, Pick<NoteTopic, "ctaTitle" | "ctaDescription">> = {
+  "website-changes-not-showing": {
+    ctaTitle: "Still seeing the old version of your website?",
+    ctaDescription: "Share the page and the change you expected to see.",
+  },
+  "moving-website-keep-email-working": {
+    ctaTitle: "Planning a website move?",
+    ctaDescription: "Tell me where your website and email are hosted so I can help you plan the change.",
+  },
+  "french-page-opens-in-english": {
+    ctaTitle: "Is a page opening in the wrong language?",
+    ctaDescription: "Share the page and the language your visitors should see.",
+  },
+  "google-product-price-mismatch": {
+    ctaTitle: "Does Google show the wrong product price?",
+    ctaDescription: "Share the product page and the price shown in Google.",
+  },
+  "customer-data-access-after-login": {
+    ctaTitle: "Want to review access to your app?",
+    ctaDescription: "Tell me who uses it and what each person should be allowed to see.",
+  },
   "google-crawled-page-not-indexed": {
     ctaTitle: "Is an important page missing from Google?",
     ctaDescription: "Share the page and the status you see in Search Console.",

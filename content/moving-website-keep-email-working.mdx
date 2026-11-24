@@ -1,0 +1,32 @@
+---
+title: "Will Moving Your Website Break Your Email?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Keep your existing email service working by checking its domain settings before moving your website."
+---
+
+Moving your website does not have to move your email. Keep the current mail service active and preserve its required domain settings while changing the website's hosting.
+
+## Find out where your email lives
+
+Confirm who provides your inboxes and whether email is included in your old hosting plan. If cancelling that plan also cancels email, preserving the settings alone will not keep your inboxes running.
+
+Imagine moving your company’s website while your team continues using Microsoft 365. The website can move independently, provided the email account and its required domain settings remain in place.
+
+I would establish that arrangement before approving the move.
+
+## Keep the email directions intact
+
+DNS records are your domain's directions to services such as its website and email. MX records tell other mail servers where incoming messages should go. Some TXT records help verify messages sent using your domain.
+
+Preserve the existing MX and required TXT entries, plus any other records your email provider specifies. Check the mail-server addresses they point to as well. [Cloudflare's email-records guide](https://developers.cloudflare.com/dns/manage-dns-records/how-to/email-records/) explains that the correct values depend on your provider.
+
+If the move changes nameservers, the servers responsible for your DNS records, review the full record list before switching. An automatic import can miss entries, as Cloudflare's [record-scan guidance](https://developers.cloudflare.com/dns/zone-setups/reference/dns-quick-scan/) explains. Keep a copy of the original settings.
+
+## Check sending and receiving
+
+After the move, send a message to an outside address and reply from that address. Confirm both directions work. A successful website launch does not confirm that email still works.
+
+If something fails, compare the published records with your provider's requirements and check that the email account is active. Cloudflare's [email troubleshooting guide](https://developers.cloudflare.com/dns/troubleshooting/email-issues/) covers missing or incorrect records.
+
+Check your website's contact form separately. Its sending service may differ from your normal inbox. The guide to [missing WordPress form emails](/blog/wordpress-form-sent-but-no-email) explains that distinction.

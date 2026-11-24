@@ -84,6 +84,10 @@ export default async function Blog({
           <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-muted-foreground">
             <span>By <Link href="/#about" rel="author" className="underline underline-offset-4">{AUTHOR.name}</Link></span>
           </div>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+            I’m a software developer in the Greater Toronto Area and the founder of{" "}
+            <Link href="https://www.codedsquare.com/" className="underline underline-offset-4">Coded Square</Link>.
+          </p>
           {post.metadata.dateLabel && <p className="mt-2 text-xs text-muted-foreground">{post.metadata.dateLabel}</p>}
         </header>
         {lead && <div className="note-lead prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: lead }} />}

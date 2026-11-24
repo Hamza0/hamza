@@ -17,7 +17,7 @@ export const DATA = {
     "Websites and software I’ve built and improved.",
 
   summary:
-    "I’m focused on Software Developer opportunities in Toronto, Ontario, Canada, and across the Greater Toronto Area (GTA). I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. My production support work includes diagnosing and resolving issues across application behaviour, integrations, authentication, databases, hosting and deployment workflows. I combine technical implementation with a strong eye for visual hierarchy, typography, responsive layout and intuitive user experiences.",
+    "I’m Hamza Shakeel, a software developer in the Greater Toronto Area and the founder of [Coded Square](https://www.codedsquare.com/). I build web apps, connect business systems and fix the problems that interrupt your team’s work.\n\nI have 7+ years of experience across healthcare, cybersecurity and agency projects. I work on the screens people use, the data behind them and the connections between tools. That includes APIs, databases, reports and support after launch.\n\nI care about software that is clear to use and straightforward to maintain.",
   avatarUrl: "/hamza-portrait.webp",
 
   skillGroups: [
@@ -64,13 +64,13 @@ export const DATA = {
     social: {
       GitHub: {
         name: "GitHub",
-        url: "https://github.com/Hamza0",
+        url: PROFILE.profiles.github,
         icon: Icons.github,
         navbar: false, // was true – now hidden from dock
       },
       LinkedIn: {
         name: "LinkedIn",
-        url: "https://www.linkedin.com/in/mianhamza",
+        url: PROFILE.profiles.linkedin,
         icon: Icons.linkedin,
         navbar: true, // keep this in the dock
       },
