@@ -1,0 +1,51 @@
+---
+title: "Why a Dashboard Total Can Be Wrong"
+publishedAt: "2026-11-24"
+summary: "How joining orders to line items can inflate a dashboard total, why DISTINCT can hide the problem, and how to validate the calculation."
+---
+
+A dashboard total can be wrong even when every source record is correct. One common cause is adding an order amount after joining orders to their line items. The join repeats the amount for each matching item, and the total counts it more than once.
+
+## How $180 becomes $280
+
+Consider an illustrative shop with two orders. Order 101 totals $100 and contains two items. Order 102 totals $80 and contains one item. The correct combined order total is $180.
+
+A report joins the orders table to the items table so it can show product details. Its intermediate result looks like this:
+
+| Order | Matching item | Order total |
+| --- | --- | ---: |
+| 101 | First item | $100 |
+| 101 | Second item | $100 |
+| 102 | First item | $80 |
+
+Adding the final column produces $280. Nothing was duplicated in the source orders table. The report changed from one row per order to one row per item, while continuing to add an order-level amount.
+
+This follows PostgreSQL's [join rules](https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN): an inner join produces a result row for each matching pair of rows.
+
+## Why DISTINCT can hide the problem
+
+Changing the calculation to `SUM(DISTINCT order_total)` might appear to fix this example. It adds $100 and $80 once each.
+
+However, PostgreSQL's [DISTINCT aggregate behaviour](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-AGGREGATES) removes repeated values of the expression. It does not identify separate orders. If two legitimate orders both total $100, that calculation returns $100 instead of $200.
+
+The relationship between records needs attention before choosing an aggregation function.
+
+## Decide what one row represents
+
+For an order-total metric, the amount should contribute once per included order. That can mean calculating directly from the filtered orders table, or preparing related data so each order has at most one matching summary row before combining it.
+
+A product-sales metric may instead need item amounts. That is a different definition, with its own treatment of quantities, discounts, tax and refunds. Adding item amounts should not silently replace an agreed order-total calculation.
+
+## Validate with a small, explainable sample
+
+I would start with records that someone can check by hand:
+
+1. Write down the metric definition, including the date range, status rules and business account.
+2. Calculate the expected result from the source records before adding joins.
+3. Inspect intermediate rows for repeated order IDs and compare row counts before and after each join.
+4. Include cases with several items and separate orders that have equal totals. Check orders without related rows if the metric should include them.
+5. Compare the corrected result with the dashboard under the same filters and capture the example in a regression test.
+
+An inflated total can influence purchasing, staffing or sales decisions. A useful investigation makes the discrepancy traceable to particular records and a particular calculation.
+
+This is one concrete example of why [data quality comes before the dashboard](/blog/data-quality-comes-before-the-dashboard). A reliable number needs a clear definition and a calculation that preserves it through every transformation.

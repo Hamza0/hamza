@@ -10,6 +10,7 @@ import { contactFormAvailable } from "@/lib/contact/config";
 import { DATA } from "@/data/resume";
 import { getBlogPosts } from "@/data/blog";
 import { getFeaturedNotes } from "@/lib/note-order";
+import { getNotePresentation } from "@/lib/note-presentation";
 import { PROFILE, SITE_UPDATED_AT } from "@/lib/site";
 import { PERSON_ID, WEBSITE_ID, serializeJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -40,10 +41,9 @@ export default async function Page() {
   const latestNotes = posts.slice(0, 2);
   const featuredNotes = [
     ...latestNotes,
-    ...editorialNotes.filter(
-      (note) => !latestNotes.some((latest) => latest.slug === note.slug)
-    ),
-  ].slice(0, 5);
+    ...posts.filter((note) => note.slug === "google-business-profile-address-change-help"),
+    ...editorialNotes,
+  ].filter((note, index, notes) => notes.findIndex((entry) => entry.slug === note.slug) === index).slice(0, 5);
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <script
@@ -300,7 +300,8 @@ export default async function Page() {
           <ul className="mt-3 divide-y divide-border/50">
             {featuredNotes.map((note) => (
               <li key={note.slug}>
-                <Link href={`/blog/${note.slug}`} className="group -mx-3 block rounded-lg px-3 py-4 transition-colors hover:bg-muted/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+                <Link href={`/blog/${note.slug}`} className={`note-theme note-tone-${getNotePresentation(note.slug).tone} note-list-link group -mx-3 block rounded-lg px-3 py-4 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring`}>
+                  <span className="note-accent mb-2 block text-xs font-medium">{getNotePresentation(note.slug).label}</span>
                   <h3 className="text-sm font-semibold group-hover:underline underline-offset-4">{note.metadata.title}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{note.metadata.summary}</p>
                 </Link>

@@ -1,0 +1,43 @@
+---
+title: "How to Choose the First Workflow to Automate"
+publishedAt: "2026-11-24"
+summary: "Choose a useful first automation by comparing repetitive work, clear rules, handoffs and recovery needs, then measure the process before changing it."
+---
+
+A good first automation handles a frequent, predictable task with clear inputs, a clear owner and a result you can verify. Start with a small part of the business where you can measure the current effort and safely handle exceptions.
+
+The most frustrating process is worth investigating, but frustration alone does not tell you whether it is ready for automation. Missing information, unclear responsibilities and changing rules need attention during planning.
+
+## Follow one request from start to finish
+
+Choose a real example, such as a website enquiry becoming a sales follow-up. Write down what starts the process, which systems it touches, who handles each step and what counts as complete.
+
+Ask the people doing the work where they copy information, wait for an answer or correct an earlier mistake. Include unusual cases: an enquiry without a phone number, a duplicate submission or a request that belongs to another team.
+
+Microsoft's [process analysis guidance](https://learn.microsoft.com/en-us/power-automate/process-advisor-overview) describes using process data and maps to identify bottlenecks and automation opportunities. A small team can begin with a shared document and a few representative examples before considering more elaborate tooling.
+
+## Compare a few candidates
+
+For an illustrative service business, the choices might look like this:
+
+| Candidate | Useful first step | Decision to keep with a person |
+| --- | --- | --- |
+| Website enquiries | Create a record and assign an owner | Decide whether the project is a good fit |
+| Supplier invoices | Collect documents and flag missing fields | Approve an unusual charge |
+| Weekly reporting | Gather agreed figures into a draft | Explain unexpected changes |
+
+The boundary matters. Collecting information can be straightforward even when the final decision requires judgement. Microsoft's [automation recommendations](https://learn.microsoft.com/en-us/power-platform/well-architected/operational-excellence/automate-tasks) favour clearly defined, procedural tasks and explicitly allow workflows that retain human decision points.
+
+## Record a baseline before building
+
+Measure a representative sample of the existing process. Record how often it runs, hands-on time, waiting time, corrections and missed handoffs. Keep hands-on time separate from elapsed time: a five-minute task can sit in an inbox for two days.
+
+For example, twenty records taking four minutes each represent eighty minutes of manual entry. That calculation is an estimate of current effort, not a promise of eighty minutes saved. Reviewing exceptions, maintaining the connection and correcting failures still take time.
+
+Write one measurable goal, such as reducing duplicate entry while keeping every enquiry assigned to someone. Include the time spent checking the automated result when you compare it with the baseline.
+
+## Give the first version an owner
+
+Define who receives failure alerts, how incomplete work is found and how a person can resume it. Decide what should happen if the same request arrives twice. [A timeout can leave an operation's outcome uncertain](/blog/why-an-api-timeout-does-not-always-mean-failure), so retry behaviour belongs in the design.
+
+Pilot one route through the process, review its exceptions and expand only after the team can explain what it does and recover when it stops. A useful first automation should make the next working day easier to manage.

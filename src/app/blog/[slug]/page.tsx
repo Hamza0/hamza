@@ -1,11 +1,13 @@
 import { PulseHeart } from "@/components/ui/pulse-heart";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BusinessProfileInquiry } from "@/components/business-profile-inquiry";
+import { NoteContactCTA } from "@/components/note-contact-cta";
 import { contactFormAvailable } from "@/lib/contact/config";
 import { getBlogPosts, getPost, getPublishedPosts } from "@/data/blog";
 import { formatDate } from "@/lib/utils";
 import { AUTHOR, articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { modificationDate } from "@/lib/publication";
+import { getNotePresentation, readingMinutes } from "@/lib/note-presentation";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -49,9 +51,10 @@ export default async function Blog({
   const previous = posts[index + 1];
   const next = posts[index - 1];
   const updatedAt = modificationDate(post.metadata);
+  const presentation = getNotePresentation(post.slug);
 
   return (
-    <main id="blog">
+    <main id="blog" className={`note-theme note-tone-${presentation.tone}`}>
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -70,7 +73,11 @@ export default async function Blog({
       ]} />
       <article>
         <header className="mb-8 max-w-[650px]">
-          <h1 className="title font-medium text-2xl tracking-tighter">
+          <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
+            <span className="note-chip rounded-full px-3 py-1 font-medium">{presentation.label}</span>
+            <span className="text-muted-foreground">{readingMinutes(post.source)} min read</span>
+          </div>
+          <h1 className="title text-pretty text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
             {post.metadata.title}
           </h1>
           <div className="mt-3 space-y-2 text-sm text-neutral-600 dark:text-neutral-400">
@@ -83,7 +90,7 @@ export default async function Blog({
           </div>
         </header>
         <div
-          className="prose dark:prose-invert"
+          className="note-prose prose max-w-none dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: post.source }}
         />
       </article>
@@ -93,6 +100,9 @@ export default async function Blog({
           <p className="mb-5 text-sm leading-relaxed text-muted-foreground">Answer a few short questions so I can understand what is happening with your Google Business Profile.</p>
           <BusinessProfileInquiry available={contactFormAvailable()} />
         </section>
+      )}
+      {post.slug !== "google-business-profile-address-change-help" && (
+        <NoteContactCTA title={presentation.ctaTitle} description={presentation.ctaDescription} />
       )}
       <div className="mt-10 flex items-center gap-3 border-t pt-5">
         <PulseHeart key={post.slug} noteSlug={post.slug} icon="heart" showCount={true} size={26} />
