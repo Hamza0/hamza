@@ -89,7 +89,7 @@ export default async function Blog({
             <span>By <Link href="/#about" rel="author" className="underline underline-offset-4">{AUTHOR.name}</Link></span>
             <span aria-hidden="true">·</span>
             <time dateTime={post.metadata.publishedAt}>{formatDate(post.metadata.publishedAt)}</time>
-            {updatedAt && <span>Updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time></span>}
+            {updatedAt && updatedAt !== post.metadata.publishedAt && <span>Updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time></span>}
           </div>
           {post.metadata.dateLabel && <p className="mt-2 text-xs text-muted-foreground">{post.metadata.dateLabel}</p>}
         </header>

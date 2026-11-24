@@ -28,7 +28,7 @@ export function NoteReadingNav({ headings }: { headings: readonly NoteHeading[] 
             <Button
               asChild
               variant="ghost"
-              className="group h-auto min-h-11 w-full justify-start gap-2.5 whitespace-normal rounded-xl bg-muted/40 px-3 py-2.5 text-left text-xs leading-relaxed text-foreground hover:bg-muted/80 hover:text-[hsl(var(--note-accent))] focus-visible:ring-2 focus-visible:ring-[hsl(var(--note-accent))] focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:text-sm"
+              className="group h-full min-h-11 w-full justify-start gap-2.5 whitespace-normal rounded-xl bg-muted/40 px-3 py-2.5 text-left text-xs leading-relaxed text-foreground hover:bg-muted/80 hover:text-[hsl(var(--note-accent))] focus-visible:ring-2 focus-visible:ring-[hsl(var(--note-accent))] focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:text-sm"
             >
               <a href={`#${heading.id}`}>
                 <span aria-hidden="true" className="note-accent self-start pt-px text-[10px] font-medium tabular-nums sm:pt-0.5">{String(index + 1).padStart(2, "0")}</span>
