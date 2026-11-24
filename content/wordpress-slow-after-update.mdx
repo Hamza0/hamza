@@ -1,0 +1,38 @@
+---
+title: "Did an Update Slow Down Your WordPress Website?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Find whether the delay affects visitors, your editor or one feature before changing more settings."
+---
+
+If your WordPress website became slow after an update, first find out where the delay happens. I would compare the public page, the editor and the update history before deciding what to change. The timing is a clue, not proof of the cause.
+
+## Tell me what feels slow
+
+“The site is slow” can describe several problems. Does the page take too long to appear? Do buttons respond late? Does opening the editor leave you waiting?
+
+Try the affected public page while signed out, then compare it with your editing experience. Note the page, device and action that triggers the delay. A homepage loading quickly does not tell you whether checkout or the editor works well.
+
+For example, if visitors can browse normally but opening one page in Elementor takes a minute, I would start with that editing path. Buying a larger hosting plan would be premature without knowing where the time goes.
+
+## Look at what changed
+
+Keep the update time and the old and new versions of WordPress, your theme and relevant plugins. Include hosting or cache changes made around the same time.
+
+The [WordPress performance handbook](https://developer.wordpress.org/advanced-administration/performance/optimization/) covers several possible contributors, including hosting resources, themes, plugins, images and caching. That is why I would investigate the affected request instead of assuming every slowdown needs another cache plugin.
+
+Browser tools can help distinguish waiting for a server response from time spent loading files or making the page usable. Compare the same action under similar conditions so the result means something.
+
+## Isolate the problem safely
+
+If Elementor is involved, its [editor troubleshooting guide](https://elementor.com/help/troubleshooting-a-slow-loading-elementor-editor/) describes Safe Mode. It isolates the editor from plugins and the theme for the logged-in user without changing the visitor experience.
+
+That comparison can narrow the investigation. It does not automatically identify which setting or extension needs attention.
+
+For broader plugin or theme changes, I would use a separate test copy of your website and change one thing at a time. Keep a usable backup and a record of each result.
+
+## Check the work people need to do
+
+After a change, repeat the original slow action. Then check the important journeys: opening a service page, submitting an enquiry or completing an order.
+
+A better speed score is useful, but your [contact options still need to work](/blog/a-fast-website-still-needs-a-clear-next-step). My approach to [investigating slow features](/blog/how-i-approach-production-problems) follows the same principle: find the delay, make a focused change and compare what happened.

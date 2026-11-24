@@ -1,11 +1,11 @@
 ---
-title: "WordPress Form Sent, but No Email?"
+title: "Why Is Your WordPress Form Email Missing?"
 publishedAt: "2026-11-24"
 updatedAt: "2026-11-24"
 summary: "Find where an enquiry stops between the form, email service and inbox."
 ---
 
-A form's success message does not guarantee an email reached your inbox. Check whether the enquiry was saved, a notification was sent and delivery succeeded.
+If your form says “sent” but your inbox stays empty, I would trace the enquiry from submission to delivery. The confirmation alone cannot explain what happened.
 
 ## Check what “sent” means
 
@@ -13,7 +13,7 @@ WordPress explains that its [email sending function](https://developer.wordpress
 
 An email-connection test, often called an SMTP test, also differs from submitting the actual form. It does not check every recipient address or notification rule. WPForms explains this in its [SMTP troubleshooting guidance](https://wpforms.com/docs/how-to-set-up-smtp-using-the-wp-mail-smtp-plugin/).
 
-If Submit produces an error or never finishes, report that separately from a completed submission with a missing email.
+If your Submit button produces an error or never finishes, mention that. It points to a different investigation from a completed submission with a missing email.
 
 ## Follow the enquiry
 
@@ -26,18 +26,18 @@ If Submit produces an error or never finishes, report that separately from a com
 
 WPForms' [notification guidance](https://wpforms.com/docs/troubleshooting-email-notifications/) covers disabled notifications, incorrect addresses and rules that depend on someone's answers.
 
-A working mail connection does not guarantee inbox delivery. Check the affected form and message before changing unrelated settings.
+A working mail connection does not guarantee inbox delivery. I would follow one affected message before changing several settings and losing track of what helped.
 
 ## Keep useful details
 
-Record the page address, submission time and time zone, exact confirmation and intended recipient. Note whether every enquiry is affected or only certain answers.
+Keep your page address, submission time and time zone, exact confirmation and intended recipient together. Note whether every enquiry is missing or only those with certain answers.
 
-Include the form plugin and email integration versions when requesting help. Mention recent website, hosting or email changes without assuming they caused the problem.
+If you ask for help, include your form plugin and email integration versions. Mention recent website, hosting or email changes without assuming they caused the problem.
 
 Preserve saved entries if the form stores them. Some forms do not retain a copy. Remove unnecessary customer details from screenshots or logs you share.
 
 ## Test the actual form
 
-Send a clearly labelled test with non-sensitive details. Check the confirmation, any saved entry, email service and receiving inbox. Test different recipient routes if the form has them.
+Send a clearly labelled test through your public form using non-sensitive details. Follow it through the confirmation, any saved entry, email service and receiving inbox. If different answers send enquiries to different people, check those routes too.
 
 Record what changed and what you confirmed. The [contact experience on the page](/blog/a-fast-website-still-needs-a-clear-next-step) and the email arriving both deserve a check.

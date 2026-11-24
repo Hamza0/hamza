@@ -37,9 +37,29 @@ const noteTopics: Record<string, keyof typeof topics> = {
   "how-to-measure-google-ai-search-visibility": "search",
   "wordpress-form-sent-but-no-email": "web",
   "woocommerce-payment-succeeded-order-pending": "systems",
+  "why-google-shows-old-website-text": "search",
+  "ai-crawlers-search-and-training": "search",
+  "wordpress-slow-after-update": "web",
+  "cdn-googlebot-crawl-problems": "search",
 };
 
 const noteCallsToAction: Record<string, Pick<NoteTopic, "ctaTitle" | "ctaDescription">> = {
+  "why-google-shows-old-website-text": {
+    ctaTitle: "Want me to check what Google sees?",
+    ctaDescription: "Share your page and the search result you’re seeing.",
+  },
+  "ai-crawlers-search-and-training": {
+    ctaTitle: "Unsure which crawlers to allow?",
+    ctaDescription: "Tell me what you want people to find and what you want to restrict.",
+  },
+  "wordpress-slow-after-update": {
+    ctaTitle: "Did an update slow your site down?",
+    ctaDescription: "Tell me what changed and which page or feature feels slow.",
+  },
+  "cdn-googlebot-crawl-problems": {
+    ctaTitle: "Did a hosting change affect your search traffic?",
+    ctaDescription: "Share the affected page and when the change happened.",
+  },
   "how-to-measure-google-ai-search-visibility": {
     ctaTitle: "Need help with search visibility?",
     ctaDescription: "Share your website and what you want to understand.",

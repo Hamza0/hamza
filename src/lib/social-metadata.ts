@@ -1,7 +1,7 @@
 export const SOCIAL_PREVIEW = {
-  title: "Hamza Shakeel | Software Developer | Toronto, Canada",
+  title: "Hamza Shakeel | Software Developer in Toronto",
   description:
-    "Software Developer based in the Greater Toronto Area, specializing in TypeScript, PostgreSQL, business applications, systems integration and production support.",
+    "Software developer in the Greater Toronto Area with 7+ years building business applications, connecting systems and improving websites, including WordPress.",
   image: {
     url: "/images/og/hamza-shakeel.jpg",
     type: "image/jpeg",

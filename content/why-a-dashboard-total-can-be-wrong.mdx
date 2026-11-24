@@ -2,22 +2,22 @@
 title: "Why a Dashboard Total Can Be Wrong"
 publishedAt: "2026-11-24"
 updatedAt: "2026-11-24"
-summary: "How a report can count correct records twice, and how to check it."
+summary: "Why your report might count correct records twice and where I'd look first."
 ---
 
-A dashboard can show the wrong total even when its source records are correct. Combining tables can repeat an amount and cause it to be counted twice.
+If your dashboard total looks wrong, I would check how the records were combined first. The original figures can be correct while the report counts an amount twice.
 
-## Decide what you are counting
+## Decide what you're counting
 
-An order total, invoice amount and payment received describe different things. Reports can disagree because they use different dates, currencies, statuses or definitions.
+Are you measuring orders, invoices or payments received? Those are different things. Your reports may disagree because they use different dates, currencies, statuses or definitions.
 
-Write down what belongs in the total. Check whether the source contains current records, a history of changes or both. Making two figures agree only helps when they measure the same thing.
+I would write down what belongs in the total, then check whether the source holds current records, a history of changes or both. We need to establish that two figures measure the same thing before trying to make them agree.
 
 ## How $180 becomes $280
 
-Imagine two orders. Order 101 totals $100 and has two items. Order 102 totals $80 and has one item. The correct order total is $180.
+Imagine you have two orders. Order 101 totals $100 and has two items. Order 102 totals $80 and has one item. You expect an order total of $180.
 
-To display product details, a report joins the orders and items tables. A *join* combines matching records. The result looks like this:
+To show product details, your report joins the orders and items tables. A *join* combines matching records:
 
 | Order | Matching item | Order total |
 | --- | --- | ---: |
@@ -25,26 +25,26 @@ To display product details, a report joins the orders and items tables. A *join*
 | 101 | Second item | $100 |
 | 102 | First item | $80 |
 
-Adding the final column gives $280. The original orders were not duplicated; the report now has one row per item and repeats the order amount.
+Add the final column and you get $280. Your original orders were not duplicated. The report now has one row per item and repeats the order amount.
 
 PostgreSQL's [join documentation](https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN) explains why each matching pair produces a row.
 
 ## Why removing duplicate amounts can fail
 
-`SUM(DISTINCT order_total)` appears to fix that example by counting $100 and $80 once each.
+You might try `SUM(DISTINCT order_total)`. It appears to fix this example by counting $100 and $80 once each.
 
-But [DISTINCT removes repeated values](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-AGGREGATES), not repeated orders. If two separate orders each total $100, that calculation returns $100 instead of $200.
+But [DISTINCT removes repeated values](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-AGGREGATES), not repeated orders. Give it two separate $100 orders and it returns $100 instead of $200.
 
-For an order-total report, each included order should contribute once. That may mean calculating from the orders table directly or summarising related records before combining them.
+I would make each included order contribute once, either by calculating from the orders table or summarising related records before combining them.
 
-A report about product sales needs different rules for item amounts, quantities, discounts, tax and refunds. It should not silently replace the agreed order-total calculation.
+If you need product sales instead, we need different rules for item amounts, quantities, discounts, tax and refunds. That is a different calculation.
 
-## Check a small sample by hand
+## Check a small sample you can explain
 
-Choose a short reporting period and calculate the expected total from its source records. Then inspect the rows after each combination, looking for repeated order identifiers.
+I would choose a short period and calculate its expected total by hand. Then I'd inspect the combined rows for repeated order identifiers.
 
-Include orders with several items, separate orders with equal totals and missing related records. Compare the result with the dashboard using the same filters, and keep the example as a test for future changes.
+Include orders with several items, separate orders with equal totals and missing related records. Compare the result with your dashboard under the same filters, and keep the example as a test for future changes.
 
-Check missing values and update times too. A blank might mean missing information rather than zero. An import can finish without an error while supplying incomplete data.
+Check missing values and update times too. A blank can mean missing information rather than zero. An import can finish successfully while supplying incomplete data.
 
-The screen should make those gaps visible so someone can judge whether the total is ready to use.
+Your screen should make those gaps visible, so you can judge whether the total is ready to use.

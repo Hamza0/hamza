@@ -2,46 +2,48 @@
 title: "Why an API Timeout Can Be Misleading"
 publishedAt: "2026-06-07"
 updatedAt: "2026-11-24"
-summary: "How this site's contact form handles missing replies and avoids duplicate messages."
+summary: "How I handle missing replies so you can retry without sending twice."
 featuredOrder: 3
 ---
 
-An API lets programs exchange information. A timeout means the reply did not arrive in time, even if the requested work finished.
+You press Submit, wait, then see a timeout. Before you try again, check whether the first request finished. A missing reply does not prove failure.
 
 ## Find out what happened
 
-Imagine a website asking another service to create an order:
+An API lets programs exchange information. When one program stops waiting for a reply, you can get a timeout even though the other program completed its work.
 
-| What happened | What the website knows |
+Imagine your website asking a service to create an order:
+
+| What happened | What your website knows |
 | --- | --- |
 | The request never arrived | No order exists, if this can be confirmed |
 | The service is still working | The outcome is unknown |
-| The order was created but the reply was lost | The website may still show an error |
+| The order exists but the reply was lost | You may still see an error |
 
-Stripe's [explanation of safe retries](https://stripe.com/blog/idempotency) describes this uncertainty. Waiting longer next time does not establish what happened to the first request.
+Stripe's [explanation of safe retries](https://stripe.com/blog/idempotency) covers this uncertainty. I want to establish what happened to the first request before creating another.
 
 ## Keep the same request identity
 
-An *idempotent* operation has the same intended effect when repeated as when performed once. The [HTTP specification](https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2) explains why automatic retries need that safeguard. The receiving service must support it; adding an identifier alone is not enough.
+An *idempotent* operation has the same intended effect when repeated as when performed once. The [HTTP specification](https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2) explains why that matters. The receiving service must support it; adding an identifier alone cannot prevent duplicates.
 
-This site's contact form gives each submission an identifier. If the result is uncertain, the browser keeps that identifier and the original details. The server uses it to tell the email provider that an unchanged retry belongs to the same submission.
+On this site's contact form, your submission gets an identifier. If the result is uncertain, the browser keeps that identifier and your original details. The server tells the email provider that an unchanged retry belongs to the same submission.
 
-Retries still need a fresh spam-check token. That proves the new attempt may proceed; it is separate from the message's identity.
+You still need a fresh spam-check token for each retry. That allows the new attempt to proceed; it is separate from your message's identity.
 
-The provider remembers duplicate requests for a limited time. The server rejects old identifiers before that window expires, and the form prevents changes to an uncertain submission. Retry timing also needs to follow the provider's [error-handling guidance](https://docs.stripe.com/error-low-level).
+The provider remembers duplicate requests for a limited time. The server rejects old identifiers before that window expires, and the form prevents edits to an uncertain submission. Retry timing also needs to follow the provider's [error-handling guidance](https://docs.stripe.com/error-low-level).
 
 ## Check the request before sending
 
-The server checks where requests came from, their size and their fields, then verifies the spam token. These checks happen before calling the email provider.
+Before contacting the email provider, the server checks the request's source, size and fields, then verifies the spam token.
 
-The visitor's email address is used for replies. The receiving address stays in server configuration, so the public form cannot be used to send messages to arbitrary recipients.
+Your email address is used for replies. The receiving address stays in server configuration, so the public form cannot send to arbitrary recipients.
 
-## Confirm the result and test failures
+## Tell you what is confirmed
 
-The form reports acceptance only after the provider returns a message identifier. That confirms acceptance by the provider, not arrival in the recipient's inbox. Pending requests, invalid input, rate limits and service failures receive different handling.
+The form reports acceptance only when the provider returns a message identifier. That confirms provider acceptance, not arrival in my inbox. Invalid input, pending requests, rate limits and service failures need different handling.
 
-When the result is uncertain, entered details remain available with a retry explanation. The interface does not assume that nothing was sent.
+If the outcome is uncertain, your details stay available with a retry explanation.
 
-Automated tests cover invalid requests, escaped email content, unchanged retries, simultaneous attempts and a simulated lost reply after acceptance. The last test checks that retrying does not send twice through the simulated provider. These are application checks, not proof of inbox delivery.
+Automated tests cover invalid requests, escaped email content, retries, simultaneous attempts and a simulated lost reply after acceptance. That last check verifies that retrying does not send twice through the simulated provider. These checks do not prove inbox delivery.
 
-The [financial case study](/projects/production-operations-platform#testing-and-production-validation) applies the same principle: confirm the existing operation before creating another one.
+I use the same principle in the [financial case study](/projects/production-operations-platform#testing-and-production-validation): confirm the existing operation before creating another.

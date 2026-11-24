@@ -1,19 +1,19 @@
 ---
-title: "Paid Order Still Pending in WooCommerce?"
+title: "Why Is a Paid WooCommerce Order Pending?"
 publishedAt: "2026-11-24"
 updatedAt: "2026-11-24"
 summary: "Compare the payment and order records before asking a customer to pay again."
 ---
 
-If Stripe shows a successful payment while WooCommerce says Pending payment, check the matching records first. Do not ask the customer to pay again yet.
+A pending order does not always mean payment failed. If Stripe shows success, I would match the records before you ask your customer to pay again.
 
 ## Match the order and payment
 
-Compare the order number, transaction reference, amount, currency and time. Check that you are looking at the correct account and live or test environment.
+Open your order and payment side by side. Compare the order number, transaction reference, amount, currency and time. Make sure both records belong to the correct account and live or test environment.
 
 WooCommerce normally uses Pending payment for an order awaiting payment. Processing generally means payment was received and the order awaits fulfilment. Its [order-status guide](https://woocommerce.com/document/managing-orders/order-statuses/) explains the exceptions.
 
-Changing the status just to make the screens agree can hide the original problem. Establish what happened to the existing payment first.
+Changing your order status just to make the screens agree can hide the original problem. First, establish what happened to the payment already attempted.
 
 ## Check the update sent to the store
 
@@ -25,14 +25,14 @@ A received message and an updated order are separate checks. Stripe's [webhook g
 
 ## Put the records in order
 
-Collect the order notes, exact payment state and relevant event delivery time and response. Include the WooCommerce and payment-extension versions and any recent changes.
+I would collect your order notes, exact payment state and the relevant message delivery time and response. Your WooCommerce and payment-extension versions, plus recent changes, help put those records in context.
 
-Build a short timeline. Was an update sent? Did the store receive it? Does an order note show an error? Is one order affected or several?
+Build a short timeline. Was an update sent? Did your store receive it? Do the order notes show an error? Check whether this affects one order or several.
 
 Keep account secrets and unnecessary customer information out of shared screenshots. A similar problem reported online may have a different cause.
 
 ## Confirm the outcome before acting
 
-Have the payment and order checked together before requesting another payment, issuing a refund or changing fulfilment status. The reviewer should explain what is confirmed and what the proposed action will do.
+Before you request another payment, issue a refund or change fulfilment status, have the payment and order checked together. You should get a clear explanation of what is confirmed and what the proposed action will do.
 
 Check any integration change in a suitable test environment. Repeated updates should not trigger duplicate actions. The same distinction appears in [how systems handle uncertain requests](/blog/apis-are-where-systems-start-talking).

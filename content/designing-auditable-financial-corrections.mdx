@@ -2,16 +2,16 @@
 title: "Correcting Financial Records Safely"
 publishedAt: "2026-11-24"
 updatedAt: "2026-11-24"
-summary: "How to correct an amount while keeping its history understandable and traceable."
+summary: "How I keep a correction traceable without losing the original financial record."
 ---
 
-A useful financial correction keeps the original record and explains the change. Someone reviewing the account should be able to understand how the final amount was reached.
+When you correct a financial amount, you still need to explain the original record. I keep the change traceable so the final balance has a clear history.
 
 I worked on this approach while building and maintaining a [business operations platform](/projects/production-operations-platform).
 
 ## Keep the original and the correction
 
-Suppose a sale recorded as $100 should have been $80. Replacing the first amount would hide part of the story. A reversal and replacement can show it:
+Suppose you recorded a $100 sale that should have been $80. Replacing the amount hides part of the story. A reversal and replacement can show you what changed:
 
 | Record | Amount |
 | --- | ---: |
@@ -20,26 +20,26 @@ Suppose a sale recorded as $100 should have been $80. Replacing the first amount
 | Replacement | $80 |
 | Final amount | $80 |
 
-This is a simple illustration. Real applications also need rules for linked payments, taxes and reports. The correction should make the history understandable without assuming every financial workflow works the same way.
+This is a simple illustration. Your application also needs rules for linked payments, taxes and reports. I would check those relationships before choosing how a correction should work.
 
 ## Make the changes succeed together
 
-A PostgreSQL [database transaction](https://www.postgresql.org/docs/current/tutorial-transactions.html) groups changes so they can be saved or cancelled together. The correction must include all required writes, with the original, reversal and replacement kept consistent.
+A PostgreSQL [database transaction](https://www.postgresql.org/docs/current/tutorial-transactions.html) groups changes so they can be saved or cancelled together. I want every required correction write inside that boundary.
 
-If a required write fails, the whole correction should roll back. Leaving half a correction could produce a misleading balance.
+If one required write fails, the whole correction should roll back. You should not be left with half a correction and a misleading balance.
 
-Retries need a separate safeguard. The system must recognise a correction that already succeeded. Depending on the design, a [unique constraint](https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-UNIQUE-CONSTRAINTS), a database rule that rejects duplicate identifiers, can help prevent the same correction from taking effect twice.
+Retries need another safeguard: recognising a correction that already succeeded. Depending on the design, a [unique constraint](https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-UNIQUE-CONSTRAINTS), a database rule that rejects duplicate identifiers, can help stop the same correction taking effect twice.
 
 ## Check who may change the record
 
-The person making a correction must have permission for that business and record. Knowing a record's identifier is not permission to view or change it.
+If you can see a record's identifier, that does not automatically give you permission to change it. I check access for the business and the specific record.
 
-Reports need the same access checks when finding the corrected version. I check permissions, exact amounts, retained history and returned results separately. A speed improvement must preserve all four.
+Reports need those checks too when they find the corrected version. I treat permissions, exact amounts, retained history and returned results as separate concerns. A speed improvement must preserve all four.
 
 ## Test what happens when things go wrong
 
-I want checks for invalid input, missing permissions, interrupted corrections and repeated attempts. Reports must interpret the resulting history correctly too.
+I want to know what happens with invalid input, missing permissions, an interrupted correction or a repeated attempt. Reports must still interpret the history correctly.
 
-The screen needs attention as well. If refreshing fails, it should not present an old balance as a confirmed current result.
+I also check what you see. If refreshing fails, an old balance should not appear to be a confirmed current result.
 
-The [case study's validation section](/projects/production-operations-platform#testing-and-production-validation) records the checks performed on this platform and the limits of the live-system evidence. Together, those details make the result easier to assess.
+The [case study's validation section](/projects/production-operations-platform#testing-and-production-validation) records the checks performed on this platform and the limits of the production evidence. You can assess both the result and what remains unconfirmed.

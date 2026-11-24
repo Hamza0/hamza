@@ -1,0 +1,46 @@
+---
+title: "Can You Block AI Training Without Blocking Search?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Understand how crawler settings affect search results, AI answers and model training before changing access."
+---
+
+Sometimes, but the control's scope matters. Search discovery, a tool fetching a page for a user, and model training are different activities. Some crawlers serve more than one purpose, so a blanket block can affect useful access.
+
+## Separate three kinds of access
+
+Cloudflare's [bot classification](https://developers.cloudflare.com/bots/concepts/bot/verified-bots/) distinguishes these behaviours:
+
+| Behaviour | What it does |
+| --- | --- |
+| Search | Collects content for later discovery or retrieval |
+| Agent | Visits a page on a user's behalf |
+| Training | Collects content to train or fine-tune models |
+
+A verified identity does not make those purposes interchangeable. Cloudflare's behaviour policies also apply to verified bots.
+
+Imagine a shop that wants product pages discoverable in AI search while opting out of training. That goal calls for examining each control's scope before changing access.
+
+## Check what the control also covers
+
+Cloudflare's [current access policies](https://developers.cloudflare.com/bots/additional-configurations/block-ai-bots/) offer different actions. A robots.txt instruction asks crawlers to stay away; a block stops matching requests before they reach your website. Some training crawlers also support search, so blocking them can affect both.
+
+Its Bot Preference Sync feature can also turn a Training “Disallow” preference into a block, with an exception for crawlers that also support Search. I would check that detail before choosing a setting.
+
+Provider controls have their own boundaries. [Google-Extended](https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers#google-extended) covers Gemini training and certain Gemini and Vertex uses of source content when answering questions. Google says it does not affect inclusion or ranking in Google Search.
+
+I would record which discovery, retrieval and training uses you want to permit, then compare that list with the documented effect of each setting.
+
+## Treat Google's shared signal as a future change
+
+Google's [October 30, 2026 announcement](https://developers.google.com/search/blog/2026/10/ai-training-control) describes plans to support a shared training-preference signal in robots.txt alongside company-specific controls.
+
+Google's current crawler documentation places intended support in early 2027. The announcement does not establish that the new signal is already enforced by Google or universally adopted.
+
+For a change today, use currently documented controls and check their scope. Revisit the shared signal when implementation guidance is published.
+
+## Review access and visibility separately
+
+Keep a record of the settings you changed and why. Check request logs and responses for the crawlers you intended to allow, including whether a rule at the edge prevents them from reaching the site.
+
+Crawler access is only one part of discovery. Review actual [Google AI search appearances](/blog/how-to-measure-google-ai-search-visibility) separately, and keep useful public pages accurate and readable. Allowing a crawler is not a promise that its service will cite your page.

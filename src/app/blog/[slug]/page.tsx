@@ -5,7 +5,6 @@ import { NoteContactCTA } from "@/components/note-contact-cta";
 import { Badge } from "@/components/ui/badge";
 import { contactFormAvailable } from "@/lib/contact/config";
 import { getBlogPosts, getPost, getPublishedPosts } from "@/data/blog";
-import { formatDate } from "@/lib/utils";
 import { AUTHOR, articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { modificationDate } from "@/lib/publication";
 import { getNotePresentation, readingMinutes } from "@/lib/note-presentation";
@@ -52,7 +51,6 @@ export default async function Blog({
   const index = posts.findIndex(entry => entry.slug === post.slug);
   const previous = index >= 0 ? posts[index + 1] : undefined;
   const next = index > 0 ? posts[index - 1] : undefined;
-  const updatedAt = modificationDate(post.metadata);
   const presentation = getNotePresentation(post.slug);
   const { lead, body } = splitNoteLead(post.source);
 
@@ -85,9 +83,6 @@ export default async function Blog({
           </h1>
           <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-muted-foreground">
             <span>By <Link href="/#about" rel="author" className="underline underline-offset-4">{AUTHOR.name}</Link></span>
-            <span aria-hidden="true">·</span>
-            <time dateTime={post.metadata.publishedAt}>{formatDate(post.metadata.publishedAt)}</time>
-            {updatedAt && updatedAt !== post.metadata.publishedAt && <span>Updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time></span>}
           </div>
           {post.metadata.dateLabel && <p className="mt-2 text-xs text-muted-foreground">{post.metadata.dateLabel}</p>}
         </header>

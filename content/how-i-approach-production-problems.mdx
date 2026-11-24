@@ -2,42 +2,42 @@
 title: "How I Investigate a Slow Feature"
 publishedAt: "2026-05-02"
 updatedAt: "2026-11-24"
-summary: "Following one slow request, making a focused change and checking the result."
+summary: "How I trace a slow feature and check that a faster result stays correct."
 featuredOrder: 1
 ---
 
-When someone says a list is slow, I first follow one request. The delay could be in the browser, permission checks or database work.
+If a page feels slow, I start with the task you're trying to finish. Following one request tells me more than changing code based on a guess.
 
-A page loading successfully does not prove that its forms, reports or connections are working. I start with the feature the person needs to use.
+## Find where your time is going
 
-## Find where the time goes
+A page loading does not prove that its forms or reports work. I follow the feature you actually need.
 
-In the [operations and financial platform](/projects/production-operations-platform#root-cause-investigation), a financial list repeated permission checks and looked through history to find corrected records. That work grew even though the response contained only one page of results.
+In the [operations and financial platform](/projects/production-operations-platform#root-cause-investigation), a financial list repeated permission checks and searched history for corrected records. That work grew even though the response contained one page of results.
 
-I compared the returned data and measured database execution using synthetic local data. Returning fewer rows would not remove work happening before the page was selected.
+I compared returned data and measured database execution using synthetic local data. Returning fewer rows would not remove work happening before the page was selected.
 
-The question was which checks could happen once while preserving each business's access restrictions. Useful logs should help trace that request without adding unrelated detail or unnecessary sensitive information.
+I looked for checks that could happen once while preserving each business's access restrictions. Useful logs help trace that path without burying it in unrelated detail.
 
 ## Keep the change focused
 
 I changed the read path to make equivalent permission decisions once, identify current records, then filter and select the page before calculating its balances. The code writing financial records and the existing history stayed intact.
 
-Changing that order carelessly could omit records or change totals. A faster response is not useful if it exposes another business's data or returns the wrong amount.
+You still need the right records and amounts. Changing the order carelessly could omit a record, alter a total or expose another business's data.
 
-A focused change also makes review and recovery easier. Restoring older code and recovering changed data are different tasks, so the release plan needs to distinguish them.
+I also consider recovery. Restoring older code and recovering changed data are different jobs. Keeping the update focused makes that distinction easier to assess.
 
-## Check correctness before speed
+## Check the answer before the speed
 
 Checks covered unchanged results, accurate financial amounts, permissions and denied access to another business's records. Browser checks covered moving between pages, refreshing and recovering from errors.
 
 The controlled local benchmark used the same synthetic data for both versions: **600 historical sales, 120 customers and a 50-row response**. Three HTTP requests per version gave median times of **4,521 ms and 94 ms**, approximately **98% lower**. Each measurement covered the complete request for that page, not every historical record.
 
-These figures describe those local test conditions. They are not measurements of real customer traffic or a promise about live response times.
+Those figures describe the local test conditions. They are not measurements of real customer traffic or a promise about response times in production.
 
-## Check the customer journey separately
+## Check what you can actually do
 
-A build or database update succeeding does not prove that a signed-in user can complete the task. A signed-in test of this feature in production was unavailable for that release.
+A successful build or database update does not prove that you can complete the task after signing in. A signed-in test of this feature in production was unavailable for that release.
 
-The screen must also explain delayed responses, old values and rejected actions clearly. Repeated button presses should not be the only apparent way forward.
+The screen matters too. If a response is delayed or a value is old, you need a useful explanation and next step. Repeatedly pressing the button should not be your only apparent option.
 
-I record the cause, change, checks and remaining uncertainty. The same approach guides my [database release planning](/blog/database-changes-need-a-delivery-plan), giving the next person enough information to assess the work.
+I record the cause, change, checks and remaining uncertainty. That also guides my [database release planning](/blog/database-changes-need-a-delivery-plan), so you can see what the evidence supports.

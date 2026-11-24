@@ -1,0 +1,40 @@
+---
+title: "Why Does Google Still Show Your Old Website Text?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Check the published page, Google's last crawl and how it chooses titles and descriptions."
+---
+
+Google may still show old text because it has not recrawled and reprocessed the page, or because it selected another source for the title or snippet. Updating your website does not immediately replace its appearance in search results.
+
+## Check what was actually published
+
+Start with the exact URL shown in the search result. I would check its visible heading, HTML title, meta description and links pointing to it.
+
+For a hypothetical example, you rename a service page from “Basic Cleaning” to “Move-Out Cleaning”. The new heading appears on the page, but the old name remains in its HTML title and navigation. That is inconsistent information to resolve before assuming Google has ignored the update.
+
+Google's [title-link documentation](https://developers.google.com/search/docs/appearance/title-link) lists several possible sources, including the title element, prominent headings, page text and links. Keep those sources accurate and descriptive.
+
+## Separate the title from the description
+
+The clickable title and the short description beneath it are different parts of the result.
+
+Google's [snippet guidance](https://developers.google.com/search/docs/appearance/snippet) says descriptions are primarily generated from page content. Google sometimes uses the meta description when it better describes the page, and different searches can produce different snippets.
+
+A rewritten description is therefore not automatically evidence of an old version. Compare the wording with the current page and the query that produced it. Write a useful meta description, but do not treat it as a guaranteed script.
+
+## Compare the indexed page with the live page
+
+Search Console's [URL Inspection tool](https://support.google.com/webmasters/answer/9012289?hl=en) distinguishes information about Google's indexed version from a live test.
+
+Check when the page was crawled and compare that with when you published the change. Inspect the available crawled HTML, then test the live page if you need to see what is available now.
+
+A successful live test does not establish that Google's index has already updated. If the inspected URL differs from the page you intended, investigate that difference before drawing conclusions.
+
+## Request a refresh and keep a record
+
+For a few changed URLs, you can request indexing through URL Inspection. For many changed pages, keep the sitemap accurate.
+
+Google's [recrawl guidance](https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl) says crawling can take days to weeks and that requests do not guarantee immediate inclusion. Repeated requests for the same URL do not accelerate the process.
+
+Record the publication date, inspected URL, crawl date and search wording. If a later crawl contains the new text but the result still differs, revisit the title sources and query-specific snippet rather than repeatedly submitting the page. The guide to [clearer search content](/blog/seo-and-aeo-start-with-clear-answers) covers the underlying page quality.

@@ -3,28 +3,28 @@ title: "From GW-BASIC to Thinking in Systems"
 publishedAt: "2026-10-15"
 updatedAt: "2026-11-24"
 dateLabel: "Retrospective · February 2026"
-summary: "How learning Java shaped the way I think about reliable business software."
+summary: "What learning Java taught me about keeping business rules clear when software fails."
 ---
 
-I started programming with GW-BASIC at 13. Learning Java in depth later helped me think about how a program's parts work together when something goes wrong.
+If you're learning to code, ask what should happen when something fails. That question shaped my path from GW-BASIC to Java and how I think about business software.
 
 ## Give information a clear meaning
 
-An amount without a currency leaves an assumption unstated. I prefer to make rules like that explicit in the code, where they can be checked.
+I started with GW-BASIC at 13. Java came later and was the first language I learned in depth.
 
-The same questions guide my work on web applications and business systems: what does this information mean, who may change it and what must remain true?
+It helped me ask better questions. If you hand a program an amount, which currency does it mean? Who may change it? I prefer to make those rules explicit in code rather than leave you guessing.
 
 ## Keep responsibilities separate
 
 In a Spring Boot design, I would separate the part receiving web requests, the service applying business rules and the code accessing the database.
 
-I would provide each service's dependencies when it is created. That makes them visible and easier to replace in tests. Moving money between accounts should be one coordinated operation, rather than unrelated updates scattered across request-handling code.
+I would provide each service's dependencies when it is created, making them visible and easier to replace in tests. If you're moving money, the two balance updates need one place coordinating them.
 
 ## Thinking about a banking API
 
 This is an independent design exercise with synthetic data, not a production banking system or client implementation.
 
-For a simulated CAD 25.00 transfer, I would use exact decimal amounts. [Oracle's BigDecimal documentation](https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html) explains why starting with a binary floating-point value can introduce an approximation.
+Imagine a CAD 25.00 transfer. I would use exact decimal amounts. [Oracle's BigDecimal documentation](https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html) explains why starting with a binary floating-point value can introduce an approximation.
 
 This illustrative Java type checks a positive CAD amount; imports are omitted:
 
@@ -40,29 +40,18 @@ record CadTransferAmount(BigDecimal value) {
 }
 ```
 
-I would create it with `new BigDecimal("25.00")`. The two decimal places apply to this CAD example, not every currency. The check refuses rounding that would change the requested amount.
+I would create it with `new BigDecimal("25.00")`. Two decimal places apply to this CAD example, not every currency. The check refuses rounding that would change your requested amount.
 
-An illustrative request, with a placeholder token:
+Before transferring, I would check distinct accounts, matching currencies, permission to debit, whether the destination can receive funds and sufficient funds for this no-overdraft example.
 
-```http
-POST /transfers HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer <token>
-Idempotency-Key: transfer-example-001
+Balances, matching debit and credit entries, and the operation record would share one database transaction, saving or cancelling together. Spring's [`@Transactional` rules](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html) require the service call and rollback settings to be configured correctly. Cancelling database work cannot undo a completed action elsewhere.
 
-{"fromAccount":"account-a","toAccount":"account-b","amount":"25.00","currency":"CAD"}
-```
+I would lock both account rows in consistent order before checking funds, following [PostgreSQL's locking guidance](https://www.postgresql.org/docs/current/explicit-locking.html). Every balance-changing path would need that discipline.
 
-I would check different accounts, matching currencies, permission to debit, whether the destination can receive funds and sufficient available funds for this no-overdraft example.
-
-Balances, matching debit and credit records, and the operation record would share one database transaction. Spring's [`@Transactional` rules](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html) require the service call and rollback settings to be configured correctly. A rollback cannot undo a completed action in another service.
-
-To prevent simultaneous requests spending the same balance, I would lock both account rows in consistent order before checking funds. [PostgreSQL's locking guidance](https://www.postgresql.org/docs/current/explicit-locking.html) explains that approach. Every balance-changing path would need to follow it.
-
-I would also store a request key, its caller, submitted details and result. A database uniqueness rule would prevent concurrent duplicates; an unchanged retry would return the saved result. Reusing the key with different details would be rejected. Temporary in-memory storage would not cover restarts or multiple servers.
+For retries, I would store a request key, caller, submitted details and result. A database uniqueness rule would prevent concurrent duplicates. An unchanged retry returns the saved result; changed details are rejected. Temporary memory would not cover restarts or multiple servers.
 
 ## Test the failures
 
-Proposed database tests would cover valid transfers, insufficient funds, duplicate attempts and changed request details. Simultaneous withdrawals would check overspending. A failure after the first write would check that balances and debit-and-credit records all roll back.
+I would test valid transfers, insufficient funds, retries, changed details and simultaneous withdrawals. A failure after the first write should cancel the balance changes and matching entries together.
 
-These are design and test proposals, not claims of a completed banking implementation.
+These are proposed database tests, not evidence of a completed implementation.

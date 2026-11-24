@@ -1,0 +1,42 @@
+---
+title: "Can Your CDN Block Google From Your Website?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Check what Google receives after a hosting or security change, even when your website loads normally."
+---
+
+Yes. A security rule can block Google's crawler even when your website works for you. If search visibility changes after a hosting or CDN update, I would compare Google's access with your server logs before rewriting the page.
+
+## Your browser is only one view
+
+A content delivery network, or CDN, sits between your visitors and your website's server. It can deliver cached pages quickly and filter incoming traffic.
+
+Imagine your service page opens normally for customers, but a new security rule asks every automated visitor to solve a CAPTCHA. Google's crawler cannot complete that challenge, so it may never reach the content you want indexed.
+
+Google's [recent guidance on CDN changes](https://developers.google.com/search/blog/2026/11/crawling-cdn) explains how blanket bot protection can interfere with crawling. A faster website and an accessible website are separate things to check.
+
+## Look at the response Google receives
+
+Start with an affected page, the time the problem appeared and the hosting or security changes made nearby. Look for:
+
+- A blocked request or challenge page.
+- A server error or rate limit.
+- A rule matching traffic you intended to allow.
+
+[Cloudflare's crawl troubleshooting guide](https://developers.cloudflare.com/support/troubleshooting/general-troubleshooting/troubleshooting-crawl-errors/) covers both its own rules and blocking at the website's server. The CDN is not automatically the source of every error.
+
+I would also verify the visitor. A request calling itself “Googlebot” is not enough. Google's [verification guidance](https://developers.google.com/crawling/docs/crawlers-fetchers/verify-google-requests) describes checking published IP ranges or confirming the address through DNS lookups.
+
+## Keep the fix focused
+
+If a rule is responsible, adjust its scope using verified crawler information. Avoid switching off all protection just to make one blocked request succeed.
+
+Also check server capacity. Google explains that newly introduced CDN caches may still need to fetch many pages from the original server. Fast cached pages do not mean every request avoids that server.
+
+I would compare the affected requests before and after the change, then continue watching for errors. That gives you evidence about access without guessing from one successful browser visit.
+
+## Check indexing separately
+
+Restoring access does not instantly refresh search results. Search Console's [URL Inspection tool](https://support.google.com/webmasters/answer/9012289?hl=en) distinguishes the indexed version from a live test of what Google can access now.
+
+If the page is reachable but Google still displays an earlier version, read [why Google can show old website text](/blog/why-google-shows-old-website-text). If your concern is AI discovery or training, those involve [different crawler controls](/blog/ai-crawlers-search-and-training).

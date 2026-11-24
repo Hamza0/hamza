@@ -2,40 +2,42 @@
 title: "Database Changes Without Surprises"
 publishedAt: "2026-05-19"
 updatedAt: "2026-11-24"
-summary: "What I check before a database update changes a working application."
+summary: "What I check so a database update keeps your application working correctly."
 featuredOrder: 2
 ---
 
-A database update can finish successfully while leaving the application wrong. I plan around the information people should see, who may access it and how recovery works.
+Your database update finishes, but a report now shows the wrong amount. I plan around the application's behaviour, because a successful update alone cannot confirm that.
 
 ## Decide what must stay the same
 
-In the [operations and financial platform](/projects/production-operations-platform#technical-solution), a correction keeps the original transaction, records its reversal and links a replacement. If part fails, the correction rolls back as one unit.
+I start with what you depend on: correct information, appropriate access and records you can trace.
 
-Reports must then identify the current version without counting an original and its replacement as two current transactions. Making those reports faster must preserve the history and each business's access restrictions.
+In the [operations and financial platform](/projects/production-operations-platform#technical-solution), a correction keeps the original transaction, records its reversal and links a replacement. If part fails, the correction rolls back together.
 
-For this change, I checked that returned data and financial amounts stayed correct. Checks also covered corrections, retries and attempts to access another business's records. A successful request from one permitted account would not cover those cases.
+Reports then need to find the current version without counting the original and replacement as separate current transactions. Making them faster must preserve that history and each business's access restrictions.
+
+For this change, I checked returned data, exact financial amounts, corrections, retries and attempts to access another business's records. Testing one successful request would have missed important cases.
 
 ## Keep existing application calls working
 
-Before a release, I identify the screens, reports and integrations that depend on the database change. A changed field or function may need a transition period while older application versions still use it.
+Before a release, I identify the screens, reports and integrations using the database definition I'm changing. Your older application version may still need it during the update.
 
-Sometimes adding the new version first lets both coexist. The old version can be removed once its users have moved. For a focused performance improvement, keeping the existing interface may be simpler.
+Sometimes I would introduce the new version first, allowing both to coexist until the old one is no longer used. For a focused speed improvement, keeping the existing interface can be simpler.
 
-I keep unrelated changes to permissions or financial records out of that update. A smaller change is easier to explain and assess.
+I keep unrelated permission or financial-record changes out of that update. You should be able to understand why each change belongs in the release.
 
 ## Describe how recovery would work
 
 Restoring older application code does not restore data that has already changed.
 
-I separate changes to database definitions from changes to stored records. For the latter, I want checks before the update, a practice run where practical, a clear limit on what may change and a way to verify the result.
+I separate changes to database definitions from changes to stored records. For the latter, I want checks beforehand, a practice run where practical, clear limits on what may change and a way to verify the result.
 
-A recovery plan should explain what it restores and how someone will confirm that restoration.
+If we need to recover, the plan should tell you what will be restored and how we will confirm it.
 
-## Check the live system separately
+## Check the actual user journey
 
 For this release, production database checks confirmed the intended change and preserved migration history, permissions and related definitions. Local tests and browser checks supplied separate evidence about behaviour.
 
-A signed-in test of the list on the live system was unavailable for that release. Inspecting a database definition does not replace that check. The [case study](/projects/production-operations-platform#testing-and-production-validation) records this limit alongside its controlled local performance result.
+A signed-in test of the list in production was unavailable for that release. Inspecting the database definition does not replace that check. The [case study](/projects/production-operations-platform#testing-and-production-validation) records this limit alongside the controlled local performance result.
 
-The release record should tell the next person what changed, what was checked and what still needs confirmation.
+I want the release record to leave you with three clear answers: what changed, what was checked and what still needs confirmation.

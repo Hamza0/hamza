@@ -9,9 +9,9 @@ export const DATA = {
   location: PROFILE.location,
   locationLink: "https://www.google.com/maps/place/Toronto,+ON",
   professionalLabel: PROFILE.role,
-  heroHeadline: "WordPress · Web apps · Business systems",
+  heroHeadline: "Business applications · Systems integration",
   heroDescription:
-    "I build websites, connect business tools and fix the problems that slow teams down. Based in the Greater Toronto Area.",
+    "I design, build and support software that helps your team get work done. Based in the Greater Toronto Area, working with React, TypeScript, PostgreSQL and WordPress.",
   projectsTitle: "Selected Work",
   projectsIntro:
     "Websites and software I’ve built and improved.",

@@ -20,7 +20,7 @@ const BLUR_FADE_DELAY = 0.04;
 
 function NoteList({ posts }: { posts: Awaited<ReturnType<typeof getBlogPosts>> }) {
   return (
-    <ul className="mt-7 grid gap-x-4 gap-y-5 rounded-2xl border border-border/40 bg-muted/40 p-3 sm:grid-cols-2 sm:gap-5 sm:p-5">
+    <ul className="mt-7 grid gap-x-4 gap-y-5 rounded-3xl border border-border/40 bg-muted/40 p-3 sm:grid-cols-2 sm:gap-5 sm:p-5">
       {posts.map((post, index) => (
         <li key={post.slug} className="min-w-0">
           <BlurFade delay={Math.min(index, 4) * BLUR_FADE_DELAY} className="h-full">
@@ -72,7 +72,7 @@ export default async function BlogPage() {
       <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Notes", path: "/blog" }]} />
       <BlurFade delay={BLUR_FADE_DELAY}>
         <h1 id="notes-title" className="text-3xl font-semibold tracking-tight">Notes</h1>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Practical answers for websites and business systems.</p>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Questions about your website or software? Here’s where I’d start.</p>
       </BlurFade>
       <section id="all-notes" aria-labelledby="notes-title">
         <NoteList posts={posts} />
