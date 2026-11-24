@@ -65,7 +65,8 @@ export default function ProductionOperationsPlatform() {
         <h2 id="testing-and-production-validation">Testing and production validation</h2>
         <p>Validation covered financial correctness, immutable history, correction and retry behavior, response parity, cross-tenant denial and permission boundaries. Desktop and mobile browser regressions checked navigation, pagination, refresh, error recovery and action accessibility.</p>
         <p>Production database checks verified the intended change and preserved migration history, permissions and related definitions. Authenticated production list acceptance was unavailable for this release; local test results do not establish live-user performance. Production deployment checks are kept separate from benchmark evidence.</p>
-        <h2>Related engineering Notes</h2>
+        <h2>Related engineering notes</h2>
+        <p><Link href="/blog/designing-auditable-financial-corrections">Designing Auditable Financial Corrections in PostgreSQL</Link> explains reversal-and-replacement records, transaction boundaries, retries and tenant isolation.</p>
         <p><Link href="/blog/how-i-approach-production-problems">How I Approach Production Problems</Link> explains the investigation and validation sequence behind this work. <Link href="/blog/database-changes-need-a-delivery-plan">Database Changes Need a Delivery Plan</Link> covers compatibility and release checks, while <Link href="/blog/apis-are-where-systems-start-talking">APIs Are Where Systems Start Talking</Link> examines retries and ambiguous outcomes at application boundaries.</p>
       </article>
       <nav aria-label="Case study navigation" className="flex flex-wrap gap-4 border-t pt-5 text-sm">
