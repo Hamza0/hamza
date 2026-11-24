@@ -2,7 +2,6 @@ import { PulseHeart } from "@/components/ui/pulse-heart";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BusinessProfileInquiry } from "@/components/business-profile-inquiry";
 import { NoteContactCTA } from "@/components/note-contact-cta";
-import { NoteReadingNav } from "@/components/note-reading-nav";
 import { Badge } from "@/components/ui/badge";
 import { contactFormAvailable } from "@/lib/contact/config";
 import { getBlogPosts, getPost, getPublishedPosts } from "@/data/blog";
@@ -10,7 +9,7 @@ import { formatDate } from "@/lib/utils";
 import { AUTHOR, articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { modificationDate } from "@/lib/publication";
 import { getNotePresentation, readingMinutes } from "@/lib/note-presentation";
-import { extractNoteHeadings, splitNoteLead } from "@/lib/note-reading";
+import { splitNoteLead } from "@/lib/note-reading";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -55,7 +54,6 @@ export default async function Blog({
   const next = index > 0 ? posts[index - 1] : undefined;
   const updatedAt = modificationDate(post.metadata);
   const presentation = getNotePresentation(post.slug);
-  const headings = extractNoteHeadings(post.source);
   const { lead, body } = splitNoteLead(post.source);
 
   return (
@@ -94,7 +92,6 @@ export default async function Blog({
           {post.metadata.dateLabel && <p className="mt-2 text-xs text-muted-foreground">{post.metadata.dateLabel}</p>}
         </header>
         {lead && <div className="note-lead prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: lead }} />}
-        <NoteReadingNav headings={headings} />
         <div
           className="note-prose prose max-w-none dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: body }}

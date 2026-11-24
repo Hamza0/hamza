@@ -1,8 +1,6 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { DiaTextReveal } from "@/components/ui/dia-text-reveal";
 import { ProjectCard } from "@/components/project-card";
-import { OperationsCaseStudyCard } from "@/components/operations-case-study-card";
-import { CASE_STUDY } from "@/lib/case-study";
 import { ResumeCard } from "@/components/resume-card";
 import { HeroLanyard } from "@/components/hero-lanyard";
 import { ContactButton } from "@/components/contact-provider";
@@ -166,23 +164,17 @@ export default async function Page() {
               <BlurFade
                 key={project.title}
                 delay={BLUR_FADE_DELAY * 4 + id * 0.05}
-                className={id === 0 ? "sm:col-span-2" : undefined}
               >
-                {project.href === `/projects/${CASE_STUDY.slug}` ? (
-                  <OperationsCaseStudyCard />
-                ) : (
-                  <ProjectCard
-                    href={project.href}
-                    title={project.title}
-                    description={project.description}
-                    highlights={"highlights" in project ? project.highlights : undefined}
-                    dates={project.dates}
-                    tags={project.technologies}
-                    image={project.image}
-                    video={project.video}
-                    links={project.links}
-                  />
-                )}
+                <ProjectCard
+                  href={project.href}
+                  title={project.title}
+                  description={project.description}
+                  dates={project.dates}
+                  tags={project.technologies}
+                  image={project.image}
+                  video={project.video}
+                  links={project.links}
+                />
               </BlurFade>
             ))}
           </div>

@@ -25,7 +25,7 @@ const HINTS = [
   "Just your name is fine.", "I'll use this email to respond to your enquiry.",
   "Check your details below. You can go back and change anything before sending.",
 ];
-const inputClass = "mt-2 w-full rounded-none border-0 border-b border-foreground/25 bg-transparent px-0 py-3 text-xl tracking-tight outline-none transition-colors placeholder:text-muted-foreground/55 focus:border-[#2d4fe1] disabled:opacity-70 sm:text-2xl";
+const inputClass = "mt-2 w-full rounded-none border-0 border-b border-foreground/25 bg-transparent px-0 py-3 text-xl tracking-tight outline-none transition-colors placeholder:text-muted-foreground/55 focus:border-primary disabled:opacity-70 sm:text-2xl";
 const issueEntries = Object.entries(BUSINESS_PROFILE_ISSUES);
 
 export function BusinessProfileInquiry({ available }: { available: boolean }) {
@@ -269,9 +269,9 @@ export function BusinessProfileInquiry({ available }: { available: boolean }) {
               {step === 0 && (
                 <div id="gbp-issue" tabIndex={-1} className="space-y-2.5 outline-none" onKeyDown={() => { clearTimeout(autoAdvance.current); autoAdvance.current = undefined; }} {...fieldAria("issue")}>
                   {issueEntries.map(([value, label], index) => (
-                    <label key={value} onClick={event => { if (event.detail > 0) chooseIssue(value, true); }} className={`inquiry-choice flex min-h-[60px] cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm leading-5 focus-within:ring-2 focus-within:ring-[#2d4fe1] focus-within:ring-offset-2 focus-within:ring-offset-background ${values.issue === value ? "border-[#2d4fe1] bg-[#2d4fe1] text-white" : "border-border bg-background hover:bg-muted/50"}`}>
+                    <label key={value} onClick={event => { if (event.detail > 0) chooseIssue(value, true); }} className={`inquiry-choice flex min-h-[60px] cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 text-sm leading-5 focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background ${values.issue === value ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background hover:bg-muted/50"}`}>
                       <input type="radio" name="issue" value={value} checked={values.issue === value} onChange={() => chooseIssue(value)} className="sr-only" />
-                      <span className={`flex size-6 shrink-0 items-center justify-center rounded-md border text-xs ${values.issue === value ? "border-white/40" : "border-border text-muted-foreground"}`} aria-hidden="true">{String.fromCharCode(65 + index)}</span>
+                      <span className={`flex size-6 shrink-0 items-center justify-center rounded-md border text-xs ${values.issue === value ? "border-primary-foreground/40" : "border-border text-muted-foreground"}`} aria-hidden="true">{String.fromCharCode(65 + index)}</span>
                       <span className="flex-1">{label}</span>
                       {values.issue === value && <Check className="size-4 shrink-0" aria-hidden="true" />}
                     </label>
@@ -286,7 +286,7 @@ export function BusinessProfileInquiry({ available }: { available: boolean }) {
                 </div>
               )}
               {step === 2 && (
-                <div><label htmlFor="gbp-details" className="sr-only">Describe the issue</label><textarea id="gbp-details" name="details" value={values.details} onChange={event => update("details", event.target.value)} minLength={CONTACT_LIMITS.messageMin} maxLength={BUSINESS_PROFILE_LIMITS.details} rows={5} required placeholder="For example, I updated our address last week, but customers still see the old location..." className="w-full resize-y rounded-xl border border-border bg-muted/20 p-4 text-base leading-7 outline-none transition-colors placeholder:text-muted-foreground/65 focus:border-[#2d4fe1]" {...fieldAria("details")} />{fieldError("details")}<p className="mt-2 text-right text-xs tabular-nums text-muted-foreground">{values.details.length.toLocaleString()} / 2,000</p></div>
+                <div><label htmlFor="gbp-details" className="sr-only">Describe the issue</label><textarea id="gbp-details" name="details" value={values.details} onChange={event => update("details", event.target.value)} minLength={CONTACT_LIMITS.messageMin} maxLength={BUSINESS_PROFILE_LIMITS.details} rows={5} required placeholder="For example, I updated our address last week, but customers still see the old location..." className="w-full resize-y rounded-xl border border-border bg-muted/20 p-4 text-base leading-7 outline-none transition-colors placeholder:text-muted-foreground/65 focus:border-primary" {...fieldAria("details")} />{fieldError("details")}<p className="mt-2 text-right text-xs tabular-nums text-muted-foreground">{values.details.length.toLocaleString()} / 2,000</p></div>
               )}
               {step === 3 && (
                 <div><label htmlFor="gbp-name" className="sr-only">Your name</label><input id="gbp-name" name="name" autoComplete="name" value={values.name} onChange={event => update("name", event.target.value)} maxLength={CONTACT_LIMITS.name} placeholder="Your name" required className={inputClass} {...fieldAria("name")} />{fieldError("name")}</div>
@@ -312,10 +312,10 @@ export function BusinessProfileInquiry({ available }: { available: boolean }) {
           <p role="status" aria-live="polite" aria-atomic="true" className="mt-4 text-sm leading-6 empty:hidden">{status}</p>
           {cooldown > 0 && <p aria-live="off" className="mt-2 text-xs text-muted-foreground">Try again in {cooldown}s.</p>}
           <div className="mt-8 border-t border-border/70 pt-5">
-            <div role="progressbar" aria-label="Enquiry progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-valuetext={step < 5 ? `Question ${step + 1} of 5` : "Review and send"} className="mb-5 h-1.5 overflow-hidden rounded-full bg-muted"><div className="inquiry-progress h-full origin-left rounded-full bg-[#2d4fe1]" style={{ transform: `scaleX(${progress / 100})` }} /></div>
+            <div role="progressbar" aria-label="Enquiry progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={progress} aria-valuetext={step < 5 ? `Question ${step + 1} of 5` : "Review and send"} className="mb-5 h-1.5 overflow-hidden rounded-full bg-muted"><div className="inquiry-progress h-full origin-left rounded-full bg-primary" style={{ transform: `scaleX(${progress / 100})` }} /></div>
             <div className="flex items-center justify-between gap-3">
               <Button type="button" variant="ghost" disabled={step === 0 || locked || exiting} onClick={() => navigate(step - 1)} className="-ml-2"><ArrowLeft className="mr-2 size-4" aria-hidden="true" />Back</Button>
-              <Button type="submit" disabled={sending || exiting || (step === 5 && (!token || cooldown > 0))} className="min-w-32 rounded-lg bg-[#2d4fe1] px-5 text-white hover:bg-[#203dbb]">{sending ? "Sending..." : step === 5 ? retryLocked ? "Retry enquiry" : "Send enquiry" : "Continue"}{!sending && <ArrowRight className="ml-2 size-4" aria-hidden="true" />}</Button>
+              <Button type="submit" disabled={sending || exiting || (step === 5 && (!token || cooldown > 0))} className="min-w-32 rounded-lg px-5">{sending ? "Sending..." : step === 5 ? retryLocked ? "Retry enquiry" : "Send enquiry" : "Continue"}{!sending && <ArrowRight className="ml-2 size-4" aria-hidden="true" />}</Button>
             </div>
           </div>
           {step === 5 && <p className="mt-5 text-xs leading-5 text-muted-foreground">Your details are used to respond to this enquiry. <Link href="/privacy" className="underline underline-offset-4">Privacy</Link>. Prefer another route? <a href={LINKEDIN} className="underline underline-offset-4">Message me on LinkedIn</a>.</p>}

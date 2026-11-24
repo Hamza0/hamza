@@ -202,29 +202,6 @@ export const DATA = {
 
   projects: [
     {
-      title: "Business operations platform",
-      featured: true,
-      href: "/projects/production-operations-platform",
-      dates: "Ongoing development & maintenance",
-      active: true,
-      description:
-        "Built, deployed and maintain a multi-tenant SaaS platform supporting operational, transactional and financial workflows.",
-      highlights: [
-        "Optimized PostgreSQL financial reads by eliminating repeated authorization and canonical record-resolution work.",
-        "Designed atomic reversal-and-replacement corrections that preserve historical transactions and auditability.",
-        "Implemented tenant-aware authorization, reporting and operational workflows.",
-        "Developed API integrations and maintain production workflows through troubleshooting, regression testing and release checks.",
-      ],
-      technologies: ["React", "TypeScript", "PostgreSQL", "Supabase", "Vercel"],
-      links: [{
-        type: "Read the engineering case study",
-        href: "/projects/production-operations-platform",
-        icon: <Icons.globe className="size-3" />,
-      }],
-      image: "",
-      video: "",
-    },
-    {
       title:
         "Health Workforce Canada – Digital Front Door, Dashboards & Modelling",
       featured: true,
