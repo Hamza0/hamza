@@ -1,16 +1,16 @@
 type NoteTopic = {
   label: string;
-  tone: "sky" | "teal" | "violet" | "amber" | "rose";
+  tone: "sky";
   ctaTitle: string;
   ctaDescription: string;
 };
 
 const topics = {
-  web: { label: "Web experiences", tone: "sky", ctaTitle: "Make the next step easier.", ctaDescription: "Tell me where visitors get stuck and what you want your website to help them do." },
-  data: { label: "Data & databases", tone: "teal", ctaTitle: "Make your data easier to trust.", ctaDescription: "Describe the report, query or workflow that needs attention. We can start with the result you need." },
-  systems: { label: "Reliable systems", tone: "violet", ctaTitle: "Have a workflow that needs attention?", ctaDescription: "Tell me what should happen, what happens now and where your team gets stuck." },
-  search: { label: "Search & discovery", tone: "amber", ctaTitle: "Help the right people find their next step.", ctaDescription: "Share your website and the questions your customers ask. Tell me what you would like to improve." },
-  practice: { label: "Engineering practice", tone: "rose", ctaTitle: "Turn the idea into a practical next step.", ctaDescription: "Have a software project, role or collaboration in mind? Tell me a little about it." },
+  web: { label: "Websites", tone: "sky", ctaTitle: "Need help with your website?", ctaDescription: "Tell me what needs improving." },
+  data: { label: "Data", tone: "sky", ctaTitle: "Numbers not adding up?", ctaDescription: "Tell me which report or records need attention." },
+  systems: { label: "Business tools", tone: "sky", ctaTitle: "Something slowing your team down?", ctaDescription: "Tell me what should happen and where it gets stuck." },
+  search: { label: "Google Search", tone: "sky", ctaTitle: "Need help getting found?", ctaDescription: "Share your website and what you want to improve." },
+  practice: { label: "Behind the build", tone: "sky", ctaTitle: "Have a project in mind?", ctaDescription: "Tell me a little about it." },
 } satisfies Record<string, NoteTopic>;
 
 const noteTopics: Record<string, keyof typeof topics> = {
@@ -41,16 +41,16 @@ const noteTopics: Record<string, keyof typeof topics> = {
 
 const noteCallsToAction: Record<string, Pick<NoteTopic, "ctaTitle" | "ctaDescription">> = {
   "how-to-measure-google-ai-search-visibility": {
-    ctaTitle: "Understand how people find your website.",
-    ctaDescription: "Share your website and the visibility question you want to answer. We can start with the reports available to you.",
+    ctaTitle: "Need help with search visibility?",
+    ctaDescription: "Share your website and what you want to understand.",
   },
   "wordpress-form-sent-but-no-email": {
     ctaTitle: "Missing enquiry emails?",
-    ctaDescription: "Tell me which form you use, what confirmation you see and where the email should arrive.",
+    ctaDescription: "Tell me which form you use and what happens.",
   },
   "woocommerce-payment-succeeded-order-pending": {
-    ctaTitle: "Is your order workflow out of sync?",
-    ctaDescription: "Tell me what the store shows, what the payment provider shows and when the problem started.",
+    ctaTitle: "Payment received, order stuck?",
+    ctaDescription: "Tell me what the store and payment provider show.",
   },
 };
 

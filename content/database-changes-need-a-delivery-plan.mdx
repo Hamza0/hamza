@@ -1,35 +1,41 @@
 ---
-title: "Database Changes Need a Delivery Plan"
+title: "Database Changes Without Surprises"
 publishedAt: "2026-05-19"
 updatedAt: "2026-11-24"
-summary: "Preserving authorization, financial history and application compatibility when a PostgreSQL change moves from local validation to release."
+summary: "What I check before a database update changes a working application."
 featuredOrder: 2
 ---
 
-A migration can run successfully while leaving the application wrong. A function signature may still match even though its permissions, row ordering or interpretation of a corrected transaction has changed. My delivery plan starts with those observable behaviours.
+A database update can finish successfully while leaving the application wrong. I plan around the information people should see, who may access it and how recovery works.
 
-## Define what must stay true
+## Decide what must stay the same
 
-The [Business Operations & Financial Systems](/projects/production-operations-platform#technical-solution) includes financial corrections that retain the original transaction, record its reversal and link a replacement. The correction is atomic: if part of it fails, the operation rolls back as one unit.
+In the [operations and financial platform](/projects/production-operations-platform#technical-solution), a correction keeps the original transaction, records its reversal and links a replacement. If part fails, the correction rolls back as one unit.
 
-That design preserves an audit trail, but it gives readers more work to do. A list must resolve the current records without treating an original and its replacement as two unrelated current transactions. Optimizing that read path must preserve the writer contract, historical data and tenant boundaries.
+Reports must then identify the current version without counting an original and its replacement as two current transactions. Making those reports faster must preserve the history and each business's access restrictions.
 
-For this change, I treated response parity and exact financial results as release requirements. The validation also covered correction and retry behaviour, permission boundaries and cross-tenant denial. Checking only a successful request from one permitted account would leave important failure paths untested.
+For this change, I checked that returned data and financial amounts stayed correct. Checks also covered corrections, retries and attempts to access another business's records. A successful request from one permitted account would not cover those cases.
 
-## Separate compatibility from deployment order
+## Keep existing application calls working
 
-Before a database release, I identify which application calls, reports and integrations depend on the definition being changed. If a field or function contract must change, an additive transition can let old and new application versions coexist. Removing the old contract belongs after its consumers have moved.
+Before a release, I identify the screens, reports and integrations that depend on the database change. A changed field or function may need a transition period while older application versions still use it.
 
-This is a planning rule, not a claim that every migration needs a large compatibility framework. For a focused read optimization, preserving the existing interface can be the smaller and more reviewable choice. Changes to permissions or financial writers should not slip into an unrelated performance patch.
+Sometimes adding the new version first lets both coexist. The old version can be removed once its users have moved. For a focused performance improvement, keeping the existing interface may be simpler.
 
-## Make recovery concrete
+I keep unrelated changes to permissions or financial records out of that update. A smaller change is easier to explain and assess.
 
-Rolling back application code does not undo transformed data. I distinguish reversible definition changes from writes that require a recovery procedure. For data migrations, I want preflight checks, a dry run where practical, explicit write scope and validation of the resulting records. A rollback plan should say what it restores and what evidence confirms that restoration.
+## Describe how recovery would work
 
-## Check the deployed state, then the user path
+Restoring older application code does not restore data that has already changed.
 
-For the platform release, production database checks verified the intended change while preserving migration history, permissions and related definitions. Local tests and browser regressions supplied separate evidence about behaviour.
+I separate changes to database definitions from changes to stored records. For the latter, I want checks before the update, a practice run where practical, a clear limit on what may change and a way to verify the result.
 
-Authenticated production list acceptance was unavailable for that release. That limit matters: inspecting a deployed definition is not equivalent to exercising the request as a real authorized user. The [case study’s validation section](/projects/production-operations-platform#testing-and-production-validation) records that distinction alongside the controlled local performance result.
+A recovery plan should explain what it restores and how someone will confirm that restoration.
 
-A useful release record names the change, the invariants checked and the checks still outstanding. It gives the next developer a better starting point than “migration succeeded.”
+## Check the live system separately
+
+For this release, production database checks confirmed the intended change and preserved migration history, permissions and related definitions. Local tests and browser checks supplied separate evidence about behaviour.
+
+A signed-in test of the list on the live system was unavailable for that release. Inspecting a database definition does not replace that check. The [case study](/projects/production-operations-platform#testing-and-production-validation) records this limit alongside its controlled local performance result.
+
+The release record should tell the next person what changed, what was checked and what still needs confirmation.

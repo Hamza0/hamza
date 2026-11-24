@@ -150,15 +150,12 @@ export default async function Page() {
       <section id="projects">
         <div className="space-y-6 w-full">
           <BlurFade delay={BLUR_FADE_DELAY * 11}>
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex flex-col space-y-3">
               <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
-                  Engineering & Delivery
-                </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+                <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                   {DATA.projectsTitle}
                 </h2>
-                <p className="text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                <p className="text-sm leading-relaxed text-muted-foreground">
                   {DATA.projectsIntro}
                 </p>
               </div>
@@ -291,11 +288,11 @@ export default async function Page() {
       {featuredNotes.length > 0 && (
         <section id="notes" aria-labelledby="technical-notes-title" className="scroll-mt-8">
           <div className="flex items-baseline justify-between gap-4">
-            <h2 id="technical-notes-title" className="text-xl font-bold">Technical notes</h2>
+            <h2 id="technical-notes-title" className="text-xl font-bold">Notes</h2>
             <Link href="/blog" className="shrink-0 text-sm underline underline-offset-4">All notes →</Link>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
-              Client work, production troubleshooting, database changes and reliable integrations.
+              Practical help with websites and business tools.
           </p>
           <ul className="mt-3 divide-y divide-border/50">
             {featuredNotes.map((note) => (

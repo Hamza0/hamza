@@ -8,5 +8,5 @@ export const PROFILE = {
   name: "Hamza Shakeel",
   role: "Software Developer",
   location: "Greater Toronto Area, Ontario, Canada",
-  description: "Hamza Shakeel is a software developer based in the Greater Toronto Area, Ontario, Canada. He has 7+ years of experience and founded Coded Square. He builds business applications, integrates APIs and supports production systems using React, TypeScript and PostgreSQL.",
+  description: "Hamza Shakeel is a software developer in the Greater Toronto Area, Ontario, Canada, and founder of Coded Square. With 7+ years of experience, he builds WordPress websites and business applications, connects tools and supports production software.",
 };

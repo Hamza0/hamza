@@ -9,12 +9,12 @@ export const DATA = {
   location: PROFILE.location,
   locationLink: "https://www.google.com/maps/place/Toronto,+ON",
   professionalLabel: PROFILE.role,
-  heroHeadline: "Business Applications · Systems Integration · Production Support",
+  heroHeadline: "WordPress · Web apps · Business systems",
   heroDescription:
-    "I’m a software developer based in the Greater Toronto Area. I build and support business applications with React, TypeScript and PostgreSQL, connect systems through APIs, and troubleshoot production issues.",
+    "I build websites, connect business tools and fix the problems that slow teams down. Based in the Greater Toronto Area.",
   projectsTitle: "Selected Work",
   projectsIntro:
-    "Production systems, data platforms and commercial technical delivery.",
+    "Websites and software I’ve built and improved.",
 
   summary:
     "I’m focused on Software Developer opportunities in Toronto, Ontario, Canada, and across the Greater Toronto Area (GTA). I bring 7+ years of experience building and supporting websites, applications and digital systems across healthcare, cybersecurity, agencies and technology teams. My work spans full-stack development, databases, APIs, CRM integrations, dashboards, analytics and forecasting initiatives. I also founded Coded Square, where I build and deliver web applications, digital platforms and internal tools for clients. My production support work includes diagnosing and resolving issues across application behaviour, integrations, authentication, databases, hosting and deployment workflows. I combine technical implementation with a strong eye for visual hierarchy, typography, responsive layout and intuitive user experiences.",
@@ -202,7 +202,7 @@ export const DATA = {
 
   projects: [
     {
-      title: "Business Operations & Financial Systems",
+      title: "Business operations platform",
       featured: true,
       href: "/projects/production-operations-platform",
       dates: "Ongoing development & maintenance",

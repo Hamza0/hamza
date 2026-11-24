@@ -65,13 +65,17 @@ export default function ProductionOperationsPlatform() {
         <h2 id="testing-and-production-validation">Testing and production validation</h2>
         <p>Validation covered financial correctness, immutable history, correction and retry behavior, response parity, cross-tenant denial and permission boundaries. Desktop and mobile browser regressions checked navigation, pagination, refresh, error recovery and action accessibility.</p>
         <p>Production database checks verified the intended change and preserved migration history, permissions and related definitions. Authenticated production list acceptance was unavailable for this release; local test results do not establish live-user performance. Production deployment checks are kept separate from benchmark evidence.</p>
-        <h2>Related engineering notes</h2>
-        <p><Link href="/blog/designing-auditable-financial-corrections">Designing Auditable Financial Corrections in PostgreSQL</Link> explains reversal-and-replacement records, transaction boundaries, retries and tenant isolation.</p>
-        <p><Link href="/blog/how-i-approach-production-problems">How I Approach Production Problems</Link> explains the investigation and validation sequence behind this work. <Link href="/blog/database-changes-need-a-delivery-plan">Database Changes Need a Delivery Plan</Link> covers compatibility and release checks, while <Link href="/blog/apis-are-where-systems-start-talking">Why an API Timeout Does Not Always Mean Failure</Link> examines retries and ambiguous outcomes at application boundaries.</p>
+        <h2>Read more</h2>
+        <ul>
+          <li><Link href="/blog/designing-auditable-financial-corrections">Correcting financial records without losing history</Link></li>
+          <li><Link href="/blog/how-i-approach-production-problems">Finding the cause of a software problem</Link></li>
+          <li><Link href="/blog/database-changes-need-a-delivery-plan">Changing a database safely</Link></li>
+          <li><Link href="/blog/apis-are-where-systems-start-talking">When connected apps stop working together</Link></li>
+        </ul>
       </article>
       <nav aria-label="Case study navigation" className="flex flex-wrap gap-4 border-t pt-5 text-sm">
         <Link href="/#projects" className="underline underline-offset-4">Back to Selected Work</Link>
-        <Link href="/blog" className="underline underline-offset-4">Technical Notes</Link>
+        <Link href="/blog" className="underline underline-offset-4">Notes</Link>
         <Link href={DATA.contact.social.GitHub.url} className="underline underline-offset-4">GitHub</Link>
         <Link href="/#contact" className="underline underline-offset-4">Get in touch</Link>
       </nav>

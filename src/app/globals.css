@@ -490,18 +490,11 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 
 /* Topic accents keep long-form notes calm, readable and recognisable. */
 .note-theme { --note-accent: 201 90% 31%; }
-.note-tone-sky { --note-accent: 201 90% 31%; }
-.note-tone-teal { --note-accent: 174 75% 24%; }
-.note-tone-violet { --note-accent: 262 66% 44%; }
-.note-tone-amber { --note-accent: 32 85% 28%; }
-.note-tone-rose { --note-accent: 345 65% 36%; }
-.dark .note-tone-sky { --note-accent: 199 90% 75%; }
-.dark .note-tone-teal { --note-accent: 172 65% 70%; }
-.dark .note-tone-violet { --note-accent: 263 85% 80%; }
-.dark .note-tone-amber { --note-accent: 38 90% 72%; }
-.dark .note-tone-rose { --note-accent: 345 85% 80%; }
+.dark .note-theme { --note-accent: 199 90% 75%; }
 
 .note-accent { color: hsl(var(--note-accent)); }
+.note-theme .pulse-heart { --ph-liked: hsl(var(--note-accent)); }
+.note-theme .pulse-heart:focus-visible { color: hsl(var(--note-accent)); background: hsl(var(--note-accent) / 0.08); }
 .note-chip { color: hsl(var(--note-accent)); background: hsl(var(--note-accent) / 0.08); }
 .note-list-link:hover { background: hsl(var(--note-accent) / 0.035); }
 .note-card {
@@ -509,7 +502,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease;
 }
 .group:focus-visible .note-card { border-color: hsl(var(--note-accent) / 0.5); }
-.note-callout { background: hsl(var(--note-accent) / 0.055); border-color: hsl(var(--note-accent) / 0.2); }
+.note-callout { background: hsl(var(--muted) / 0.45); border-color: hsl(var(--border)); }
 .note-callout .text-muted-foreground { color: hsl(var(--foreground) / 0.72); }
 .note-action { background: hsl(var(--note-accent)); color: white; }
 .dark .note-action { color: hsl(var(--background)); }
@@ -519,31 +512,32 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   margin: 0;
   color: hsl(var(--foreground) / 0.82);
   font-size: 1.125rem;
-  line-height: 1.75;
+  line-height: 1.65;
   text-wrap: pretty;
 }
 .note-lead a { color: hsl(var(--note-accent)); text-underline-offset: 3px; }
-.note-lead strong { color: hsl(var(--note-accent)); font-weight: 600; }
+.note-lead strong { color: hsl(var(--foreground)); font-weight: 600; }
 .note-prose { overflow-wrap: anywhere; }
-.note-prose p { line-height: 1.8; }
-.note-prose :is(h2, h3) { color: hsl(var(--note-accent)); scroll-margin-top: 1.5rem; }
+.note-prose p { line-height: 1.75; }
+.note-prose :is(h2, h3) { color: hsl(var(--foreground)); scroll-margin-top: 1.5rem; }
 .note-prose h2 { margin-top: 2.5rem; margin-bottom: 0.85rem; font-size: 1.3rem; line-height: 1.4; letter-spacing: -0.02em; }
 .note-prose a { color: hsl(var(--note-accent)); text-decoration-color: hsl(var(--note-accent) / 0.45); text-underline-offset: 3px; }
 .note-prose a:hover { text-decoration-color: currentColor; }
 .note-prose a:focus-visible, .note-lead a:focus-visible { outline: 2px solid hsl(var(--note-accent)); outline-offset: 4px; border-radius: 2px; }
 .note-prose :is(ul, ol) > li::marker { color: hsl(var(--note-accent)); }
-.note-prose blockquote { border: 1px solid hsl(var(--note-accent) / 0.16); border-radius: 1rem; background: hsl(var(--note-accent) / 0.045); padding: 0.25rem 1.25rem; }
+.note-prose blockquote { border: 1px solid hsl(var(--border)); border-radius: 1rem; background: hsl(var(--muted) / 0.45); padding: 0.25rem 1.25rem; }
 .note-prose :not(pre) > code { border-radius: 0.3rem; padding: 0.15em 0.35em; background: hsl(var(--note-accent) / 0.07); color: hsl(var(--note-accent)); }
 .note-prose :not(pre) > code::before, .note-prose :not(pre) > code::after { content: none; }
 .note-prose table { font-size: 0.875rem; line-height: 1.6; }
-.note-prose thead { background: hsl(var(--note-accent) / 0.07); border-color: hsl(var(--note-accent) / 0.25); }
-.note-prose th { color: hsl(var(--note-accent)); }
+.note-prose thead { background: hsl(var(--muted) / 0.5); border-color: hsl(var(--border)); }
+.note-prose th { color: hsl(var(--foreground)); }
 .note-prose :is(th, td) { padding: 0.7rem; }
-.note-prose tbody tr { border-color: hsl(var(--note-accent) / 0.15); }
-.note-prose tbody tr:nth-child(even) { background: hsl(var(--note-accent) / 0.025); }
+.note-prose tbody tr { border-color: hsl(var(--border)); }
+.note-prose tbody tr:nth-child(even) { background: hsl(var(--muted) / 0.3); }
 
 @media (hover: hover) and (pointer: fine) {
   .group:hover .note-card { border-color: hsl(var(--note-accent) / 0.3); background: hsl(var(--note-accent) / 0.025); }
+  .note-theme .pulse-heart:not([data-liked="true"]):not(:disabled):hover { color: hsl(var(--note-accent)); background: hsl(var(--note-accent) / 0.08); }
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .group:hover .note-card { transform: translateY(-2px); }

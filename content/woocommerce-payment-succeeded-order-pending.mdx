@@ -1,48 +1,38 @@
 ---
-title: "Payment Succeeded, but the WooCommerce Order Is Still Pending"
+title: "Paid Order Still Pending in WooCommerce?"
 publishedAt: "2026-11-24"
-summary: "Understand why payment and WooCommerce order status can disagree, what evidence to compare and how to investigate without creating another payment."
+updatedAt: "2026-11-24"
+summary: "Compare the payment and order records before asking a customer to pay again."
 ---
 
-When Stripe shows a successful payment but WooCommerce still shows Pending payment, compare the records for the same order before taking another payment action. The payment service and the store maintain different records, and a missing or unprocessed update can leave them out of step.
+If Stripe shows a successful payment while WooCommerce says Pending payment, check the matching records first. Do not ask the customer to pay again yet.
 
-The first task is to establish what happened to the existing attempt. A pending order alone is not enough reason to ask the customer to pay again.
+## Match the order and payment
 
-## Are the payment and order describing the same attempt?
+Compare the order number, transaction reference, amount, currency and time. Check that you are looking at the correct account and live or test environment.
 
-Match the order number, transaction reference, amount, currency and time. Confirm that you are reviewing the correct account and live or test environment. A similar amount or customer name is not enough to identify the same transaction.
+WooCommerce normally uses Pending payment for an order awaiting payment. Processing generally means payment was received and the order awaits fulfilment. Its [order-status guide](https://woocommerce.com/document/managing-orders/order-statuses/) explains the exceptions.
 
-In the normal WooCommerce flow, Pending payment means the order is awaiting payment, while Processing indicates payment has been received and the order awaits fulfilment. Its [order-status documentation](https://woocommerce.com/document/managing-orders/order-statuses/) explains the distinctions and exceptions.
+Changing the status just to make the screens agree can hide the original problem. Establish what happened to the existing payment first.
 
-If the gateway and store disagree, investigate that discrepancy. Changing a label simply to make the screens agree can hide the information needed to understand it.
+## Check the update sent to the store
 
-## How does payment confirmation reach the store?
+Stripe sends payment updates through webhooks: messages that tell the store an event occurred. WooCommerce's [Stripe webhook guide](https://woocommerce.com/document/stripe/setup-and-configuration/stripe-webhooks/) explains how this connection is configured and checked.
 
-The WooCommerce Stripe extension sends requests to Stripe through its API. Stripe sends updates back through webhooks, which are notifications about events. WooCommerce's [dedicated Stripe webhook documentation](https://woocommerce.com/document/stripe/setup-and-configuration/stripe-webhooks/) explains this connection and how its status is represented.
+Follow the instructions for the installed extension version. Supported versions configure webhooks when connecting to Stripe, so creating another connection without checking the existing setup can add confusion.
 
-Supported extension versions configure webhooks when connecting to Stripe. The right investigation depends on the installed extension and its documented setup. A blanket instruction to create another endpoint can introduce confusion.
+A received message and an updated order are separate checks. Stripe's [webhook guidance](https://docs.stripe.com/webhooks) recommends acknowledging messages before lengthy processing, so a successful delivery response does not prove the order changed correctly.
 
-Also distinguish delivery from processing. Stripe's [webhook guidance](https://docs.stripe.com/webhooks) recommends acknowledging receipt before complex work that could time out. A successful delivery response therefore needs to be checked alongside the resulting store state.
+## Put the records in order
 
-## What information makes the issue easier to investigate?
+Collect the order notes, exact payment state and relevant event delivery time and response. Include the WooCommerce and payment-extension versions and any recent changes.
 
-Collect a small set of matching records:
+Build a short timeline. Was an update sent? Did the store receive it? Does an order note show an error? Is one order affected or several?
 
-| Record | Useful detail |
-| --- | --- |
-| WooCommerce order | Status, order notes and transaction reference |
-| Stripe payment | Exact payment state, amount, currency and time |
-| Relevant event delivery | Event type, delivery time and response |
-| Store environment | WooCommerce and gateway versions, recent changes |
+Keep account secrets and unnecessary customer information out of shared screenshots. A similar problem reported online may have a different cause.
 
-Build a timeline from those records. Did the store receive the relevant update? Does an order note describe an error? Is one order affected, or is the same pattern appearing across several orders?
+## Confirm the outcome before acting
 
-A public support report may describe a similar symptom without having the same cause. Keep account secrets and unnecessary customer information out of shared screenshots and diagnostic excerpts.
+Have the payment and order checked together before requesting another payment, issuing a refund or changing fulfilment status. The reviewer should explain what is confirmed and what the proposed action will do.
 
-## What should happen before another action is taken?
-
-Have the existing payment and order reconciled before asking for another payment, changing fulfilment status or attempting a refund. The person reviewing the issue should be able to explain the confirmed state and the effect of the proposed action.
-
-Any integration change should then be checked in a suitable test environment, including whether an update changes the intended order correctly. Repeated notifications must not create repeated business actions.
-
-The underlying boundary is explained in [Why an API Timeout Does Not Always Mean Failure](/blog/apis-are-where-systems-start-talking): a response, a completed operation and what the interface displays are separate pieces of evidence.
+Check any integration change in a suitable test environment. Repeated updates should not trigger duplicate actions. The same distinction appears in [how systems handle uncertain requests](/blog/apis-are-where-systems-start-talking).

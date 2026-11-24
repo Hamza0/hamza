@@ -2,53 +2,43 @@
 title: "When a Website Becomes a System"
 publishedAt: "2026-01-12"
 updatedAt: "2026-11-24"
-summary: "How to decide when a website needs connected workflows, clear system ownership and dependable integrations beyond its visible pages."
+summary: "What changes when a website starts handling enquiries, data and work between teams."
 ---
 
-A website becomes part of a business system when an interaction starts work beyond the page: creating a CRM record, retrieving data, sending a notification or moving a request to another team. Those connections need to be designed and checked alongside the interface.
+A website becomes part of a business system when an action starts work elsewhere, such as assigning an enquiry, retrieving information or sending a notification.
 
-The distinction helps define a project's scope. It does not mean every website needs accounts, automation or a custom platform.
+## Start with the business job
 
-## Start with the job the website needs to do
+Some websites need to explain an organisation, show its services and help people make contact. Clear pages, accessible navigation and dependable publishing may meet that need.
 
-A publishing website may need to explain an organisation, present services and help someone find the right contact. Clear content, accessible navigation and a dependable publishing setup can meet that need.
+Other websites take on work. A form might assign an enquiry to a team, while a dashboard brings in regularly updated data. Those connections need to be planned and checked alongside the visible pages.
 
-A platform takes on more responsibility when people use it to carry out work. A contact form may assign an enquiry to someone. A resource page may retrieve information from an API. A dashboard may depend on regularly validated data.
+The design can stay simple. The extra responsibility is making the whole process work, including when another service is unavailable.
 
-The visual design can remain simple in either case. The difference is what must happen around the interaction, including who maintains the information and what the visitor sees when a supporting service is unavailable.
+## Follow one enquiry from start to finish
 
-## Follow one interaction from beginning to end
+Imagine a visitor completing a contact form. The website checks the details, another service accepts the request and someone follows up.
 
-Consider an illustrative website enquiry. The visitor enters details, the receiving system validates them, a service accepts the request and a team follows up.
+For that journey, establish:
 
-Each boundary raises a practical question:
+- What information is required, and where the main record is stored.
+- Who handles the next step and how they receive the request.
+- What the visitor sees if a connection fails, and how the team investigates.
 
-- Which information is required, and do the form and receiving system agree on its format?
-- Where does the authoritative record live?
-- Who owns the next step?
-- What can the interface confirm if a connection fails?
-- How can someone investigate an enquiry that did not reach its destination?
+A tidy form can still send the wrong fields. Following the full journey finds problems that a visual review would miss.
 
-A form can look complete while sending the wrong fields. A successful page load can conceal an incomplete API response. Following the full path helps identify work that a visual review would miss.
+[Missing API replies and retries](/blog/apis-are-where-systems-start-talking) explain one example: an error on screen does not always mean the underlying work failed.
 
-[API timeouts and retries](/blog/apis-are-where-systems-start-talking) are one example of why the visible result and the completed business action need separate checks.
+## Make ownership and information clear
 
-## Make ownership and maintenance clear
+Someone should know who can change an integration's settings, which system holds the current record and where to investigate failures. Document how information moves between systems, especially when they use different formats.
 
-A useful integration has an owner. Someone should know who can change its configuration, which service holds the current record and where to look when the connection stops working.
+Content needs an owner too. The editing process should work for the person publishing information each week.
 
-Content needs ownership too. An update that is easy for a developer may be awkward for the person publishing information every week. The editing workflow belongs in the design, alongside the customer-facing pages.
-
-Keep field mappings and important assumptions understandable. If two systems store the same value differently, document how the integration handles that difference. That gives the next person enough context to maintain the connection.
-
-## Explain the information around the tool
-
-My workforce data experience has also made me pay attention to the path into a tool. A chart or planning interface needs context about what its information represents, where it comes from and how someone can use it.
-
-Labels, source information, accessible controls and clear empty states help people interpret the result. These are part of [building data tools for non-technical teams](/blog/building-data-tools-for-non-technical-teams), even when the underlying calculation already works.
+My workforce data experience also taught me to consider the path into a tool. Labels, sources and explanations help people understand a chart or planning screen. That context belongs in [data tools for non-technical teams](/blog/building-data-tools-for-non-technical-teams), alongside accessible controls and useful messages when no results are available.
 
 ## Choose the smallest useful scope
 
-Write down the outcome before adding another integration. If a content site and a dependable form meet the need, keep the build focused. If the task crosses several systems, include those connections, their failure paths and their owners in the project scope.
+Write down the outcome before adding another integration. If clear pages and a dependable form meet the need, keep the project focused.
 
-Before launch, follow the intended user journey with realistic content. Check the handoff, the receiving system and the recovery path, then leave enough information for the team maintaining it.
+If the task crosses several systems, include those connections, their owners and their failure paths. Before launch, follow the journey with realistic content and leave enough information for the team maintaining it.

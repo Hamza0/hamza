@@ -103,7 +103,7 @@ export default async function Blog({
       {post.slug === "google-business-profile-address-change-help" && (
         <section id="get-help" aria-labelledby="profile-enquiry-heading" className="mt-10 scroll-mt-6">
           <h2 id="profile-enquiry-heading" className="mb-3 text-xl font-semibold">Have a similar address issue?</h2>
-          <p className="mb-5 text-sm leading-relaxed text-muted-foreground">Answer a few short questions so I can understand what is happening with your Google Business Profile.</p>
+          <p className="mb-5 text-sm leading-relaxed text-muted-foreground">Tell me what happened using the short form below.</p>
           <BusinessProfileInquiry available={contactFormAvailable()} />
         </section>
       )}

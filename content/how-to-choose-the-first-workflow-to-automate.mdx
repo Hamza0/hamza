@@ -1,44 +1,42 @@
 ---
-title: "How to Choose the First Workflow to Automate"
+title: "Which Business Task Should You Automate?"
 publishedAt: "2026-11-24"
 updatedAt: "2026-11-24"
-summary: "Choose a useful first automation by comparing repetitive work, clear rules, handoffs and recovery needs, then measure the process before changing it."
+summary: "Choose a repeatable task, measure the effort and plan for mistakes."
 ---
 
-A good first automation handles a frequent, predictable task with clear inputs, a clear owner and a result you can verify. Start with a small part of the business where you can measure the current effort and safely handle exceptions.
+Start with a task that happens often and follows clear rules. Choose something small enough to measure, check and recover when an exception occurs.
 
-The most frustrating process is worth investigating, but frustration alone does not tell you whether it is ready for automation. Missing information, unclear responsibilities and changing rules need attention during planning.
+## Follow one real example
 
-## Follow one request from start to finish
+Take a website enquiry and follow it until someone responds. Write down who handles it, which systems they use and where they copy information or wait.
 
-Choose a real example, such as a website enquiry becoming a sales follow-up. Write down what starts the process, which systems it touches, who handles each step and what counts as complete.
+Include awkward cases: a missing phone number, a duplicate message or a request sent to the wrong team. These help reveal which parts need judgement.
 
-Ask the people doing the work where they copy information, wait for an answer or correct an earlier mistake. Include unusual cases: an enquiry without a phone number, a duplicate submission or a request that belongs to another team.
+Microsoft's [process analysis guidance](https://learn.microsoft.com/en-us/power-automate/process-advisor-overview) describes mapping work to find delays and automation opportunities. A small team can start with a shared document and a few examples.
 
-Microsoft's [process analysis guidance](https://learn.microsoft.com/en-us/power-automate/process-advisor-overview) describes using process data and maps to identify bottlenecks and automation opportunities. A small team can begin with a shared document and a few representative examples before considering more elaborate tooling.
+## Separate routine work from decisions
 
-## Compare a few candidates
+These are possible starting points for a service business:
 
-For an illustrative service business, the choices might look like this:
-
-| Candidate | Useful first step | Decision to keep with a person |
+| Task | Part to automate | Keep a person involved |
 | --- | --- | --- |
-| Website enquiries | Create a record and assign an owner | Decide whether the project is a good fit |
-| Supplier invoices | Collect documents and flag missing fields | Approve an unusual charge |
-| Weekly reporting | Gather agreed figures into a draft | Explain unexpected changes |
+| Enquiries | Create a record and assign it | Decide whether the job is a good fit |
+| Invoices | Collect documents and flag missing details | Approve unusual charges |
+| Reports | Gather agreed figures | Explain unexpected changes |
 
-The boundary matters. Collecting information can be straightforward even when the final decision requires judgement. Microsoft's [automation recommendations](https://learn.microsoft.com/en-us/power-platform/well-architected/operational-excellence/automate-tasks) favour clearly defined, procedural tasks and explicitly allow workflows that retain human decision points.
+Microsoft's [automation recommendations](https://learn.microsoft.com/en-us/power-platform/well-architected/operational-excellence/automate-tasks) favour clearly defined tasks and allow human decisions within a partly automated process.
 
-## Record a baseline before building
+## Measure the current effort
 
-Measure a representative sample of the existing process. Record how often it runs, hands-on time, waiting time, corrections and missed handoffs. Keep hands-on time separate from elapsed time: a five-minute task can sit in an inbox for two days.
+Record how often the task happens, time spent doing it, waiting time and corrections. A five-minute task might sit in an inbox for two days.
 
-For example, twenty records taking four minutes each represent eighty minutes of manual entry. That calculation is an estimate of current effort, not a promise of eighty minutes saved. Reviewing exceptions, maintaining the connection and correcting failures still take time.
+For example, twenty records taking four minutes each represent eighty minutes of manual entry. The eventual saving will also depend on time spent reviewing exceptions and maintaining the automation.
 
-Write one measurable goal, such as reducing duplicate entry while keeping every enquiry assigned to someone. Include the time spent checking the automated result when you compare it with the baseline.
+Choose a goal you can check, such as reducing repeated data entry while ensuring every enquiry reaches someone.
 
-## Give the first version an owner
+## Decide who handles problems
 
-Define who receives failure alerts, how incomplete work is found and how a person can resume it. Decide what should happen if the same request arrives twice. [A timeout can leave an operation's outcome uncertain](/blog/apis-are-where-systems-start-talking), so retry behaviour belongs in the design.
+Name the person who receives failure alerts and knows how to resume incomplete work. Check what happens when a request arrives twice or a connection fails.
 
-Pilot one route through the process, review its exceptions and expand only after the team can explain what it does and recover when it stops. A useful first automation should make the next working day easier to manage.
+[A timed-out request may already have completed](/blog/apis-are-where-systems-start-talking), so retrying needs care. Try one small part of the process first and review its exceptions before expanding it.

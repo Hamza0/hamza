@@ -1,45 +1,43 @@
 ---
-title: "How I Approach Production Problems"
+title: "How I Investigate a Slow Feature"
 publishedAt: "2026-05-02"
 updatedAt: "2026-11-24"
-summary: "Tracing a slow financial API through repeated authorization work, then checking response parity, tenant isolation and measured results."
+summary: "Following one slow request, making a focused change and checking the result."
 featuredOrder: 1
 ---
 
-“The list is slow” describes a symptom. It does not tell me whether the time is spent in the browser, the API, authorization checks or the database. Before changing code, I define the request, the expected response and the conditions that reproduce the delay.
+When someone says a list is slow, I first follow one request. The delay could be in the browser, permission checks or database work.
 
-Supporting production systems makes the affected user path important. A page can be reachable while its form, report or integration is failing. The investigation needs to follow the feature people rely on.
+A page loading successfully does not prove that its forms, reports or connections are working. I start with the feature the person needs to use.
 
-## Follow the work behind one request
+## Find where the time goes
 
-In the anonymized [Business Operations & Financial Systems case study](/projects/production-operations-platform#root-cause-investigation), a financial list repeated permission checks and resolved historical records to their current corrected versions. That work grew with the history being examined, even though the response contained only one page of results.
+In the [operations and financial platform](/projects/production-operations-platform#root-cause-investigation), a financial list repeated permission checks and looked through history to find corrected records. That work grew even though the response contained only one page of results.
 
-I compared before-and-after API responses and profiled database execution using synthetic local data. Returning fewer rows would not remove the repeated work happening before pagination. The useful question was which decisions could be evaluated once while keeping tenant and record-level restrictions intact.
+I compared the returned data and measured database execution using synthetic local data. Returning fewer rows would not remove work happening before the page was selected.
 
-Useful diagnostic information should help trace that path. I want to identify the affected operation, relevant inputs and last confirmed result without burying the investigation in unrelated logs or unnecessary sensitive information.
+The question was which checks could happen once while preserving each business's access restrictions. Useful logs should help trace that request without adding unrelated detail or unnecessary sensitive information.
 
-## Keep the change narrow
+## Keep the change focused
 
-The read path was changed to evaluate equivalent authorization decisions once, resolve the current candidate records, then filter and paginate before bounded balance aggregation. Financial writers and historical records were left intact.
+I changed the read path to make equivalent permission decisions once, identify current records, then filter and select the page before calculating its balances. The code writing financial records and the existing history stayed intact.
 
-This order matters. Moving pagination earlier can change which records qualify or how totals are calculated. A faster response is a regression if it drops an eligible record, exposes another tenant's data or changes a financial result.
+Changing that order carelessly could omit records or change totals. A faster response is not useful if it exposes another business's data or returns the wrong amount.
 
-A focused change also makes review and recovery more understandable. Reverting application code and recovering changed data are different tasks. The release plan should identify which kind of recovery the change could require.
+A focused change also makes review and recovery easier. Restoring older code and recovering changed data are different tasks, so the release plan needs to distinguish them.
 
-## Verify correctness before interpreting speed
+## Check correctness before speed
 
-Validation covered response parity, financial correctness, permission boundaries and cross-tenant denial. Browser checks covered pagination, refresh and error recovery.
+Checks covered unchanged results, accurate financial amounts, permissions and denied access to another business's records. Browser checks covered moving between pages, refreshing and recovering from errors.
 
-The controlled local benchmark used the same synthetic fixture for both versions: 600 historical sales, 120 customers and a 50-row response. Three HTTP samples per version gave median full-list API times of **4,521 ms and 94 ms**, approximately **98% lower**. “Full-list” means the complete API request for that page, not every historical record.
+The controlled local benchmark used the same synthetic data for both versions: **600 historical sales, 120 customers and a 50-row response**. Three HTTP requests per version gave median times of **4,521 ms and 94 ms**, approximately **98% lower**. Each measurement covered the complete request for that page, not every historical record.
 
-These measurements demonstrate the effect under those test conditions. They are not live production latency measurements or an uptime promise.
+These figures describe those local test conditions. They are not measurements of real customer traffic or a promise about live response times.
 
-## Check the release and the user experience separately
+## Check the customer journey separately
 
-A successful build or migration does not demonstrate acceptable behaviour for an authenticated user. Authenticated production list acceptance was unavailable for that release, which remains a separate validation limit.
+A build or database update succeeding does not prove that a signed-in user can complete the task. A signed-in test of this feature in production was unavailable for that release.
 
-The interface also needs to explain failure honestly. A delayed response, stale value or rejected action should give someone enough context to understand the next step. Repeatedly pressing a button should not be the only apparent recovery route.
+The screen must also explain delayed responses, old values and rejected actions clearly. Repeated button presses should not be the only apparent way forward.
 
-For ongoing support, checks should cover the feature's important behaviour and give the team something specific to investigate when it fails. Configuration, dependencies and recovery instructions should stay close to the work they describe.
-
-I use the same discipline when planning [database delivery and recovery](/blog/database-changes-need-a-delivery-plan): record the cause, the change, the correctness checks and the remaining uncertainty so the next person can assess the release.
+I record the cause, change, checks and remaining uncertainty. The same approach guides my [database release planning](/blog/database-changes-need-a-delivery-plan), giving the next person enough information to assess the work.

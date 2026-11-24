@@ -1,42 +1,45 @@
 ---
-title: "Designing Auditable Financial Corrections in PostgreSQL"
+title: "Correcting Financial Records Safely"
 publishedAt: "2026-11-24"
-summary: "How reversal-and-replacement transactions preserve financial history, keep balances consistent and make corrections easier to audit in multi-tenant software."
+updatedAt: "2026-11-24"
+summary: "How to correct an amount while keeping its history understandable and traceable."
 ---
 
-An auditable financial correction preserves the original transaction, records the change and links it to the corrected result. In financial software, that history helps explain what happened and why the current balance differs from the original record.
+A useful financial correction keeps the original record and explains the change. Someone reviewing the account should be able to understand how the final amount was reached.
 
-While building and maintaining a [multi-tenant operations and financial platform](/projects/production-operations-platform), I worked on corrections that retain the original transaction, record its reversal and link the replacement. This is a useful pattern when historical financial records need to remain traceable.
+I worked on this approach while building and maintaining a [business operations platform](/projects/production-operations-platform).
 
-## Why not just update the original row?
+## Keep the original and the correction
 
-Consider an illustrative sale recorded at $100 that should have been $80. Overwriting the original amount can leave the final total correct, but obscure the history of the correction. An append-oriented correction might instead record:
+Suppose a sale recorded as $100 should have been $80. Replacing the first amount would hide part of the story. A reversal and replacement can show it:
 
-| Entry | Amount |
+| Record | Amount |
 | --- | ---: |
 | Original sale | $100 |
 | Reversal | -$100 |
 | Replacement | $80 |
-| Net amount | $80 |
+| Final amount | $80 |
 
-The example is deliberately simple. A real application must also define how payments, taxes, reports and other linked records are handled. The point is to preserve an understandable record of the change rather than assume that every financial correction can use the same model.
+This is a simple illustration. Real applications also need rules for linked payments, taxes and reports. The correction should make the history understandable without assuming every financial workflow works the same way.
 
-## Make the correction atomic
+## Make the changes succeed together
 
-In PostgreSQL, a [database transaction](https://www.postgresql.org/docs/current/tutorial-transactions.html) groups related writes so they can commit or roll back together. For a reversal-and-replacement operation, the original record, reversal and replacement must remain consistent. The transaction should include all required correction writes. If one required write fails, the correction should roll back rather than leave a partial financial state.
+A PostgreSQL [database transaction](https://www.postgresql.org/docs/current/tutorial-transactions.html) groups changes so they can be saved or cancelled together. The correction must include all required writes, with the original, reversal and replacement kept consistent.
 
-A transaction alone does not prevent duplicate business operations. A retry must recognize a correction that has already succeeded. Depending on the design, an idempotency mechanism can use a [unique constraint](https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-UNIQUE-CONSTRAINTS) on an appropriate operation identifier. Two requests that represent the same correction should not silently create two financial effects.
+If a required write fails, the whole correction should roll back. Leaving half a correction could produce a misleading balance.
 
-## Protect the tenant boundary
+Retries need a separate safeguard. The system must recognise a correction that already succeeded. Depending on the design, a [unique constraint](https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-UNIQUE-CONSTRAINTS), a database rule that rejects duplicate identifiers, can help prevent the same correction from taking effect twice.
 
-A correction must be authorized for the correct business and record. The same principle applies when a report resolves the current version of a transaction. A valid identifier is not evidence of permission to access or change it.
+## Check who may change the record
 
-I check authorization, exact amounts, retained history and unchanged API results separately. A faster query is only useful when it preserves the correct balance and access boundaries.
+The person making a correction must have permission for that business and record. Knowing a record's identifier is not permission to view or change it.
 
-## Test the failures as well as the success
+Reports need the same access checks when finding the corrected version. I check permissions, exact amounts, retained history and returned results separately. A speed improvement must preserve all four.
 
-For a financial workflow, I want tests for invalid input, unauthorized access, a failure during a correction, retries and the way reports interpret the resulting history. I also distinguish an API-level check from the experience of someone using the application: stale values and failed refreshes need clear treatment in the interface.
+## Test what happens when things go wrong
 
-The [engineering case study](/projects/production-operations-platform#testing-and-production-validation) records the validation performed on this platform, including the limits of its production acceptance evidence.
+I want checks for invalid input, missing permissions, interrupted corrections and repeated attempts. Reports must interpret the resulting history correctly too.
 
-Every correction should leave an explainable history and a result that remains consistent with the rest of the system.
+The screen needs attention as well. If refreshing fails, it should not present an old balance as a confirmed current result.
+
+The [case study's validation section](/projects/production-operations-platform#testing-and-production-validation) records the checks performed on this platform and the limits of the live-system evidence. Together, those details make the result easier to assess.

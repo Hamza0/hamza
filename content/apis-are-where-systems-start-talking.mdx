@@ -1,61 +1,47 @@
 ---
-title: "Why an API Timeout Does Not Always Mean Failure"
+title: "Why an API Timeout Can Be Misleading"
 publishedAt: "2026-06-07"
 updatedAt: "2026-11-24"
-summary: "Why a timed-out request may already have succeeded, and how this portfolio's contact workflow handles validation, uncertain outcomes and duplicate retries."
+summary: "How this site's contact form handles missing replies and avoids duplicate messages."
 featuredOrder: 3
 ---
 
-An API timeout means the caller did not receive the expected response within its waiting period. It does not, by itself, prove that the server rejected the request or reversed its work. Retrying as a new operation can create duplicate work.
+An API lets programs exchange information. A timeout means the reply did not arrive in time, even if the requested work finished.
 
-This matters when connecting a website to a CRM, booking system or email provider. The error on the screen and the final state in the other system can tell different stories.
+## Find out what happened
 
-## Separate failure from uncertainty
+Imagine a website asking another service to create an order:
 
-Imagine an application asking a service to create an order. These are three possible outcomes:
-
-| What happened | What the caller knows |
+| What happened | What the website knows |
 | --- | --- |
-| The request never reached the service | No order was created, if this can be established |
-| The service is still processing it | The final outcome is not yet known |
-| The order was created, but the reply was lost | The caller may still see a timeout |
+| The request never arrived | No order exists, if this can be confirmed |
+| The service is still working | The outcome is unknown |
+| The order was created but the reply was lost | The website may still show an error |
 
-Stripe's [engineering explanation of idempotency](https://stripe.com/blog/idempotency) describes this ambiguity. Increasing a timeout may reduce interruptions, but it does not establish what happened to an earlier request.
+Stripe's [explanation of safe retries](https://stripe.com/blog/idempotency) describes this uncertainty. Waiting longer next time does not establish what happened to the first request.
 
-## Give the intended operation a stable identity
+## Keep the same request identity
 
-An idempotent operation has the same intended effect when repeated as when performed once. The [HTTP specification](https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2) cautions against automatically retrying non-idempotent requests without a basis for knowing the repetition is safe.
+An *idempotent* operation has the same intended effect when repeated as when performed once. The [HTTP specification](https://www.rfc-editor.org/rfc/rfc9110.html#section-9.2.2) explains why automatic retries need that safeguard. The receiving service must support it; adding an identifier alone is not enough.
 
-Where an API supports idempotency keys, reuse the identifier for the same intended operation according to that provider's contract. Check its scope, retention period and treatment of changed parameters or requests already in progress. Adding a header cannot make an arbitrary endpoint safe to retry.
+This site's contact form gives each submission an identifier. If the result is uncertain, the browser keeps that identifier and the original details. The server uses it to tell the email provider that an unchanged retry belongs to the same submission.
 
-Follow error-specific guidance, limit attempts and space them out. Stripe's [advanced error-handling guidance](https://docs.stripe.com/error-low-level) illustrates how retry decisions depend on both the error and the provider's idempotency behaviour.
+Retries still need a fresh spam-check token. That proves the new attempt may proceed; it is separate from the message's identity.
 
-## Protect the handoff before calling the provider
+The provider remembers duplicate requests for a limited time. The server rejects old identifiers before that window expires, and the form prevents changes to an uncertain submission. Retry timing also needs to follow the provider's [error-handling guidance](https://docs.stripe.com/error-low-level).
 
-This portfolio's contact workflow provides a concrete implementation example. It separates input validation, spam verification, provider acceptance and what the interface can confirm.
+## Check the request before sending
 
-The server checks the request origin, payload size and allowed fields before sending an email. It verifies the spam-protection token server-side. Invalid input or failed verification should stop before the provider is called.
+The server checks where requests came from, their size and their fields, then verifies the spam token. These checks happen before calling the email provider.
 
-The visitor's address is used for replies; the recipient remains a server-side configuration value. This keeps the public enquiry endpoint from becoming an arbitrary email-sending interface.
+The visitor's email address is used for replies. The receiving address stays in server configuration, so the public form cannot be used to send messages to arbitrary recipients.
 
-## Retain the identity of an uncertain submission
+## Confirm the result and test failures
 
-The browser assigns an identifier to a submission and retains it with the same details when an attempt is uncertain. The server derives the provider idempotency key from that identifier, so an unchanged retry can refer to the same operation.
+The form reports acceptance only after the provider returns a message identifier. That confirms acceptance by the provider, not arrival in the recipient's inbox. Pending requests, invalid input, rate limits and service failures receive different handling.
 
-A retry still needs a fresh spam-verification token. That token allows the new request to proceed; it is separate from the identity of the email operation.
+When the result is uncertain, entered details remain available with a retry explanation. The interface does not assume that nothing was sent.
 
-The provider's deduplication window is finite. The server rejects old submission identifiers before that window expires. The interface also prevents edits to an uncertain attempt, so a retry does not silently change the meaning of an existing operation.
+Automated tests cover invalid requests, escaped email content, unchanged retries, simultaneous attempts and a simulated lost reply after acceptance. The last test checks that retrying does not send twice through the simulated provider. These are application checks, not proof of inbox delivery.
 
-## Report only what has been confirmed
-
-The API returns an accepted result only after receiving a provider response containing an identifier. That confirms provider acceptance, not delivery into the recipient's inbox. Pending work, invalid input, rate limits and an unavailable provider need distinct handling.
-
-On an uncertain failure, the interface retains the entered details and explains how to retry. It does not assume that nothing was sent.
-
-For other integrations that provide a documented status lookup or event mechanism, use it to resolve the original attempt. If the result cannot be established, keep the uncertainty visible and provide an investigation path instead of creating another operation.
-
-## Test the failure boundary
-
-The portfolio's automated tests exercise rejected origins, invalid input, escaped email content, unchanged retries, concurrent attempts and a simulated timeout after provider acceptance. That last case checks that retrying does not trigger a second send in the mocked provider. These checks verify application behaviour; they do not establish real-world inbox delivery.
-
-The same distinction appears in [financial corrections and retry validation](/projects/production-operations-platform#testing-and-production-validation). Test what happens when an action succeeds but its response never arrives, and ensure the recovery path preserves the identity of the original work.
+The [financial case study](/projects/production-operations-platform#testing-and-production-validation) applies the same principle: confirm the existing operation before creating another one.
