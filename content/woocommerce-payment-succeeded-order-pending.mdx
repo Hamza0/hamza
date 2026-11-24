@@ -1,0 +1,48 @@
+---
+title: "Payment Succeeded, but the WooCommerce Order Is Still Pending"
+publishedAt: "2026-11-24"
+summary: "Understand why payment and WooCommerce order status can disagree, what evidence to compare and how to investigate without creating another payment."
+---
+
+When Stripe shows a successful payment but WooCommerce still shows Pending payment, compare the records for the same order before taking another payment action. The payment service and the store maintain different records, and a missing or unprocessed update can leave them out of step.
+
+The first task is to establish what happened to the existing attempt. A pending order alone is not enough reason to ask the customer to pay again.
+
+## Are the payment and order describing the same attempt?
+
+Match the order number, transaction reference, amount, currency and time. Confirm that you are reviewing the correct account and live or test environment. A similar amount or customer name is not enough to identify the same transaction.
+
+In the normal WooCommerce flow, Pending payment means the order is awaiting payment, while Processing indicates payment has been received and the order awaits fulfilment. Its [order-status documentation](https://woocommerce.com/document/managing-orders/order-statuses/) explains the distinctions and exceptions.
+
+If the gateway and store disagree, investigate that discrepancy. Changing a label simply to make the screens agree can hide the information needed to understand it.
+
+## How does payment confirmation reach the store?
+
+The WooCommerce Stripe extension sends requests to Stripe through its API. Stripe sends updates back through webhooks, which are notifications about events. WooCommerce's [dedicated Stripe webhook documentation](https://woocommerce.com/document/stripe/setup-and-configuration/stripe-webhooks/) explains this connection and how its status is represented.
+
+Supported extension versions configure webhooks when connecting to Stripe. The right investigation depends on the installed extension and its documented setup. A blanket instruction to create another endpoint can introduce confusion.
+
+Also distinguish delivery from processing. Stripe's [webhook guidance](https://docs.stripe.com/webhooks) recommends acknowledging receipt before complex work that could time out. A successful delivery response therefore needs to be checked alongside the resulting store state.
+
+## What information makes the issue easier to investigate?
+
+Collect a small set of matching records:
+
+| Record | Useful detail |
+| --- | --- |
+| WooCommerce order | Status, order notes and transaction reference |
+| Stripe payment | Exact payment state, amount, currency and time |
+| Relevant event delivery | Event type, delivery time and response |
+| Store environment | WooCommerce and gateway versions, recent changes |
+
+Build a timeline from those records. Did the store receive the relevant update? Does an order note describe an error? Is one order affected, or is the same pattern appearing across several orders?
+
+A public support report may describe a similar symptom without having the same cause. Keep account secrets and unnecessary customer information out of shared screenshots and diagnostic excerpts.
+
+## What should happen before another action is taken?
+
+Have the existing payment and order reconciled before asking for another payment, changing fulfilment status or attempting a refund. The person reviewing the issue should be able to explain the confirmed state and the effect of the proposed action.
+
+Any integration change should then be checked in a suitable test environment, including whether an update changes the intended order correctly. Repeated notifications must not create repeated business actions.
+
+The underlying boundary is explained in [Why an API Timeout Does Not Always Mean Failure](/blog/apis-are-where-systems-start-talking): a response, a completed operation and what the interface displays are separate pieces of evidence.

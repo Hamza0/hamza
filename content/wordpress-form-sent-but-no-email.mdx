@@ -1,0 +1,47 @@
+---
+title: "WordPress Form Says Sent, but No Email Arrives"
+publishedAt: "2026-11-24"
+summary: "Find where a WordPress enquiry stops between form submission, notification and inbox delivery, and collect useful evidence before changing settings."
+---
+
+If a WordPress form shows a success message but no email arrives, check the submission, notification and delivery stages separately. The message on the website is one piece of evidence. It does not establish that the enquiry reached the person who needs to respond.
+
+That distinction helps a business owner explain the problem clearly and avoid changing several unrelated settings at once.
+
+## What does the success message actually prove?
+
+Its meaning depends on the form's implementation. WordPress's [documentation for `wp_mail()`](https://developer.wordpress.org/reference/functions/wp_mail/) explicitly says that a successful return value means the sending method processed the request without errors. It does not confirm receipt by the user.
+
+Similarly, an SMTP test checks a particular test message. It does not exercise every form's recipient settings, notification conditions or submitted values. WPForms addresses this distinction in its [SMTP troubleshooting guidance](https://wpforms.com/docs/how-to-set-up-smtp-using-the-wp-mail-smtp-plugin/).
+
+If clicking Submit produces an error or never finishes, record that as a submission problem. It needs a different investigation from a completed submission with a missing notification.
+
+## Where can an enquiry get lost?
+
+Start with what each system can confirm:
+
+| Evidence | What it helps establish |
+| --- | --- |
+| Form confirmation | What the visitor was told |
+| Saved entry, if enabled | Whether the form retained the submitted information |
+| Notification settings and logs | Whether a notification was triggered and addressed correctly |
+| Email provider records | Whether the provider accepted, rejected or otherwise handled the message |
+| Receiving mailbox | Whether the intended recipient can find it, including in spam |
+
+WPForms' [notification documentation](https://wpforms.com/docs/troubleshooting-email-notifications/) covers disabled notifications, recipient errors and conditional rules. These are separate checks from the sending service itself.
+
+An authenticated mail connection can address some sending problems, but it is not a guarantee that every message will reach an inbox. Follow the evidence for the affected form and message.
+
+## What should you collect before changing settings?
+
+Record the page address, which form was used, the approximate submission time and its time zone, and the exact message shown. Note the intended receiving address and whether all enquiries are affected or only particular form choices.
+
+Include the form plugin and mail integration versions when requesting technical help. Mention recent website, hosting, email or notification changes without assuming that the latest change caused the problem.
+
+If the plugin stores entries, preserve those records while the delivery issue is reviewed. Do not assume that a missing email means an enquiry was never saved, or that every form automatically retains a recoverable copy. Share redacted diagnostic information rather than unnecessary customer details.
+
+## How do you know it is working again?
+
+Submit a clearly labelled test through the actual public form using non-sensitive details. Check its confirmation, any retained entry, the notification path and the intended mailbox. If different answers route enquiries to different people, check those paths too.
+
+Record what was changed and which checks succeeded. A dependable contact journey needs both [a clear next step for visitors](/blog/a-fast-website-still-needs-a-clear-next-step) and a verified handoff to the business behind the website.

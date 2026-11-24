@@ -1,7 +1,7 @@
 ---
 title: "Database Changes Need a Delivery Plan"
 publishedAt: "2026-05-19"
-updatedAt: "2026-10-24"
+updatedAt: "2026-11-24"
 summary: "Preserving authorization, financial history and application compatibility when a PostgreSQL change moves from local validation to release."
 featuredOrder: 2
 ---
@@ -10,7 +10,7 @@ A migration can run successfully while leaving the application wrong. A function
 
 ## Define what must stay true
 
-The [Production Operations Platform](/projects/production-operations-platform#technical-solution) includes financial corrections that retain the original transaction, record its reversal and link a replacement. The correction is atomic: if part of it fails, the operation rolls back as one unit.
+The [Business Operations & Financial Systems](/projects/production-operations-platform#technical-solution) includes financial corrections that retain the original transaction, record its reversal and link a replacement. The correction is atomic: if part of it fails, the operation rolls back as one unit.
 
 That design preserves an audit trail, but it gives readers more work to do. A list must resolve the current records without treating an original and its replacement as two unrelated current transactions. Optimizing that read path must preserve the writer contract, historical data and tenant boundaries.
 
