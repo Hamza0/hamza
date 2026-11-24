@@ -202,7 +202,7 @@ export const DATA = {
 
   projects: [
     {
-      title: "Production Operations Platform",
+      title: "Business Operations & Financial Systems",
       featured: true,
       href: "/projects/production-operations-platform",
       dates: "Ongoing development & maintenance",

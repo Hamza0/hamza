@@ -1,0 +1,42 @@
+---
+title: "Designing Auditable Financial Corrections in PostgreSQL"
+publishedAt: "2026-11-24"
+summary: "How reversal-and-replacement transactions preserve financial history, keep balances consistent and make corrections easier to audit in multi-tenant software."
+---
+
+An auditable financial correction preserves the original transaction, records the change and links it to the corrected result. In financial software, that history helps explain what happened and why the current balance differs from the original record.
+
+While building and maintaining a [multi-tenant operations and financial platform](/projects/production-operations-platform), I worked on corrections that retain the original transaction, record its reversal and link the replacement. This is a useful pattern when historical financial records need to remain traceable.
+
+## Why not just update the original row?
+
+Consider an illustrative sale recorded at $100 that should have been $80. Overwriting the original amount can leave the final total correct, but obscure the history of the correction. An append-oriented correction might instead record:
+
+| Entry | Amount |
+| --- | ---: |
+| Original sale | $100 |
+| Reversal | -$100 |
+| Replacement | $80 |
+| Net amount | $80 |
+
+The example is deliberately simple. A real application must also define how payments, taxes, reports and other linked records are handled. The point is to preserve an understandable record of the change rather than assume that every financial correction can use the same model.
+
+## Make the correction atomic
+
+In PostgreSQL, a [database transaction](https://www.postgresql.org/docs/current/tutorial-transactions.html) groups related writes so they can commit or roll back together. For a reversal-and-replacement operation, the original record, reversal and replacement must remain consistent. The transaction should include all required correction writes. If one required write fails, the correction should roll back rather than leave a partial financial state.
+
+A transaction alone does not prevent duplicate business operations. A retry must recognize a correction that has already succeeded. Depending on the design, an idempotency mechanism can use a [unique constraint](https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-UNIQUE-CONSTRAINTS) on an appropriate operation identifier. Two requests that represent the same correction should not silently create two financial effects.
+
+## Protect the tenant boundary
+
+A correction must be authorized for the correct business and record. The same principle applies when a report resolves the current version of a transaction. A valid identifier is not evidence of permission to access or change it.
+
+I check authorization, exact amounts, retained history and unchanged API results separately. A faster query is only useful when it preserves the correct balance and access boundaries.
+
+## Test the failures as well as the success
+
+For a financial workflow, I want tests for invalid input, unauthorized access, a failure during a correction, retries and the way reports interpret the resulting history. I also distinguish an API-level check from the experience of someone using the application: stale values and failed refreshes need clear treatment in the interface.
+
+The [engineering case study](/projects/production-operations-platform#testing-and-production-validation) records the validation performed on this platform, including the limits of its production acceptance evidence.
+
+Every correction should leave an explainable history and a result that remains consistent with the rest of the system.

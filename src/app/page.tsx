@@ -1,6 +1,8 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { DiaTextReveal } from "@/components/ui/dia-text-reveal";
 import { ProjectCard } from "@/components/project-card";
+import { OperationsCaseStudyCard } from "@/components/operations-case-study-card";
+import { CASE_STUDY } from "@/lib/case-study";
 import { ResumeCard } from "@/components/resume-card";
 import { HeroLanyard } from "@/components/hero-lanyard";
 import { ContactButton } from "@/components/contact-provider";
@@ -35,8 +37,13 @@ export default async function Page() {
   const contactReady = contactFormAvailable();
   const posts = await getBlogPosts();
   const editorialNotes = getFeaturedNotes(posts);
-  const featuredNotes = (posts[0] && !editorialNotes.some(note => note.slug === posts[0].slug)
-    ? [posts[0], ...editorialNotes] : editorialNotes).slice(0, 4);
+  const latestNotes = posts.slice(0, 2);
+  const featuredNotes = [
+    ...latestNotes,
+    ...editorialNotes.filter(
+      (note) => !latestNotes.some((latest) => latest.slug === note.slug)
+    ),
+  ].slice(0, 5);
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <script
@@ -49,6 +56,7 @@ export default async function Page() {
                 "@type": "WebSite",
                 "@id": WEBSITE_ID,
                 name: DATA.name,
+                alternateName: "hamzashakeel.ca",
                 url: DATA.url,
                 publisher: { "@id": PERSON_ID },
                 inLanguage: "en-CA",
@@ -61,6 +69,14 @@ export default async function Page() {
                 description: PROFILE.description,
                 dateModified: SITE_UPDATED_AT,
                 mainEntity: { "@id": PERSON_ID },
+                hasPart: featuredNotes.map((note) => ({
+                  "@type": "Article",
+                  "@id": `${DATA.url}/blog/${note.slug}#article`,
+                  headline: note.metadata.title,
+                  url: `${DATA.url}/blog/${note.slug}`,
+                  datePublished: note.metadata.publishedAt,
+                  author: { "@id": PERSON_ID },
+                })),
                 isPartOf: { "@id": WEBSITE_ID },
                 inLanguage: "en-CA",
               },
@@ -82,6 +98,14 @@ export default async function Page() {
                 knowsAbout: [...DATA.skillGroups[0].skills, "Production Support", "WooCommerce Integrations", "Cloud Deployment", "Technical Project Delivery"],
                 image: new URL(DATA.avatarUrl, DATA.url).toString(),
                 sameAs: [DATA.contact.social.LinkedIn.url, DATA.contact.social.GitHub.url],
+                worksFor: { "@id": "https://www.codedsquare.com/#organization" },
+              },
+              {
+                "@type": "Organization",
+                "@id": "https://www.codedsquare.com/#organization",
+                name: "Coded Square",
+                url: "https://www.codedsquare.com/",
+                founder: { "@id": PERSON_ID },
               },
             ],
           }),
@@ -147,18 +171,21 @@ export default async function Page() {
                 delay={BLUR_FADE_DELAY * 4 + id * 0.05}
                 className={id === 0 ? "sm:col-span-2" : undefined}
               >
-                <ProjectCard
-                  href={project.href}
-                  key={project.title}
-                  title={project.title}
-                  description={project.description}
-                  highlights={"highlights" in project ? project.highlights : undefined}
-                  dates={project.dates}
-                  tags={project.technologies}
-                  image={project.image}
-                  video={project.video}
-                  links={project.links}
-                />
+                {project.href === `/projects/${CASE_STUDY.slug}` ? (
+                  <OperationsCaseStudyCard />
+                ) : (
+                  <ProjectCard
+                    href={project.href}
+                    title={project.title}
+                    description={project.description}
+                    highlights={"highlights" in project ? project.highlights : undefined}
+                    dates={project.dates}
+                    tags={project.technologies}
+                    image={project.image}
+                    video={project.video}
+                    links={project.links}
+                  />
+                )}
               </BlurFade>
             ))}
           </div>
@@ -176,6 +203,11 @@ export default async function Page() {
           <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
             {DATA.summary}
           </Markdown>
+          <nav aria-label="Professional profiles" className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            <Link href={DATA.contact.social.LinkedIn.url} rel="me" className="underline underline-offset-4">LinkedIn</Link>
+            <Link href={DATA.contact.social.GitHub.url} rel="me" className="underline underline-offset-4">GitHub</Link>
+            <Link href="https://www.codedsquare.com/" className="underline underline-offset-4">Coded Square</Link>
+          </nav>
         </BlurFade>
       </section>
 
