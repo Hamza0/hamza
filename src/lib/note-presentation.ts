@@ -18,15 +18,11 @@ const noteTopics: Record<string, keyof typeof topics> = {
   "accessibility-is-part-of-the-build": "web",
   "apis-are-where-systems-start-talking": "systems",
   "building-data-tools-for-non-technical-teams": "data",
-  "data-quality-comes-before-the-dashboard": "data",
   "how-i-approach-production-problems": "systems",
-  "the-difference-between-a-website-and-a-digital-platform": "web",
   "when-a-website-becomes-a-system": "systems",
-  "why-production-support-changes-how-you-build": "systems",
   "the-work-behind-clean-digital-experiences": "web",
   "what-a-forecast-needs-around-the-number": "data",
   "database-changes-need-a-delivery-plan": "data",
-  "forms-are-part-of-the-workflow": "web",
   "documentation-that-helps-the-next-person": "practice",
   "ai-changes-the-development-process-not-just-the-code": "practice",
   "software-is-becoming-agent-ready": "systems",
@@ -37,12 +33,29 @@ const noteTopics: Record<string, keyof typeof topics> = {
   "google-business-profile-address-change-help": "search",
   "seo-and-aeo-start-with-clear-answers": "search",
   "how-to-choose-the-first-workflow-to-automate": "systems",
-  "why-an-api-timeout-does-not-always-mean-failure": "systems",
   "why-a-dashboard-total-can-be-wrong": "data",
+  "how-to-measure-google-ai-search-visibility": "search",
+  "wordpress-form-sent-but-no-email": "web",
+  "woocommerce-payment-succeeded-order-pending": "systems",
+};
+
+const noteCallsToAction: Record<string, Pick<NoteTopic, "ctaTitle" | "ctaDescription">> = {
+  "how-to-measure-google-ai-search-visibility": {
+    ctaTitle: "Understand how people find your website.",
+    ctaDescription: "Share your website and the visibility question you want to answer. We can start with the reports available to you.",
+  },
+  "wordpress-form-sent-but-no-email": {
+    ctaTitle: "Missing enquiry emails?",
+    ctaDescription: "Tell me which form you use, what confirmation you see and where the email should arrive.",
+  },
+  "woocommerce-payment-succeeded-order-pending": {
+    ctaTitle: "Is your order workflow out of sync?",
+    ctaDescription: "Tell me what the store shows, what the payment provider shows and when the problem started.",
+  },
 };
 
 export function getNotePresentation(slug: string): NoteTopic {
-  return topics[noteTopics[slug] ?? "practice"];
+  return { ...topics[noteTopics[slug] ?? "practice"], ...noteCallsToAction[slug] };
 }
 
 export function readingMinutes(html: string) {

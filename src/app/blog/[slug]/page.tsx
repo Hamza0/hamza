@@ -2,12 +2,15 @@ import { PulseHeart } from "@/components/ui/pulse-heart";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BusinessProfileInquiry } from "@/components/business-profile-inquiry";
 import { NoteContactCTA } from "@/components/note-contact-cta";
+import { NoteReadingNav } from "@/components/note-reading-nav";
+import { Badge } from "@/components/ui/badge";
 import { contactFormAvailable } from "@/lib/contact/config";
 import { getBlogPosts, getPost, getPublishedPosts } from "@/data/blog";
 import { formatDate } from "@/lib/utils";
 import { AUTHOR, articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { modificationDate } from "@/lib/publication";
 import { getNotePresentation, readingMinutes } from "@/lib/note-presentation";
+import { extractNoteHeadings, splitNoteLead } from "@/lib/note-reading";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -48,10 +51,12 @@ export default async function Blog({
 
   const posts = await getBlogPosts();
   const index = posts.findIndex(entry => entry.slug === post.slug);
-  const previous = posts[index + 1];
-  const next = posts[index - 1];
+  const previous = index >= 0 ? posts[index + 1] : undefined;
+  const next = index > 0 ? posts[index - 1] : undefined;
   const updatedAt = modificationDate(post.metadata);
   const presentation = getNotePresentation(post.slug);
+  const headings = extractNoteHeadings(post.source);
+  const { lead, body } = splitNoteLead(post.source);
 
   return (
     <main id="blog" className={`note-theme note-tone-${presentation.tone}`}>
@@ -72,26 +77,27 @@ export default async function Blog({
         { name: post.metadata.title, path: `/blog/${post.slug}` },
       ]} />
       <article>
-        <header className="mb-8 max-w-[650px]">
+        <header className="mb-6 max-w-[650px]">
           <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
-            <span className="note-chip rounded-full px-3 py-1 font-medium">{presentation.label}</span>
+            <Badge variant="secondary" className="note-chip rounded-full border-transparent px-3 py-1 font-medium shadow-none">{presentation.label}</Badge>
             <span className="text-muted-foreground">{readingMinutes(post.source)} min read</span>
           </div>
           <h1 className="title text-pretty text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
             {post.metadata.title}
           </h1>
-          <div className="mt-3 space-y-2 text-sm text-neutral-600 dark:text-neutral-400">
-            <p>By <Link href="/#about" rel="author" className="underline underline-offset-4">{AUTHOR.name}</Link></p>
-            <p>
-              Published <time dateTime={post.metadata.publishedAt}>{formatDate(post.metadata.publishedAt)}</time>
-              {updatedAt && <> · Updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time></>}
-            </p>
-            {post.metadata.dateLabel && <p>{post.metadata.dateLabel}</p>}
+          <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-muted-foreground">
+            <span>By <Link href="/#about" rel="author" className="underline underline-offset-4">{AUTHOR.name}</Link></span>
+            <span aria-hidden="true">·</span>
+            <time dateTime={post.metadata.publishedAt}>{formatDate(post.metadata.publishedAt)}</time>
+            {updatedAt && updatedAt !== post.metadata.publishedAt && <span>Updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time></span>}
           </div>
+          {post.metadata.dateLabel && <p className="mt-2 text-xs text-muted-foreground">{post.metadata.dateLabel}</p>}
         </header>
+        {lead && <div className="note-lead prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: lead }} />}
+        <NoteReadingNav headings={headings} />
         <div
           className="note-prose prose max-w-none dark:prose-invert"
-          dangerouslySetInnerHTML={{ __html: post.source }}
+          dangerouslySetInnerHTML={{ __html: body }}
         />
       </article>
       {post.slug === "google-business-profile-address-change-help" && (
@@ -108,6 +114,9 @@ export default async function Blog({
         <PulseHeart key={post.slug} noteSlug={post.slug} icon="heart" showCount={true} size={26} />
       </div>
       <nav aria-label="Note navigation" className="mt-6 grid grid-cols-2 gap-5 border-t pt-5 pb-16">
+        {index < 0 && (
+          <Link href="/blog" className="text-sm font-medium underline underline-offset-4">Explore current notes</Link>
+        )}
         {previous && (
           <Link href={`/blog/${previous.slug}`} rel="prev" className="min-w-0 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">
             <span className="block text-xs text-muted-foreground">← Previous note</span>

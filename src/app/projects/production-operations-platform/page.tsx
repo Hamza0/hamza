@@ -55,7 +55,7 @@ export default function ProductionOperationsPlatform() {
 
         <h2>Measurable result</h2>
         <div className="not-prose rounded-lg border p-5">
-          <p className="text-xs font-medium text-muted-foreground">Median full-list API response · controlled local benchmark</p>
+          <p className="text-xs font-medium text-muted-foreground">Response time comparison · synthetic test data</p>
           <p className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">4,521 ms → 94 ms</p>
           <p className="mt-2 text-sm text-muted-foreground">Approximately 98% lower response time.</p>
         </div>
@@ -67,7 +67,7 @@ export default function ProductionOperationsPlatform() {
         <p>Production database checks verified the intended change and preserved migration history, permissions and related definitions. Authenticated production list acceptance was unavailable for this release; local test results do not establish live-user performance. Production deployment checks are kept separate from benchmark evidence.</p>
         <h2>Related engineering notes</h2>
         <p><Link href="/blog/designing-auditable-financial-corrections">Designing Auditable Financial Corrections in PostgreSQL</Link> explains reversal-and-replacement records, transaction boundaries, retries and tenant isolation.</p>
-        <p><Link href="/blog/how-i-approach-production-problems">How I Approach Production Problems</Link> explains the investigation and validation sequence behind this work. <Link href="/blog/database-changes-need-a-delivery-plan">Database Changes Need a Delivery Plan</Link> covers compatibility and release checks, while <Link href="/blog/apis-are-where-systems-start-talking">APIs Are Where Systems Start Talking</Link> examines retries and ambiguous outcomes at application boundaries.</p>
+        <p><Link href="/blog/how-i-approach-production-problems">How I Approach Production Problems</Link> explains the investigation and validation sequence behind this work. <Link href="/blog/database-changes-need-a-delivery-plan">Database Changes Need a Delivery Plan</Link> covers compatibility and release checks, while <Link href="/blog/apis-are-where-systems-start-talking">Why an API Timeout Does Not Always Mean Failure</Link> examines retries and ambiguous outcomes at application boundaries.</p>
       </article>
       <nav aria-label="Case study navigation" className="flex flex-wrap gap-4 border-t pt-5 text-sm">
         <Link href="/#projects" className="underline underline-offset-4">Back to Selected Work</Link>

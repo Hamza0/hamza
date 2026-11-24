@@ -1,10 +1,21 @@
 ---
 title: "Why a Dashboard Total Can Be Wrong"
 publishedAt: "2026-11-24"
-summary: "How joining orders to line items can inflate a dashboard total, why DISTINCT can hide the problem, and how to validate the calculation."
+updatedAt: "2026-11-24"
+summary: "How joins, inconsistent definitions and incomplete inputs can distort a dashboard total, with a concrete example and a practical validation sequence."
 ---
 
 A dashboard total can be wrong even when every source record is correct. One common cause is adding an order amount after joining orders to their line items. The join repeats the amount for each matching item, and the total counts it more than once.
+
+Before changing the calculation, establish what the total represents, which records belong in it and whether those records are complete.
+
+## Agree on the meaning of the total
+
+An order total, an invoiced amount and a payment received describe different things. Two reports can disagree because they use different definitions, date ranges or inclusion rules.
+
+Write down the business account, reporting period, currency and relevant statuses. Check whether the source represents current records, a history of changes or a mixture of both. Those choices determine what should contribute to the result.
+
+Keep source differences visible until they are understood. Making two numbers agree is only useful when they are meant to measure the same thing.
 
 ## How $180 becomes $280
 
@@ -28,24 +39,26 @@ Changing the calculation to `SUM(DISTINCT order_total)` might appear to fix this
 
 However, PostgreSQL's [DISTINCT aggregate behaviour](https://www.postgresql.org/docs/current/sql-expressions.html#SYNTAX-AGGREGATES) removes repeated values of the expression. It does not identify separate orders. If two legitimate orders both total $100, that calculation returns $100 instead of $200.
 
-The relationship between records needs attention before choosing an aggregation function.
-
-## Decide what one row represents
-
 For an order-total metric, the amount should contribute once per included order. That can mean calculating directly from the filtered orders table, or preparing related data so each order has at most one matching summary row before combining it.
 
-A product-sales metric may instead need item amounts. That is a different definition, with its own treatment of quantities, discounts, tax and refunds. Adding item amounts should not silently replace an agreed order-total calculation.
+A product-sales metric may instead need item amounts, with its own treatment of quantities, discounts, tax and refunds. It should not silently replace an agreed order-total calculation.
+
+## Check missing values and source freshness
+
+A blank value might mean information was not collected, was not applicable or could not be matched. Treating all three as zero can conceal the distinction. The report needs an explicit rule for missing information and a way to explain material gaps.
+
+Check categories, units and date formats before combining sources. Confirm when the data was last updated and whether the expected records arrived. An import can finish without an error while providing an empty or incomplete input.
+
+The interface should make an incomplete update distinguishable from a complete result.
 
 ## Validate with a small, explainable sample
 
 I would start with records that someone can check by hand:
 
-1. Write down the metric definition, including the date range, status rules and business account.
+1. Record the metric definition and select a small reporting period.
 2. Calculate the expected result from the source records before adding joins.
-3. Inspect intermediate rows for repeated order IDs and compare row counts before and after each join.
-4. Include cases with several items and separate orders that have equal totals. Check orders without related rows if the metric should include them.
-5. Compare the corrected result with the dashboard under the same filters and capture the example in a regression test.
+3. Inspect intermediate rows for repeated IDs and compare counts before and after each transformation.
+4. Include several items, separate orders with equal totals and missing related records where they are relevant.
+5. Compare the corrected result with the dashboard under the same filters, then capture the example in a regression test.
 
-An inflated total can influence purchasing, staffing or sales decisions. A useful investigation makes the discrepancy traceable to particular records and a particular calculation.
-
-This is one concrete example of why [data quality comes before the dashboard](/blog/data-quality-comes-before-the-dashboard). A reliable number needs a clear definition and a calculation that preserves it through every transformation.
+An inflated total can influence purchasing, staffing or sales decisions. Keep the reconciled sample with the query so future changes can be checked against the same expected result.
