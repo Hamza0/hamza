@@ -1,0 +1,34 @@
+---
+title: "Why Are WooCommerce Payment Methods Missing?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Check payment setup, checkout compatibility and customer details before changing how your store accepts payments."
+---
+
+If customers cannot choose a payment method, check whether it is enabled, fully connected, compatible with your checkout and available for that customer's country and currency.
+
+## Confirm the payment setup
+
+Start by asking whether every payment option is missing or only one. Does it affect all customers, or a particular basket or destination? Those details help narrow the problem before you change settings.
+
+In WooCommerce, an installed payment extension still needs the appropriate setup and enabled methods. The official [payment-settings guidance](https://woocommerce.com/document/configuring-woocommerce-settings/#payments-settings) shows where to enable providers and manage their configuration.
+
+I would also check whether you are viewing the intended live or test setup, and whether the provider reports any unfinished account requirements. Record the current settings before changing them so you can compare the result.
+
+## Check which checkout you use
+
+WooCommerce supports a Checkout Block and a classic checkout. An extension that works with one is not automatically compatible with the other.
+
+The [Checkout Block documentation](https://woocommerce.com/document/woocommerce-store-editing/customizing-cart-and-checkout/) explains that incompatible payment extensions can leave customers with no available methods. Check the editor's notices and your extension's compatibility guidance.
+
+For example, if payment choices disappeared after replacing a classic checkout with blocks, that change gives you a specific place to investigate. Confirm support for your installed extension version before reconnecting accounts or rebuilding the page. Test layout or extension changes on a copy of the store first.
+
+## Reproduce the customer's conditions
+
+Some methods appear only for eligible countries and currencies. WooPayments documents these [local-payment requirements](https://woocommerce.com/document/woopayments/payment-methods/local-payment-methods/).
+
+For example, its Bancontact option requires a Belgian billing address and payment in euros. Testing with a Canadian address and Canadian dollars should not produce the same choices.
+
+Note the basket, billing country, currency and exact message. Also record whether methods never appear or appear after a delay. The same visible message can describe different problems.
+
+If shipping choices are missing too, check the [delivery rules](/blog/woocommerce-no-shipping-options). If your customer has already paid, use the separate guide to a [paid order still showing pending](/blog/woocommerce-payment-succeeded-order-pending) before asking them to try again.

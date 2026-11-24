@@ -1,0 +1,34 @@
+---
+title: "Why Are WooCommerce Shipping Options Missing?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Trace the delivery address, matching zone and shipping conditions to understand what your checkout can offer."
+---
+
+When your checkout shows no shipping options, check the delivery address, matching shipping zone and available methods. A method listed elsewhere in your settings may not apply to this basket.
+
+## Start with the delivery address
+
+I would reproduce the problem with the same products, quantities, country, province and postal code. Check that your store is configured to ship to that destination before changing individual rates.
+
+A shipping zone is a geographical area with its own delivery options. WooCommerce selects the first matching zone, working down your list. It does not combine methods from every zone that includes the address.
+
+Its [shipping-zone guide](https://woocommerce.com/document/setting-up-shipping-zones/) recommends putting smaller areas before broader ones. A Canada-wide zone above an Ontario zone can prevent the Ontario rules from being reached.
+
+## Check what that zone actually offers
+
+Open the matching zone and inspect its enabled methods. Having a zone without an available method leaves the customer without a delivery option.
+
+Here is a hypothetical Canadian example: your Ontario zone appears above Canada and offers only free shipping on qualifying orders of at least CAD $100. A Toronto customer's CAD $60 basket matches Ontario first. The flat rate in your Canada zone does not automatically become a fallback.
+
+Free shipping can depend on a minimum amount, a coupon or both. Coupon discounts can also affect the threshold calculation, depending on your settings. Check the [free-shipping requirements](https://woocommerce.com/document/free-shipping/) against the actual basket.
+
+Only add another method if it matches the delivery service you intend to offer.
+
+## Change one thing at a time
+
+Write down the expected method, actual message, basket contents, destination and any coupon. Compare a working example with the failing one, changing one detail at a time in a test copy of your store.
+
+If the right method is enabled and its conditions are met, collect any shipping-extension errors from that checkout attempt. Rebuilding every zone can obscure what originally failed.
+
+Once delivery options appear, confirm the customer can continue. Missing payment choices need a [separate checkout check](/blog/woocommerce-payment-methods-missing).

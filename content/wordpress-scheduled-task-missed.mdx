@@ -1,0 +1,36 @@
+---
+title: "Why Did WordPress Miss Your Scheduled Post?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "What I check when WordPress scheduled posts or background jobs run later than expected."
+---
+
+You scheduled a post for nine, but it is still unpublished. I would check what triggers the job and whether the publishing task actually completed.
+
+## Why can a scheduled post run late?
+
+WordPress uses WP-Cron for scheduled work, including publishing posts. By default, a page load triggers its check for tasks that are due. It is not a clock running continuously in the background, as the [WordPress handbook](https://developer.wordpress.org/plugins/cron/) explains.
+
+Imagine a quiet site with a post due at 9:00. If no request triggers WordPress until 9:17, the due work may only begin then. That example explains one possible delay, not every missed schedule.
+
+Also compare your site's time zone, the requested publication time and the time recorded in its logs. Two screens can appear to disagree simply because they show different clocks.
+
+## Did the trigger fail, or did the task fail?
+
+Follow the task through three stages:
+
+1. Was the post or task actually scheduled?
+2. Did the scheduler start the work?
+3. Did the work complete and produce the expected result?
+
+A plugin can report that a scheduled action ran while the content remains unpublished. Check its error messages, approval requirements and recent changes before assuming that low traffic caused it.
+
+Keep the post reference, expected time, actual outcome and relevant plugin versions together. That gives you a useful support request instead of another round of changing settings without knowing which stage failed.
+
+## When does a server schedule make sense?
+
+A system cron job is a server-level timer that can trigger WordPress at set intervals without waiting for visits. WordPress documents [connecting its tasks to that scheduler](https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/).
+
+First confirm whether your host already provides one, how often it runs and whether its attempts succeed. Any replacement trigger needs to work before the existing one is disabled. A reliable timer also cannot fix an error inside the task itself.
+
+After a change, I would check an actual scheduled post through to publication. It is the same principle I use when [investigating a failing feature](/blog/how-i-approach-production-problems): verify the result you needed, not just the process that started.

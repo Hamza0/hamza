@@ -1,0 +1,37 @@
+---
+title: "New Website, Less Google Traffic? Here’s Where I’d Start"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Trace lost traffic to changed page addresses, missing content and redirects that lead somewhere irrelevant."
+---
+
+A redesign can change the pages Google already knows, even when the new website looks better. If traffic falls after launch, I would compare the old and new URLs, check redirects and identify which pages actually lost search visits.
+
+## Start with the pages that lost visits
+
+Use Search Console to compare clicks and impressions before and after launch, then look at individual pages and searches. Google's [traffic-drop guide](https://developers.google.com/search/docs/monitor-debug/debugging-search-traffic-drops) recommends examining the pattern instead of assuming one cause.
+
+Did every page decline, or only services whose addresses changed? Did impressions fall too, or mainly clicks? Keep the launch date beside that comparison.
+
+The timing makes the redesign worth investigating. It does not rule out changing demand, ranking changes or another technical issue.
+
+## Match each old page to its real replacement
+
+Imagine `/services/roof-repair` becomes `/roofing/repairs`. Someone following the old address should reach the relevant replacement, with the service information still available.
+
+I would create a simple mapping of old URL, new URL and redirect status. A permanent redirect tells browsers and search engines that a page has moved. Google's [site-move guidance](https://developers.google.com/search/docs/crawling-indexing/site-move-with-url-changes) recommends server-side permanent redirects to the corresponding new pages.
+
+Sending every retired page to the homepage can confuse visitors and may be treated as a missing-page error. Where several articles were genuinely combined, the consolidated article can be the appropriate destination.
+
+## Check what the launch carried over
+
+A useful migration check includes:
+
+- Important service details, headings and links that existed before launch.
+- Canonical tags, which identify the preferred page address, pointing to the intended URLs.
+- Any temporary `noindex` instruction removed from pages that should appear in search.
+- Navigation and sitemap entries using the new addresses.
+
+Google needs to recrawl and process URL changes, so fluctuations can happen. A fixed recovery date would be a guess. Monitor the affected pages and their replacements together.
+
+If the redesign also changed hosting or security, check [whether your CDN is blocking Google](/blog/cdn-googlebot-crawl-problems). For page copy that needs rebuilding, start with [clear answers to real customer questions](/blog/seo-and-aeo-start-with-clear-answers).

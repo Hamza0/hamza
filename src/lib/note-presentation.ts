@@ -41,9 +41,59 @@ const noteTopics: Record<string, keyof typeof topics> = {
   "ai-crawlers-search-and-training": "search",
   "wordpress-slow-after-update": "web",
   "cdn-googlebot-crawl-problems": "search",
+  "google-crawled-page-not-indexed": "search",
+  "website-redesign-google-traffic-drop": "search",
+  "google-business-profile-not-showing-maps": "search",
+  "woocommerce-no-shipping-options": "systems",
+  "woocommerce-payment-methods-missing": "systems",
+  "spreadsheet-or-custom-web-app": "systems",
+  "website-crm-sync-stopped": "systems",
+  "wordpress-scheduled-task-missed": "web",
+  "website-backup-restore-check": "web",
+  "ai-chatbot-wrong-answers": "systems",
 };
 
 const noteCallsToAction: Record<string, Pick<NoteTopic, "ctaTitle" | "ctaDescription">> = {
+  "google-crawled-page-not-indexed": {
+    ctaTitle: "Is an important page missing from Google?",
+    ctaDescription: "Share the page and the status you see in Search Console.",
+  },
+  "website-redesign-google-traffic-drop": {
+    ctaTitle: "Did search traffic drop after your redesign?",
+    ctaDescription: "Tell me what changed and which pages lost visitors.",
+  },
+  "google-business-profile-not-showing-maps": {
+    ctaTitle: "Need help with your Google listing?",
+    ctaDescription: "Share your profile link and what customers see when they search.",
+  },
+  "woocommerce-no-shipping-options": {
+    ctaTitle: "Are shipping options missing at checkout?",
+    ctaDescription: "Tell me which products and delivery areas are affected.",
+  },
+  "woocommerce-payment-methods-missing": {
+    ctaTitle: "Can’t see the payment option you need?",
+    ctaDescription: "Share the payment provider and the checkout behaviour you’re seeing.",
+  },
+  "spreadsheet-or-custom-web-app": {
+    ctaTitle: "Wondering if your team needs a web app?",
+    ctaDescription: "Tell me what your spreadsheet handles and where the work gets difficult.",
+  },
+  "website-crm-sync-stopped": {
+    ctaTitle: "Have your tools stopped sharing updates?",
+    ctaDescription: "Tell me which systems should connect and what information is missing.",
+  },
+  "wordpress-scheduled-task-missed": {
+    ctaTitle: "Is a scheduled task running late?",
+    ctaDescription: "Tell me what should run, when it was due and what happened.",
+  },
+  "website-backup-restore-check": {
+    ctaTitle: "Not sure your backup would restore the site?",
+    ctaDescription: "Tell me how your backups are stored and what your business needs to recover.",
+  },
+  "ai-chatbot-wrong-answers": {
+    ctaTitle: "Need help improving your chatbot’s answers?",
+    ctaDescription: "Share an example question and the information it should use, without customer details.",
+  },
   "why-google-shows-old-website-text": {
     ctaTitle: "Want me to check what Google sees?",
     ctaDescription: "Share your page and the search result you’re seeing.",

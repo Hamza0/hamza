@@ -9,7 +9,7 @@ export const DATA = {
   location: PROFILE.location,
   locationLink: "https://www.google.com/maps/place/Toronto,+ON",
   professionalLabel: PROFILE.role,
-  heroHeadline: "Business applications · Systems integration",
+  heroHeadline: "Web apps · Systems integration",
   heroDescription:
     "I design, build and support software that helps your team get work done. Based in the Greater Toronto Area, working with React, TypeScript, PostgreSQL and WordPress.",
   projectsTitle: "Selected Work",

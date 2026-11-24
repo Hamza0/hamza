@@ -1,0 +1,39 @@
+---
+title: "You Have a Website Backup. Can You Restore It?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "What a restore check tells you about backup coverage, missing data and your recovery point."
+---
+
+A backup marked successful is a starting point. I would restore it in an isolated test environment and check the parts of your website you actually depend on.
+
+## What is inside the backup?
+
+For a typical WordPress site, a full recovery needs both files and the database. The [WordPress backup handbook](https://developer.wordpress.org/advanced-administration/security/backup/) explains why copying the website folder alone does not normally include the database.
+
+Files include things such as themes, plugins and uploaded images. The database holds content, settings and other stored records. Check which parts your backup tool includes, any exclusions and the time each backup represents.
+
+If an archive is split into several parts, confirm that the complete set is available. The files and database should belong to your intended restore point.
+
+## Can you use the restored copy?
+
+Use a separate test location that cannot send customer emails, take payments or trigger other outgoing automations. WordPress.com's [staging guidance](https://wordpress.com/support/how-to-create-a-staging-site/) describes the role of a separate site for testing; the available setup depends on your host.
+
+Then try the restored copy:
+
+1. Sign in and open an important page.
+2. Check images, menus and a recent content item.
+3. Exercise a key form or workflow using test details.
+4. Confirm the expected records and settings are present.
+
+A homepage loading is useful evidence, but it does not verify the whole site. Record the backup used, what was checked and anything that could not be tested.
+
+## What would restoring that date replace?
+
+Imagine restoring Monday's backup on Tuesday. It will not inherently contain Tuesday's changes. Your recovery plan needs to account for those newer records before replacing anything.
+
+Some services preserve selected data during a restore. [WordPress.com's restore documentation](https://wordpress.com/support/restore/) explains its own overwrite behaviour and exceptions; other tools can behave differently.
+
+Agree on what needs preserving, who decides when to restore and how the resulting site will be checked. The [database release note](/blog/database-changes-need-a-delivery-plan) covers a related distinction: restoring older code does not automatically recover changed data.
+
+A successful practice restore gives you evidence about that backup and setup. It cannot guarantee every future recovery.

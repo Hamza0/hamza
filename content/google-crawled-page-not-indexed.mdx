@@ -1,0 +1,34 @@
+---
+title: "Google Crawled Your Page. Why Isn't It Indexed?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "What this Search Console status means, and which pages are worth investigating first."
+---
+
+Google fetched the URL but has not included it in its search index. That status alone does not identify the cause. I would first check whether it affects an important page, then inspect what Google actually received.
+
+Google's [Page indexing guidance](https://support.google.com/webmasters/answer/7440203?hl=en) says this is a common status and does not necessarily indicate a problem. Getting every URL indexed is not the goal.
+
+## Check the page, not just the totals
+
+Pick one affected page that customers need. In [URL Inspection](https://support.google.com/webmasters/answer/9012289?hl=en), check:
+
+- The current indexing status and last crawl date.
+- Whether Google could fetch the page and indexing was allowed.
+- The crawled content, when available, and any preferred page version Google reports.
+
+Compare that information with the live page. A successful live test shows what Google can access now; it does not guarantee indexing. If the reports disagree, record their dates before assuming another problem appeared.
+
+## Give the page a reason to exist
+
+Imagine a contractor publishes twelve service pages that differ only in their city names. Before submitting them again, I would ask what a customer learns from each page that the others cannot answer.
+
+A useful service page might explain the actual work offered, relevant limitations and what someone needs before requesting a quote. Adding another paragraph of repeated keywords does not answer those questions.
+
+Google's [content assessment questions](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) focus on original information and useful detail. Use those questions to evaluate the page, without treating this status as proof that Google has diagnosed its content as poor.
+
+## Make a focused change
+
+Keep a short record: affected URL, inspection result, change made and date. Correct a confirmed issue or improve the page's usefulness, then monitor it. An indexing request cannot promise inclusion.
+
+If Google cannot fetch the page, investigate [crawler access and CDN rules](/blog/cdn-googlebot-crawl-problems). If it is already indexed but displays an earlier title or description, that is a different question: [why Google still shows old website text](/blog/why-google-shows-old-website-text).

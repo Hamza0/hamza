@@ -1,0 +1,36 @@
+---
+title: "Why Did Your Website Stop Updating the CRM?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "How I would trace missing CRM updates through access, queued work and rejected records."
+---
+
+Your website accepts an enquiry, but your customer database stays unchanged. I would trace one missing record through the connection before reconnecting accounts or sending everything again.
+
+A CRM is the system your team uses to manage contacts and customer relationships. A website confirmation alone does not prove that it saved the record.
+
+## Can the connection still do its job?
+
+Compare the last successful update with the first failure. That helps narrow down which account, permission or configuration changed.
+
+For integrations using OAuth, access relies on a temporary credential. The integration should renew it when it expires. HubSpot's [access-token documentation](https://developers.hubspot.com/docs/api-reference/legacy/authentication/manage-oauth-tokens) explains that process and the permissions attached to the connection.
+
+Check whether access is still valid and includes the required read or write permission. A connection can exist without being allowed to perform every action you expect.
+
+## Is the record waiting, rejected or excluded?
+
+A queue is a waiting list of work. Its status and the error attached to your missing record help explain where the update stopped.
+
+HubSpot's [data-sync guidance](https://knowledge.hubspot.com/integrations/connect-and-use-hubspot-data-sync) distinguishes queued, failing and excluded records. A record can be excluded by a filter or a missing matching identifier.
+
+Imagine your website sends “Phone call” into a CRM field that only accepts “Phone.” Compare the submitted value with the field's allowed options. Reconnecting the account would not correct that mismatch.
+
+Keep the record reference, time and relevant error together so someone can follow the same trail.
+
+## Will retrying update the right record?
+
+Before replaying missed work, establish how the integration recognises an existing contact. HubSpot's [matching rules](https://knowledge.hubspot.com/records/deduplication-of-records) vary by record type and creation method, so automatic duplicate prevention should not be assumed.
+
+I would start with one controlled example, then confirm the intended CRM record and fields changed. That check matters more than a green status on the website.
+
+This is part of [planning connected website workflows](/blog/when-a-website-becomes-a-system). If the original outcome is uncertain, the separate [API retry question](/blog/apis-are-where-systems-start-talking) needs attention before any replay.

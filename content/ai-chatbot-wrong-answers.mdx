@@ -1,0 +1,37 @@
+---
+title: "Can You Trust Your AI Chatbot’s Answers?"
+publishedAt: "2026-11-24"
+updatedAt: "2026-11-24"
+summary: "Check the sources behind confident answers before your chatbot promises something your business cannot deliver."
+---
+
+A confident answer can still be wrong. If your chatbot misstates a price, policy or service detail, I would check the question, the information it retrieved and the rules it followed before changing the prompt.
+
+## Follow the answer back to its source
+
+Save one example: what the customer asked, what the bot said and what the correct answer should have been. Remove personal details before sharing it.
+
+Was the right information available? Did the bot retrieve it? Did it apply the right conditions? Intercom's [conversation debugging guidance](https://www.intercom.com/help/en/articles/14707480-use-fin-operator-for-conversation-debugging) makes these distinctions when investigating unexpected answers.
+
+Imagine you offer next-day delivery in one city. Your bot finds the delivery page but promises that service to everyone. Adding more delivery articles could leave the real problem untouched: the answer needs the customer's location.
+
+I would compare the actual response with the relevant source, including its date and exceptions.
+
+## Give it a useful way to stop
+
+Your bot needs a clear next step when information is missing: ask a specific question or pass the conversation to a person. For example, “Which city are you ordering from?” is more useful than guessing a delivery promise.
+
+Using retrieved documents to support an answer is often called grounding. Google's [grounding documentation](https://docs.cloud.google.com/generative-ai-app-builder/docs/check-grounding) describes checking how well claims agree with supplied reference material. That checks agreement with the reference. You still need to know whether the reference is current and applies to the customer.
+
+## Keep a few questions worth repeating
+
+I would save a small set of realistic questions with the expected answer or action:
+
+- A normal request the bot should answer.
+- A request missing an important detail.
+- An exception needing a person.
+- A question the available information cannot answer.
+
+Repeat them after changing content, instructions or integrations. Intercom's [Evals guidance](https://www.intercom.com/help/en/articles/15899411-fin-evals-explained) describes evaluating conversation behaviour against defined expectations.
+
+For your business, the useful measure is whether customers get an accurate answer or the right handoff. If the bot also updates records, treat that as a separate [business workflow](/blog/how-to-choose-the-first-workflow-to-automate), with its own permissions and checks.
