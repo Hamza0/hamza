@@ -40,6 +40,7 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
   const [status, setStatus] = useState("");
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [receiptAccepted, setReceiptAccepted] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const [viewport, setViewport] = useState<{ height: number; top: number } | null>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -54,7 +55,7 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
 
   useEffect(() => {
     if (open && !wasOpen.current && success) {
-      setSuccess(false); setStep(1); setCategory(""); setFields(EMPTY); setStatus("");
+      setSuccess(false); setReceiptAccepted(false); setStep(1); setCategory(""); setFields(EMPTY); setStatus("");
       attempt.current = { id: "", payload: "", uncertain: false };
     }
     wasOpen.current = open;
@@ -116,8 +117,9 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
     const timeout = setTimeout(() => controller.abort(), 30000);
     try {
       const r = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...details, website: fields.website, token, submissionId: attempt.current.id }), signal: controller.signal });
-      const data = await r.json().catch(() => ({})) as { code?: string };
+      const data = await r.json().catch(() => ({})) as { code?: string; confirmation?: string };
       if (r.ok && data.code === "accepted") {
+        setReceiptAccepted(data.confirmation === "accepted");
         setSuccess(true);
         setStatus("");
         trackEvent("contact_submit_success", { category });
@@ -173,7 +175,8 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
         {success ? <div className="contact-step pt-7 text-center">
           <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-[#DDF7E9] text-[#14532d]" aria-hidden="true"><Check size={26} strokeWidth={2} /></div>
           <Heading ref={title} tabIndex={-1} className="mt-5 text-xl font-semibold tracking-tight outline-none">Message received.</Heading>
-          <Description className="mt-2 text-sm leading-6 text-muted-foreground">Thanks for reaching out. I&apos;ll get back to you soon.</Description>
+          <Description className="mt-2 text-sm leading-6 text-muted-foreground">Thanks for reaching out. I&apos;ll review your message and reply by email.</Description>
+          {receiptAccepted && <p className="mt-3 text-sm leading-6 text-muted-foreground">A confirmation email should arrive shortly. You can reply to it if you need to add anything.</p>}
           {!isInline && <Dialog.Close asChild><Button type="button" className="mt-7 w-full">Done</Button></Dialog.Close>}
         </div> : <>
         {isInline ? (

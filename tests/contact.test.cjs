@@ -144,3 +144,54 @@ test('all categories use fixed subjects and contextual labels in accessible emai
     assert.equal((body.html.match(/<table /g) || []).length, (body.html.match(/<table role="presentation"/g) || []).length);
   }
 });
+
+test('confirmation is sent only after the owner notification, with a safe reply route and separate key', async () => {
+  const mock = services();
+  const data = input({ name: 'Not provided', context: 'My Website Says Your Connection Is Not Private', message: 'PRIVATE_MESSAGE <script>do not echo</script>' });
+  const enabled = { ...config, confirmations: true };
+  const first = await handleContact(request(data), enabled, mock.transport);
+  assert.deepEqual(await first.json(), { code: 'accepted', confirmation: 'accepted' });
+  const calls = mock.calls.filter(c => c.url.includes('resend'));
+  const owner = JSON.parse(calls[0].init.body);
+  const receipt = JSON.parse(calls[1].init.body);
+  assert.deepEqual(owner.to, [config.to]); assert.equal(owner.reply_to, data.email);
+  assert.deepEqual(receipt.to, [data.email]); assert.equal(receipt.reply_to, config.to);
+  assert.equal(receipt.from, 'Hamza Shakeel <' + config.from + '>');
+  assert.equal(receipt.subject, "I've received your message");
+  assert.ok(owner.html.includes('Note / topic'));
+  assert.ok(!owner.html.includes('Not provided'));
+  assert.ok(receipt.html.includes("website isn&#39;t working"));
+  for (const value of [data.message, 'PRIVATE_MESSAGE', data.context, data.email, 'Not provided']) {
+    assert.ok(!receipt.text.includes(value));
+    assert.ok(!receipt.html.includes(value));
+  }
+  assert.ok(!/<img|<script|<iframe/i.test(receipt.html));
+  assert.ok(receipt.text.includes('Simply reply to this email'));
+  assert.equal((receipt.html.match(/<h1 /g) || []).length, 1);
+  assert.equal((receipt.html.match(/<table /g) || []).length, (receipt.html.match(/<table role="presentation"/g) || []).length);
+  assert.notEqual(calls[0].init.headers['Idempotency-Key'], calls[1].init.headers['Idempotency-Key']);
+  assert.equal((await handleContact(request({ ...data, token: randomUUID() }), enabled, mock.transport)).status, 200);
+  assert.equal(mock.sends, 2, 'same submission sends neither email twice');
+  const second = input({ category: 'job' });
+  const next = await handleContact(request(second), enabled, mock.transport);
+  assert.deepEqual(await next.json(), { code: 'accepted', confirmation: 'not_confirmed' });
+  assert.equal(mock.sends, 3, 'new lead still arrives, daily receipt cap avoids another email');
+});
+
+test('receipt failure cannot make the accepted enquiry fail or prompt another submission', async () => {
+  const mock = services({ onProvider: async (init, sends) => sends === 1 ? Response.json({ id: 'owner-id' }) : Response.json({}, { status: 503 }) });
+  const result = await handleContact(request(input()), { ...config, confirmations: true }, mock.transport);
+  assert.equal(result.status, 200);
+  assert.deepEqual(await result.json(), { code: 'accepted', confirmation: 'not_confirmed' });
+  assert.equal(mock.sends, 2);
+  const failedOwner = services({ providerDown: true });
+  assert.equal((await handleContact(request(input()), { ...config, confirmations: true }, failedOwner.transport)).status, 503);
+  assert.equal(failedOwner.sends, 1);
+});
+
+test('invalid or replayed verification cannot send a receipt', async () => {
+  const mock = services({ verification: { success: false } });
+  const result = await handleContact(request(input()), { ...config, confirmations: true }, mock.transport);
+  assert.equal(result.status, 400);
+  assert.equal(mock.sends, 0);
+});

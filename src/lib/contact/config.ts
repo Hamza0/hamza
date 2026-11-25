@@ -17,6 +17,7 @@ export function getContactConfig(): ContactConfig | null {
       origin: origin.origin, hostname: origin.hostname,
       resendKey: env.RESEND_API_KEY!, from: env.CONTACT_FROM_EMAIL!, to: env.CONTACT_TO_EMAIL!,
       turnstileSecret: env.TURNSTILE_SECRET_KEY!,
+      confirmations: env.CONTACT_CONFIRMATIONS_ENABLED !== "false",
     };
   } catch { return null; }
 }

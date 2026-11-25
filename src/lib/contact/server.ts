@@ -1,10 +1,11 @@
 import { createHash } from "node:crypto";
 import { parseContactDetails, type ContactDetails } from "./schema";
-import { createContactEmail } from "./email";
+import { createContactEmail, createContactConfirmation } from "./email";
 
 export type ContactConfig = {
   origin: string; hostname: string; resendKey: string; from: string; to: string;
   turnstileSecret: string;
+  confirmations?: boolean;
 };
 type ContactInput = ContactDetails & { website: string; token: string; submissionId: string };
 const MAX_BYTES = 8192;
@@ -79,6 +80,29 @@ export async function handleContact(request: Request, config: ContactConfig | nu
     }
     const accepted = await provider.json() as { id?: string };
     if (!accepted.id || typeof accepted.id !== "string") throw new Error("service");
+    // A receipt is secondary to the original enquiry: never make an accepted
+    // lead fail just because the optional acknowledgement cannot be sent.
+    if (config.confirmations) {
+      const date = new Date(Number(input.submissionId.split(".")[0])).toISOString().slice(0, 10);
+      // Separate deduplication keys. At most one successful receipt per email
+      // address per UTC submission day, even across distinct submission IDs.
+      const receiptKey = `portfolio-receipt-${createHash("sha256").update(input.email.toLowerCase() + "\\0" + date).digest("hex")}`;
+      try {
+        const receipt = await send("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${config.resendKey}`, "Content-Type": "application/json", "Idempotency-Key": receiptKey },
+          body: JSON.stringify({ from: `Hamza Shakeel <${config.from}>`, to: [input.email], reply_to: config.to, ...createContactConfirmation(input) }),
+          signal: AbortSignal.timeout(6000), cache: "no-store",
+        });
+        if (receipt.ok) {
+          const result = await receipt.json() as { id?: string };
+          if (typeof result.id === "string" && result.id) {
+            return Response.json({ code: "accepted", confirmation: "accepted" }, { status: 200, headers: { "Cache-Control": "no-store" } });
+          }
+        }
+      } catch { /* The owner notification has already been accepted. */ }
+      return Response.json({ code: "accepted", confirmation: "not_confirmed" }, { status: 200, headers: { "Cache-Control": "no-store" } });
+    }
     return response(200, "accepted");
   } catch { return response(503, "service"); }
 }

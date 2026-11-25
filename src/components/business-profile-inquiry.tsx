@@ -39,6 +39,7 @@ export function BusinessProfileInquiry({ available }: { available: boolean }) {
   const [sending, setSending] = useState(false);
   const [retryLocked, setRetryLocked] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [receiptAccepted, setReceiptAccepted] = useState(false);
   const [status, setStatus] = useState("");
   const [cooldown, setCooldown] = useState(0);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -190,9 +191,10 @@ export function BusinessProfileInquiry({ available }: { available: boolean }) {
         body: JSON.stringify({ ...details, website: values.website, token, submissionId: attempt.current.id }),
         signal: controller.signal,
       });
-      const body = await response.json().catch(() => ({})) as { code?: string };
+      const body = await response.json().catch(() => ({})) as { code?: string; confirmation?: string };
       if (!mounted.current) return;
       if (response.ok && body.code === "accepted") {
+        setReceiptAccepted(body.confirmation === "accepted");
         setSuccess(true);
         setStatus("");
         trackEvent("contact_submit_success", { category: "business_profile" });
@@ -253,6 +255,7 @@ export function BusinessProfileInquiry({ available }: { available: boolean }) {
           <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted" aria-hidden="true"><Check className="size-6" /></div>
           <h2 ref={successHeading} tabIndex={-1} className="mt-5 text-2xl font-semibold tracking-tight outline-none">Your enquiry has been sent.</h2>
           <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-muted-foreground">Thanks for sharing the details. I&apos;ll review your message and reply by email.</p>
+          {receiptAccepted && <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-muted-foreground">A confirmation email should arrive shortly. You can reply to it if you need to add anything.</p>}
           <Link href="/" className="mt-7 inline-block text-sm underline underline-offset-4">Back to my portfolio</Link>
         </div>
       ) : (

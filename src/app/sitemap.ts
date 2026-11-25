@@ -43,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${SITE_URL}/privacy`,
       // Last substantive privacy policy update, verified in Git history.
-      lastModified: "2026-11-17",
+      lastModified: "2026-11-25",
       changeFrequency: "yearly",
       priority: 0.2,
     },
