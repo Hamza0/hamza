@@ -1,0 +1,30 @@
+---
+title: "Why Is My Shopify Checkout Not Accepting Payments?"
+publishedAt: "2026-11-25"
+updatedAt: "2026-11-25"
+summary: "How I narrow down a payment error, missing orders or customers who cannot complete checkout."
+---
+
+Customers can browse your Shopify store and add products to their carts, but they cannot finish paying. Before changing the theme or installing another app, I would establish which stage is failing and how many customers it affects.
+
+An abandoned checkout by itself is not proof that payments are broken. Some shoppers simply leave. A repeatable error or failed payment event is more useful.
+
+## Find the payment attempt
+
+In Shopify admin, look at an affected order or abandoned checkout and its timeline. Note the exact payment message and approximate time without sharing customer card details. [Shopify's payment troubleshooting guide](https://help.shopify.com/en/manual/checkout-settings/troubleshooting-checkout-payments) explains where failed attempts appear.
+
+If just one card is declined, the customer's bank may be involved. If all payment methods suddenly fail, check [Shopify Status](https://www.shopifystatus.com/) and the payment provider's status. A restriction on a payment account may also need to be addressed directly with the provider.
+
+## Do not confuse checkout problems with theme problems
+
+Imagine a store owner has changed its product page before a promotion. Customers now reach the shipping stage but cannot choose delivery. The issue could be the product, destination or shipping setup rather than a payment failure.
+
+I would reproduce the actual path from product page to checkout and identify the point where it stops. If a customer says they have already been charged, confirm the transaction status with your payment provider before asking them to pay again.
+
+## Be especially careful during a sale
+
+Use an isolated test environment where possible. Turning on [Shopify payment test mode](https://help.shopify.com/en/manual/checkout-settings/test-orders/payments-test-mode) on an active store can prevent customers from paying, so don't enable it casually during a promotion.
+
+If this is a WooCommerce store instead, see my note on [missing payment options](/blog/woocommerce-payment-methods-missing).
+
+Send me your store link, the payment error and whether the issue affects one customer or several. If you are in the middle of a sale, tell me that too.

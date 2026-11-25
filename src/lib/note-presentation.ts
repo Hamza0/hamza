@@ -14,6 +14,12 @@ const topics = {
 } satisfies Record<string, NoteTopic>;
 
 const noteTopics: Record<string, keyof typeof topics> = {
+  "website-connection-not-private": "web",
+  "website-dns-site-cant-be-reached": "web",
+  "website-too-many-redirects": "web",
+  "cloudflare-error-522-website-down": "web",
+  "shopify-checkout-payment-not-working": "systems",
+  "google-dangerous-site-warning": "web",
   "fix-existing-website-without-rebuild": "web",
   "fix-existing-lovable-app": "systems",
   "website-developer-stopped-responding": "web",
@@ -65,6 +71,12 @@ const noteTopics: Record<string, keyof typeof topics> = {
 };
 
 const noteCallsToAction: Record<string, Pick<NoteTopic, "ctaTitle" | "ctaDescription">> = {
+  "website-connection-not-private": { ctaTitle: "Seeing this error?", ctaDescription: "Tell me which website or app is affected and when the problem started." },
+  "website-dns-site-cant-be-reached": { ctaTitle: "Seeing this error?", ctaDescription: "Tell me which website or app is affected and when the problem started." },
+  "website-too-many-redirects": { ctaTitle: "Seeing this error?", ctaDescription: "Tell me which website or app is affected and when the problem started." },
+  "cloudflare-error-522-website-down": { ctaTitle: "Seeing this error?", ctaDescription: "Tell me which website or app is affected and when the problem started." },
+  "shopify-checkout-payment-not-working": { ctaTitle: "Seeing this error?", ctaDescription: "Tell me which website or app is affected and when the problem started." },
+  "google-dangerous-site-warning": { ctaTitle: "Seeing this error?", ctaDescription: "Tell me which website or app is affected and when the problem started." },
   "fix-existing-website-without-rebuild": { ctaTitle: "Tell me what is broken", ctaDescription: "Share your website address and the one thing you wish worked better." },
   "fix-existing-lovable-app": { ctaTitle: "Tell me about your app", ctaDescription: "Share what you built, what still works and what is getting in the way." },
   "website-developer-stopped-responding": { ctaTitle: "Need someone to look at your existing website?", ctaDescription: "Tell me what you can access and which changes you have been unable to make." },

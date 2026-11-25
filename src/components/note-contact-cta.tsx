@@ -4,15 +4,15 @@ import ContactDialog from "@/components/contact-dialog";
 import { useContact } from "@/components/contact-provider";
 import { useId } from "react";
 
-export function NoteContactCTA({ title, description, context }: { title: string; description: string; context: string }) {
+export function NoteContactCTA({ title, description, context, starters }: { title: string; description: string; context: string; starters: readonly string[] }) {
   const { available } = useContact();
   const headingId = useId();
 
   return (
-    <section className="mt-10 rounded-2xl border bg-muted/25 p-5 sm:p-6" aria-label="Contact Hamza about this note">
+    <section id="get-help" className="note-enquiry mt-10 scroll-mt-6 rounded-2xl border bg-muted/25 p-5 sm:p-6" aria-label="Contact Hamza about this note">
       {available ? (
         <>
-          <ContactDialog key={context} open={true} onOpenChange={() => {}} restoreFocus={() => {}} inline={{ title, description, context }} />
+          <ContactDialog key={context} open={true} onOpenChange={() => {}} restoreFocus={() => {}} inline={{ title, description, context, starters }} />
           <noscript><a href="https://www.linkedin.com/in/mianhamza" className="mt-3 block text-sm underline underline-offset-4">Message me on LinkedIn</a></noscript>
         </>
       ) : (

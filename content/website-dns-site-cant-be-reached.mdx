@@ -1,0 +1,32 @@
+---
+title: "Why Does My Website Say This Site Can't Be Reached?"
+publishedAt: "2026-11-25"
+updatedAt: "2026-11-25"
+summary: "Find out whether a missing DNS record, expired domain or local connection issue is stopping people from reaching your site."
+---
+
+When a customer cannot reach your website, the first question is whether their browser can find the website at all. A missing domain record is a different problem from a broken website.
+
+If the error includes DNS_PROBE_FINISHED_NXDOMAIN, the domain lookup returned that the requested name does not exist. That does not necessarily mean your website files are gone.
+
+## Check the address before changing anything
+
+Try the full address, including www if your business uses it, then try from another network. Note whether other people can open the website and whether business email has stopped too.
+
+I would check whether the domain registration is current, where its DNS is managed, and whether the necessary website records point to the correct hosting provider.
+
+[Cloudflare's DNS troubleshooting guide](https://developers.cloudflare.com/dns/troubleshooting/dns-probe-finished-nxdomain/) explains why the main domain and its subdomains need to be checked separately.
+
+## Why a move can make a working site disappear
+
+Imagine you move your domain's DNS settings to a new provider but forget the record for www. The new hosting can be perfectly healthy while customers using your old website link receive an error.
+
+I would compare the intended records with what the internet is actually returning. A recently corrected record can also take time to appear consistently because DNS answers are cached.
+
+## Keep the rest of your business working
+
+Avoid deleting every DNS record or changing nameservers simply to see what happens. The same domain may handle your email and verification for other business tools.
+
+If the browser instead shows a [certificate warning](/blog/website-connection-not-private), the investigation is different.
+
+Send me the public website address, the error code and whether the problem started after a move or renewal. That is enough to start narrowing it down.

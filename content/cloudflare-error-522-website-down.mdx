@@ -1,0 +1,28 @@
+---
+title: "My Website Is Down With Cloudflare Error 522. What Does It Mean?"
+publishedAt: "2026-11-25"
+updatedAt: "2026-11-25"
+summary: "What to check when Cloudflare cannot reach the server that hosts your website."
+---
+
+Cloudflare error 522 means Cloudflare could not communicate with your website's hosting server in time. It is not the same thing as your domain being missing or a particular page having a broken layout.
+
+If your business relies on the website for enquiries or orders, I would first establish whether the whole site is affected or only certain requests.
+
+## Check the hosting connection
+
+I would check the host's service status, whether the server is reachable, and whether Cloudflare is pointing to the correct server. A server that is too busy, unavailable or blocking legitimate Cloudflare connections can produce this error.
+
+[Cloudflare's explanation of error 522](https://developers.cloudflare.com/support/troubleshooting/http-status-codes/cloudflare-5xx-errors/error-522/) describes these different causes. It also provides information that your hosting provider can use to investigate.
+
+## The error can be intermittent
+
+Suppose a shop's website opens normally most of the day, then stops responding during a promotion. I would compare the error times with server logs, requests and resource usage. It is worth distinguishing a capacity issue from a configuration problem before paying for a larger hosting plan.
+
+If the problem follows a DNS change, I would also check whether the destination is the correct server. See the [note about missing website addresses](/blog/website-dns-site-cant-be-reached) if you are seeing a DNS error instead.
+
+## What helps me investigate
+
+Tell me when the error started, whether you can reach your hosting dashboard, and which pages are affected. If available, note the error code and time displayed on the error page.
+
+I would not disable your firewall or remove Cloudflare simply to make the warning disappear. The goal is to restore the website without introducing another problem. If your site is down now, say so in your message so I understand the impact.

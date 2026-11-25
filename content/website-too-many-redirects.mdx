@@ -1,0 +1,32 @@
+---
+title: "Why Is My Website Showing ERR_TOO_MANY_REDIRECTS?"
+publishedAt: "2026-11-25"
+updatedAt: "2026-11-25"
+summary: "What I check when your website keeps sending visitors between pages and never opens."
+---
+
+If your website keeps redirecting and never opens, it may be caught in a loop. One setting sends visitors to a new address, and another sends them back. The browser eventually stops trying.
+
+I would look for the rule that is causing the loop instead of removing all of your website's redirects.
+
+## Find out which pages are affected
+
+Try the website in a private browsing window. If only your signed-in session fails, cookies or login state may be involved. If everyone gets the error, I would look at the server and website settings.
+
+[Chrome's error guide](https://support.google.com/chrome/answer/95669?hl=en) includes redirect loops and explains why cookie-related problems can produce this message.
+
+## A common example after enabling HTTPS
+
+Imagine the hosting provider sends visitors to a secure HTTPS address, but a conflicting proxy or application setting sends them back to HTTP. The two rules can repeat indefinitely.
+
+Another example is a customer login that redirects to a dashboard while the dashboard sends that customer straight back to login.
+
+I would inspect the sequence of redirects and check which part of the system controls each step. That might involve the website itself, a WordPress plugin, the hosting provider or a proxy.
+
+## Fix the loop without breaking other links
+
+I want the website to reach one intended address consistently, keep HTTPS working and preserve the links customers and Google already use. A login-related fix must also retain the app's access controls.
+
+After correcting the conflicting rule, I would check the homepage, important customer pages and the sign-in process if relevant.
+
+If the error started after a hosting change, enabling SSL or installing a plugin, tell me that first. Share the page where it happens and whether the rest of your website still opens. If the problem is isolated to sign-in, see my [note on customers who cannot log in](/blog/customers-cannot-log-into-web-app).

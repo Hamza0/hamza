@@ -562,3 +562,7 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
   .note-article .note-prose { font-size: 1.0625rem; }
   .note-article .note-lead p { font-size: 1.2rem; }
 }
+
+/* A little depth at the conversation entry point, without a downloaded image. */
+.note-enquiry { background-image: radial-gradient(ellipse at 100% 0%, hsl(var(--primary) / 0.055), transparent 64%); }
+.dark .note-enquiry { background-image: radial-gradient(ellipse at 100% 0%, hsl(var(--note-accent) / 0.07), transparent 64%); }

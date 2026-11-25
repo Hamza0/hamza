@@ -41,6 +41,7 @@ export default async function Page() {
     "google-business-profile-address-change-help",
     "wordpress-critical-error-help",
     "customers-cannot-log-into-web-app",
+    "shopify-checkout-payment-not-working",
     "website-developer-stopped-responding",
   ];
   const featuredNotes = featuredSlugs.flatMap(slug => posts.filter(note => note.slug === slug));

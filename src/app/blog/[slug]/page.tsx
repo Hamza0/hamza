@@ -9,6 +9,8 @@ import { AUTHOR, articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo"
 import { modificationDate } from "@/lib/publication";
 import { getNotePresentation, readingMinutes } from "@/lib/note-presentation";
 import { splitNoteLead } from "@/lib/note-reading";
+import { getNoteStarters, getErrorExample } from "@/lib/note-helpers";
+import { NoteErrorExample } from "@/components/note-error-example";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -52,6 +54,7 @@ export default async function Blog({
   const previous = index >= 0 ? posts[index + 1] : undefined;
   const next = index > 0 ? posts[index - 1] : undefined;
   const presentation = getNotePresentation(post.slug);
+  const errorExample = getErrorExample(post.slug);
   const { lead, body } = splitNoteLead(post.source);
 
   return (
@@ -91,6 +94,7 @@ export default async function Blog({
           {post.metadata.dateLabel && <p className="mt-2 text-xs text-muted-foreground">{post.metadata.dateLabel}</p>}
         </header>
         {lead && <div className="note-lead prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: lead }} />}
+        {errorExample && <NoteErrorExample example={errorExample} />}
         <div
           className="note-prose prose max-w-none dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: body }}
@@ -104,7 +108,7 @@ export default async function Blog({
         </section>
       )}
       {post.slug !== "google-business-profile-address-change-help" && (
-        <NoteContactCTA title={presentation.ctaTitle} description={presentation.ctaDescription} context={post.metadata.title} />
+        <NoteContactCTA title={presentation.ctaTitle} description={presentation.ctaDescription} context={post.metadata.title} starters={getNoteStarters(post.slug)} />
       )}
       <div className="mt-10 flex items-center gap-3 border-t pt-5">
         <PulseHeart key={post.slug} noteSlug={post.slug} icon="heart" showCount={true} size={26} />
