@@ -5,151 +5,414 @@ export type ErrorExample = {
   kind: "neutral" | "warning";
 };
 
-const starters: Record<string, readonly string[]> = {
+export type NoteStarter = { label: string; message: string };
+
+const starters: Record<string, readonly NoteStarter[]> = {
   "fix-existing-website-without-rebuild": [
-    "My website has suddenly stopped working.",
-    "My customers are getting an error.",
-    "I need help fixing something on my existing website."
+    {
+      "label": "Website not working",
+      "message": "My website has suddenly stopped working."
+    },
+    {
+      "label": "Customers see errors",
+      "message": "My customers are getting an error."
+    },
+    {
+      "label": "Fix existing website",
+      "message": "I need help fixing something on my existing website."
+    }
   ],
   "fix-existing-lovable-app": [
-    "I built an app with Lovable and a feature is not working.",
-    "My AI-built app works in preview but not when published.",
-    "I need someone to improve an app I already built."
+    {
+      "label": "Broken app feature",
+      "message": "I built an app with Lovable and a feature is not working."
+    },
+    {
+      "label": "Preview works, live fails",
+      "message": "My AI-built app works in preview but not when published."
+    },
+    {
+      "label": "Improve existing app",
+      "message": "I need someone to improve an app I already built."
+    }
   ],
   "website-developer-stopped-responding": [
-    "My web developer is no longer responding.",
-    "I need help taking over an existing website.",
-    "I can access my site but cannot make the changes I need."
+    {
+      "label": "Developer unavailable",
+      "message": "My web developer is no longer responding."
+    },
+    {
+      "label": "Website handover",
+      "message": "I need help taking over an existing website."
+    },
+    {
+      "label": "Need website changes",
+      "message": "I can access my site but cannot make the changes I need."
+    }
   ],
   "wordpress-critical-error-help": [
-    "My WordPress website shows a critical error.",
-    "My website stopped working after a plugin update.",
-    "This is urgent. My WordPress website is down."
+    {
+      "label": "Critical error",
+      "message": "My WordPress website shows a critical error."
+    },
+    {
+      "label": "Broken after update",
+      "message": "My website stopped working after a plugin update."
+    },
+    {
+      "label": "Urgent: site down",
+      "message": "This is urgent. My WordPress website is down."
+    }
   ],
   "customers-cannot-log-into-web-app": [
-    "My customers cannot log into my app.",
-    "Password reset emails are not arriving.",
-    "Customers keep returning to the login screen."
+    {
+      "label": "Login not working",
+      "message": "My customers cannot log into my app."
+    },
+    {
+      "label": "Password reset issue",
+      "message": "Password reset emails are not arriving."
+    },
+    {
+      "label": "Login loop",
+      "message": "Customers keep returning to the login screen."
+    }
   ],
   "website-booking-no-available-times": [
-    "My calendar has free time but customers cannot book.",
-    "My appointment booking form is not working.",
-    "Customers cannot complete an appointment booking."
+    {
+      "label": "No available times",
+      "message": "My calendar has free time but customers cannot book."
+    },
+    {
+      "label": "Booking form issue",
+      "message": "My appointment booking form is not working."
+    },
+    {
+      "label": "Cannot finish booking",
+      "message": "Customers cannot complete an appointment booking."
+    }
   ],
   "wordpress-form-sent-but-no-email": [
-    "My website form says sent but I never receive the email.",
-    "My business is missing customer enquiries.",
-    "I need help checking my website’s contact form."
+    {
+      "label": "Emails not arriving",
+      "message": "My website form says sent but I never receive the email."
+    },
+    {
+      "label": "Missing enquiries",
+      "message": "My business is missing customer enquiries."
+    },
+    {
+      "label": "Check contact form",
+      "message": "I need help checking my website’s contact form."
+    }
   ],
   "woocommerce-payment-succeeded-order-pending": [
-    "My customer paid but WooCommerce shows the order as pending.",
-    "Payment was received but no order was created.",
-    "I need to check whether payments and orders match."
+    {
+      "label": "Order stuck pending",
+      "message": "My customer paid but WooCommerce shows the order as pending."
+    },
+    {
+      "label": "Payment without order",
+      "message": "Payment was received but no order was created."
+    },
+    {
+      "label": "Payment and order mismatch",
+      "message": "I need to check whether payments and orders match."
+    }
   ],
   "woocommerce-payment-methods-missing": [
-    "My customers cannot see payment options at checkout.",
-    "My card payment option suddenly disappeared.",
-    "This is urgent. My store cannot accept payments."
+    {
+      "label": "No payment options",
+      "message": "My customers cannot see payment options at checkout."
+    },
+    {
+      "label": "Card payments missing",
+      "message": "My card payment option suddenly disappeared."
+    },
+    {
+      "label": "Urgent: payments blocked",
+      "message": "This is urgent. My store cannot accept payments."
+    }
   ],
   "woocommerce-no-shipping-options": [
-    "My customers cannot select shipping at checkout.",
-    "WooCommerce says no shipping options are available.",
-    "Customers in certain areas cannot complete an order."
+    {
+      "label": "No shipping options",
+      "message": "My customers cannot select shipping at checkout."
+    },
+    {
+      "label": "Shipping error",
+      "message": "WooCommerce says no shipping options are available."
+    },
+    {
+      "label": "Some regions affected",
+      "message": "Customers in certain areas cannot complete an order."
+    }
   ],
   "wordpress-slow-after-update": [
-    "My WordPress website became slow after an update.",
-    "My website is very slow on mobile.",
-    "I need help finding what is making my website slow."
+    {
+      "label": "Slow after update",
+      "message": "My WordPress website became slow after an update."
+    },
+    {
+      "label": "Slow on mobile",
+      "message": "My website is very slow on mobile."
+    },
+    {
+      "label": "Find performance issue",
+      "message": "I need help finding what is making my website slow."
+    }
   ],
   "website-crm-sync-stopped": [
-    "My website stopped sending leads to my CRM.",
-    "My business tools are not syncing anymore.",
-    "Records are missing from one of my systems."
+    {
+      "label": "Missing leads",
+      "message": "My website stopped sending leads to my CRM."
+    },
+    {
+      "label": "Sync stopped",
+      "message": "My business tools are not syncing anymore."
+    },
+    {
+      "label": "Missing records",
+      "message": "Records are missing from one of my systems."
+    }
   ],
   "website-changes-not-showing": [
-    "I changed my website but customers still see the old version.",
-    "My changes show when I am logged in but not for visitors.",
-    "I need help getting my website update to appear."
+    {
+      "label": "Old website version",
+      "message": "I changed my website but customers still see the old version."
+    },
+    {
+      "label": "Visitors see old content",
+      "message": "My changes show when I am logged in but not for visitors."
+    },
+    {
+      "label": "Update not appearing",
+      "message": "I need help getting my website update to appear."
+    }
   ],
   "moving-website-keep-email-working": [
-    "I need to move my website without losing my email.",
-    "My business email stopped working after a domain change.",
-    "I am changing hosting and want to avoid interruptions."
+    {
+      "label": "Move website safely",
+      "message": "I need to move my website without losing my email."
+    },
+    {
+      "label": "Email stopped working",
+      "message": "My business email stopped working after a domain change."
+    },
+    {
+      "label": "Changing hosting",
+      "message": "I am changing hosting and want to avoid interruptions."
+    }
   ],
   "google-business-profile-not-showing-maps": [
-    "My Google business listing is missing from Maps.",
-    "Customers cannot find my business on Google.",
-    "I need help understanding why my listing is not visible."
+    {
+      "label": "Missing from Maps",
+      "message": "My Google business listing is missing from Maps."
+    },
+    {
+      "label": "Business not found",
+      "message": "Customers cannot find my business on Google."
+    },
+    {
+      "label": "Check listing visibility",
+      "message": "I need help understanding why my listing is not visible."
+    }
   ],
   "google-crawled-page-not-indexed": [
-    "Google is not indexing an important page on my website.",
-    "Search Console says crawled but currently not indexed.",
-    "I need help understanding why my website is missing from search."
+    {
+      "label": "Page not indexed",
+      "message": "Google is not indexing an important page on my website."
+    },
+    {
+      "label": "Crawled, not indexed",
+      "message": "Search Console says crawled but currently not indexed."
+    },
+    {
+      "label": "Missing from search",
+      "message": "I need help understanding why my website is missing from search."
+    }
   ],
   "website-redesign-google-traffic-drop": [
-    "My Google traffic dropped after a website redesign.",
-    "My old pages no longer appear in Google.",
-    "I need to understand what happened to my search visibility."
+    {
+      "label": "Traffic dropped",
+      "message": "My Google traffic dropped after a website redesign."
+    },
+    {
+      "label": "Old pages missing",
+      "message": "My old pages no longer appear in Google."
+    },
+    {
+      "label": "Check search visibility",
+      "message": "I need to understand what happened to my search visibility."
+    }
   ],
   "customer-data-access-after-login": [
-    "I need help checking access to my customer portal.",
-    "Customers are seeing information they should not see.",
-    "I want to review the permissions in my existing app."
+    {
+      "label": "Portal access review",
+      "message": "I need help checking access to my customer portal."
+    },
+    {
+      "label": "Wrong customer data",
+      "message": "Customers are seeing information they should not see."
+    },
+    {
+      "label": "App permissions",
+      "message": "I want to review the permissions in my existing app."
+    }
   ],
   "ai-chatbot-wrong-answers": [
-    "My website chatbot keeps giving customers wrong answers.",
-    "My chatbot is not using the right business information.",
-    "I need to improve the reliability of an existing AI tool."
+    {
+      "label": "Wrong chatbot answers",
+      "message": "My website chatbot keeps giving customers wrong answers."
+    },
+    {
+      "label": "Wrong business information",
+      "message": "My chatbot is not using the right business information."
+    },
+    {
+      "label": "Improve AI tool",
+      "message": "I need to improve the reliability of an existing AI tool."
+    }
   ],
   "spreadsheet-or-custom-web-app": [
-    "My team is struggling to manage everything in a spreadsheet.",
-    "I need to improve a manual process in my business.",
-    "I have an existing tool and need it to work better."
+    {
+      "label": "Too many spreadsheets",
+      "message": "My team is struggling to manage everything in a spreadsheet."
+    },
+    {
+      "label": "Manual business process",
+      "message": "I need to improve a manual process in my business."
+    },
+    {
+      "label": "Improve existing tool",
+      "message": "I have an existing tool and need it to work better."
+    }
   ],
   "french-page-opens-in-english": [
-    "My French website opens the English page instead.",
-    "The language switcher on my website is not working.",
-    "I need help correcting my translated website."
+    {
+      "label": "Wrong page language",
+      "message": "My French website opens the English page instead."
+    },
+    {
+      "label": "Language switcher broken",
+      "message": "The language switcher on my website is not working."
+    },
+    {
+      "label": "Fix translations",
+      "message": "I need help correcting my translated website."
+    }
   ],
   "google-product-price-mismatch": [
-    "Google shows the wrong price for my products.",
-    "My product price on Google does not match my store.",
-    "I need help finding the cause of my product listing errors."
+    {
+      "label": "Wrong Google price",
+      "message": "Google shows the wrong price for my products."
+    },
+    {
+      "label": "Price mismatch",
+      "message": "My product price on Google does not match my store."
+    },
+    {
+      "label": "Product listing errors",
+      "message": "I need help finding the cause of my product listing errors."
+    }
   ],
   "why-google-shows-old-website-text": [
-    "Google still shows the old text from my website.",
-    "I updated my site but Google has not picked up the changes.",
-    "I need help checking what Google sees."
+    {
+      "label": "Old search result",
+      "message": "Google still shows the old text from my website."
+    },
+    {
+      "label": "Google missed update",
+      "message": "I updated my site but Google has not picked up the changes."
+    },
+    {
+      "label": "Check Google visibility",
+      "message": "I need help checking what Google sees."
+    }
   ],
   "website-connection-not-private": [
-    "My website shows a connection is not private warning.",
-    "Customers cannot open my website because of an SSL error.",
-    "This is urgent. My website shows a security warning."
+    {
+      "label": "SSL warning",
+      "message": "My website shows a connection is not private warning."
+    },
+    {
+      "label": "Customers blocked",
+      "message": "Customers cannot open my website because of an SSL error."
+    },
+    {
+      "label": "Urgent security warning",
+      "message": "This is urgent. My website shows a security warning."
+    }
   ],
   "website-dns-site-cant-be-reached": [
-    "My website says this site can’t be reached.",
-    "My website stopped opening after I changed my domain settings.",
-    "My website is down and I need help as soon as possible."
+    {
+      "label": "Website unreachable",
+      "message": "My website says this site can’t be reached."
+    },
+    {
+      "label": "After domain change",
+      "message": "My website stopped opening after I changed my domain settings."
+    },
+    {
+      "label": "Urgent: site down",
+      "message": "My website is down and I need help as soon as possible."
+    }
   ],
   "website-too-many-redirects": [
-    "My website shows ERR_TOO_MANY_REDIRECTS.",
-    "My website stopped working after I enabled HTTPS.",
-    "Customers keep getting sent back to the login page."
+    {
+      "label": "Redirect loop",
+      "message": "My website shows ERR_TOO_MANY_REDIRECTS."
+    },
+    {
+      "label": "After enabling HTTPS",
+      "message": "My website stopped working after I enabled HTTPS."
+    },
+    {
+      "label": "Stuck at login",
+      "message": "Customers keep getting sent back to the login page."
+    }
   ],
   "cloudflare-error-522-website-down": [
-    "My website is showing Cloudflare error 522.",
-    "My website keeps going offline when customers visit.",
-    "This is urgent. My entire website is currently unavailable."
+    {
+      "label": "Cloudflare 522",
+      "message": "My website is showing Cloudflare error 522."
+    },
+    {
+      "label": "Intermittent downtime",
+      "message": "My website keeps going offline when customers visit."
+    },
+    {
+      "label": "Urgent: site down",
+      "message": "This is urgent. My entire website is currently unavailable."
+    }
   ],
   "shopify-checkout-payment-not-working": [
-    "My Shopify customers cannot complete their payments.",
-    "Customers can add products to the cart but checkout fails.",
-    "This is urgent. My store is losing orders because checkout is not working."
+    {
+      "label": "Payments failing",
+      "message": "My Shopify customers cannot complete their payments."
+    },
+    {
+      "label": "Checkout blocked",
+      "message": "Customers can add products to the cart but checkout fails."
+    },
+    {
+      "label": "Urgent: lost orders",
+      "message": "This is urgent. My store is losing orders because checkout is not working."
+    }
   ],
   "google-dangerous-site-warning": [
-    "Google is showing a dangerous site warning for my website.",
-    "My website redirects visitors somewhere I do not recognize.",
-    "This is urgent. I suspect my business website has been compromised."
+    {
+      "label": "Google security warning",
+      "message": "Google is showing a dangerous site warning for my website."
+    },
+    {
+      "label": "Unexpected redirects",
+      "message": "My website redirects visitors somewhere I do not recognize."
+    },
+    {
+      "label": "Suspected compromise",
+      "message": "This is urgent. I suspect my business website has been compromised."
+    }
   ]
 };
 
@@ -204,13 +467,13 @@ const examples: Record<string, ErrorExample> = {
   }
 };
 
-const defaults = [
-  "I need help with something on my website.",
-  "I have an existing app that needs some changes.",
-  "I want to understand how to improve a business process.",
-] as const;
+const defaults: readonly NoteStarter[] = [
+  { label: "Website help", message: "I need help with something on my website." },
+  { label: "Existing app", message: "I have an existing app that needs some changes." },
+  { label: "Business process", message: "I want to understand how to improve a business process." },
+];
 
-export function getNoteStarters(slug: string): readonly string[] {
+export function getNoteStarters(slug: string): readonly NoteStarter[] {
   return starters[slug] ?? defaults;
 }
 

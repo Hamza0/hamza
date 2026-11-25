@@ -4,7 +4,9 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { trackEvent } from "@/lib/analytics";
 import { CONTACT_CATEGORIES, CONTACT_LIMITS, parseContactDetails, type ContactCategory } from "@/lib/contact/schema";
-import { Check, X } from "lucide-react";
+import { Check, Plus, X } from "lucide-react";
+import type { NoteStarter } from "@/lib/note-helpers";
+import { hasNoteStarter, toggleNoteStarter } from "@/lib/contact/note-starters";
 import Script from "next/script";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 
@@ -21,7 +23,7 @@ const OPTIONS = Object.keys(CONTACT_CATEGORIES) as ContactCategory[];
 const EMPTY = { name: "", email: "", context: "", message: "", website: "" };
 const fieldClass = "mt-1 w-full rounded-md border bg-background px-3 py-2 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring";
 
-type InlineContact = { title: string; description: string; context: string; starters?: readonly string[] };
+type InlineContact = { title: string; description: string; context: string; starters?: readonly NoteStarter[] };
 
 export default function ContactDialog({ open, onOpenChange, restoreFocus, inline }: { open: boolean; onOpenChange: (value: boolean) => void; restoreFocus: () => void; inline?: InlineContact }) {
   const isInline = Boolean(inline);
@@ -41,7 +43,6 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
   const [cooldown, setCooldown] = useState(0);
   const [viewport, setViewport] = useState<{ height: number; top: number } | null>(null);
   const title = useRef<HTMLHeadingElement>(null);
-  const problemInput = useRef<HTMLTextAreaElement>(null);
   const challenge = useRef<HTMLDivElement>(null);
   const widget = useRef<string | undefined>(undefined);
   const attempt = useRef({ id: "", payload: "", uncertain: false });
@@ -180,32 +181,40 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
         <Description className="mt-2 text-sm text-muted-foreground">{isInline ? (step === 1 ? "Tell me what you’re trying to do and where it gets stuck." : "I’ll reply to this email.") : (step === 1 ? "Have a project, role, or collaboration in mind? Tell me a little about it." : selected?.description)}</Description>
         {isInline && step === 1 ? <form key="note-problem" className="contact-step mt-5 space-y-4" onSubmit={continueInline}>
           <label htmlFor={`${fieldId}-problem`} className="sr-only">What’s happening?</label>
-          <textarea ref={problemInput} id={`${fieldId}-problem`} name="message" required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} onChange={event => { setFields(value => ({ ...value, message: event.target.value })); setStatus(""); }} placeholder="A little about the problem. You can include a public website or app link." className={`${fieldClass} block resize-y`} />
-          {inline?.starters?.length && !fields.message.trim() ? (
-            <div className="space-y-2" aria-label="Suggested messages">
-              <p className="text-xs font-medium text-muted-foreground">Not sure what to write?</p>
-              <div className="flex flex-col items-start gap-1.5">
-                {inline.starters.map(starter => (
-                  <button
-                    key={starter}
-                    type="button"
-                    className="group inline-flex min-h-10 max-w-full items-center gap-2 rounded-lg border bg-background/80 px-3 py-2 text-left text-xs leading-relaxed transition-colors hover:border-primary/40 hover:bg-background focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:text-sm"
-                    onClick={() => {
-                      setFields(value => value.message.trim() ? value : { ...value, message: starter });
-                      setStatus("");
-                      problemInput.current?.focus({ preventScroll: true });
-                    }}
-                  >
-                    <span className="min-w-0">{starter}</span>
-                    <span aria-hidden="true" className="shrink-0 text-muted-foreground group-hover:text-primary">↖</span>
-                  </button>
-                ))}
+          <textarea id={`${fieldId}-problem`} name="message" required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} onChange={event => { setFields(value => ({ ...value, message: event.target.value })); setStatus(""); }} placeholder="Tell me a little about it. A website or app link helps." className={`${fieldClass} block resize-y rounded-xl p-3 leading-relaxed`} />
+          {inline?.starters?.length ? (
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <p id={`${fieldId}-suggestions`} className="text-xs font-medium text-muted-foreground">Not sure what to write?</p>
+                <span className="text-xs text-muted-foreground">Choose any that apply.</span>
+              </div>
+              <div role="group" aria-labelledby={`${fieldId}-suggestions`} className="flex flex-wrap items-start gap-2">
+                {inline.starters.map(starter => {
+                  const active = hasNoteStarter(fields.message, starter.message);
+                  const tooLong = !active && toggleNoteStarter(fields.message, starter.message, CONTACT_LIMITS.message) === fields.message;
+                  return (
+                    <button
+                      key={starter.label}
+                      type="button"
+                      aria-pressed={active}
+                      disabled={tooLong}
+                      className={`inline-flex min-h-9 max-w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-left text-xs font-medium leading-snug transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-50 ${active ? "border-primary bg-primary/10 text-primary" : "border-border bg-muted/50 text-foreground hover:bg-muted"}`}
+                      onClick={() => {
+                        setFields(value => ({ ...value, message: toggleNoteStarter(value.message, starter.message, CONTACT_LIMITS.message) }));
+                        setStatus("");
+                      }}
+                    >
+                      {active ? <Check aria-hidden="true" className="size-3.5 shrink-0" /> : <Plus aria-hidden="true" className="size-3.5 shrink-0 text-muted-foreground" />}
+                      <span className="min-w-0">{starter.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ) : null}
-          <p className="text-xs leading-relaxed text-muted-foreground">Please don’t include passwords or private customer details.</p>
+          <p className="text-xs leading-relaxed text-muted-foreground">No account needed. Your message comes directly to me. Please leave out passwords and private customer details.</p>
           <p role="status" aria-live="polite" className="text-sm empty:hidden">{status}</p>
-          <Button type="submit" className="w-full">Continue</Button>
+          <Button type="submit" className="h-11 w-full rounded-full">Continue</Button>
         </form> : step === 1 ? <form className="contact-step mt-6 space-y-4" onSubmit={event => { event.preventDefault(); if (category) { setStep(2); setStatus(""); } }}>
           <fieldset className="space-y-2" disabled={attempt.current.uncertain}><legend className="sr-only">Enquiry type</legend>{OPTIONS.map(option => <label key={option} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border p-3 text-sm has-[:checked]:border-primary"><input type="radio" name="category" value={option} checked={category === option} onChange={() => { if (category !== option) setFields(value => ({ ...value, context: "" })); setCategory(option); }} required className="accent-primary" />{CONTACT_CATEGORIES[option].label}</label>)}</fieldset>
           <Button type="submit" className="w-full" disabled={!category}>Continue</Button>
