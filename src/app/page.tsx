@@ -42,6 +42,7 @@ export default async function Page() {
     "wordpress-critical-error-help",
     "customers-cannot-log-into-web-app",
     "shopify-checkout-payment-not-working",
+    "shopify-discount-code-not-working",
     "website-developer-stopped-responding",
   ];
   const featuredNotes = featuredSlugs.flatMap(slug => posts.filter(note => note.slug === slug));
@@ -286,7 +287,7 @@ export default async function Page() {
             <Link href="/blog" className="shrink-0 text-sm underline underline-offset-4">All notes →</Link>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
-              Already have a website or app? Here’s where I’d start when something isn’t working.
+              Already have a website or app? Here’s where I’d start when something isn’t working. If you need help with a specific issue, you can tell me about it directly in any note.
           </p>
           <ul className="mt-3 divide-y divide-border/50">
             {featuredNotes.map((note) => (

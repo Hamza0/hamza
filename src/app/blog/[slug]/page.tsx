@@ -9,7 +9,7 @@ import { AUTHOR, articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo"
 import { modificationDate } from "@/lib/publication";
 import { getNotePresentation, readingMinutes } from "@/lib/note-presentation";
 import { splitNoteLead } from "@/lib/note-reading";
-import { getNoteStarters, getErrorExample } from "@/lib/note-helpers";
+import { getNoteStarters, getErrorExample, hasContextualStarters } from "@/lib/note-helpers";
 import { NoteErrorExample } from "@/components/note-error-example";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -95,6 +95,7 @@ export default async function Blog({
         </header>
         {lead && <div className="note-lead prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: lead }} />}
         {errorExample && <NoteErrorExample example={errorExample} />}
+        {!errorExample && hasContextualStarters(post.slug) && <p className="mb-6 text-sm"><a href="#get-help" className="font-medium text-[hsl(var(--note-accent))] underline underline-offset-4">Dealing with this right now? Tell me what’s happening.</a></p>}
         <div
           className="note-prose prose max-w-none dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: body }}

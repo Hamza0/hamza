@@ -14,6 +14,11 @@ const topics = {
 } satisfies Record<string, NoteTopic>;
 
 const noteTopics: Record<string, keyof typeof topics> = {
+  "shopify-discount-code-not-working": "systems",
+  "elementor-editor-not-loading": "web",
+  "google-business-profile-suspended": "search",
+  "gmail-rejecting-business-email-550-5-7-26": "systems",
+  "lovable-custom-domain-not-working": "systems",
   "website-connection-not-private": "web",
   "website-dns-site-cant-be-reached": "web",
   "website-too-many-redirects": "web",
@@ -71,6 +76,11 @@ const noteTopics: Record<string, keyof typeof topics> = {
 };
 
 const noteCallsToAction: Record<string, Pick<NoteTopic, "ctaTitle" | "ctaDescription">> = {
+  "shopify-discount-code-not-working": { ctaTitle: "Is your promotion not working?", ctaDescription: "Tell me which discount is affected and what customers see at checkout." },
+  "elementor-editor-not-loading": { ctaTitle: "Having trouble editing your website?", ctaDescription: "Share the page and what you see when you try to edit it." },
+  "google-business-profile-suspended": { ctaTitle: "Has Google restricted your business listing?", ctaDescription: "Tell me what the notification says and how your business is affected." },
+  "gmail-rejecting-business-email-550-5-7-26": { ctaTitle: "Are your business emails being rejected?", ctaDescription: "Share the sending service and the error code, without including customer email contents." },
+  "lovable-custom-domain-not-working": { ctaTitle: "Having trouble launching your Lovable app?", ctaDescription: "Tell me which address works and what happens when you open your custom domain." },
   "website-connection-not-private": { ctaTitle: "Seeing this error?", ctaDescription: "Tell me which website or app is affected and when the problem started." },
   "website-dns-site-cant-be-reached": { ctaTitle: "Seeing this error?", ctaDescription: "Tell me which website or app is affected and when the problem started." },
   "website-too-many-redirects": { ctaTitle: "Seeing this error?", ctaDescription: "Tell me which website or app is affected and when the problem started." },

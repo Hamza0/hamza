@@ -1,0 +1,36 @@
+---
+title: "Lovable Custom Domain Not Working? What to Check Before Starting Over"
+publishedAt: "2026-11-25"
+updatedAt: "2026-11-25"
+summary: "Check your published Lovable app, domain verification, DNS and SSL when your own website address does not work."
+---
+
+If your Lovable app works on its default address but not on your custom domain, do not rebuild the app just yet. The problem may be in the connection between the domain and the published project.
+
+It can be disappointing to have your application ready for customers and then get stuck at the last step of launching it.
+
+## Is the app published and accessible?
+
+First confirm that the published Lovable address works as expected. A working editor preview does not necessarily mean the latest version is available to visitors.
+
+Open the project's domain settings and note the status of your custom domain. Lovable's [custom domain documentation](https://docs.lovable.dev/features/custom-domain) explains that a project must be published before the domain can serve it and that custom domains require an eligible paid plan.
+
+## Check where the DNS records actually live
+
+Your domain registrar and DNS provider may be different companies. For example, you might have purchased your domain from Namecheap but manage its DNS through Cloudflare.
+
+I would check which nameservers control the domain and compare the published records with the exact values Lovable provides for your project. Do not copy IP addresses or verification records from a random tutorial.
+
+If your domain still hosts another business website or email service, preserve those working services while planning the change.
+
+## Check both your domain and the secure connection
+
+Try the specific address you connected. The root domain and the www address are separate hostnames, so one can work while the other fails. After correcting DNS, allow for cached records and the platform's certificate setup.
+
+If the browser displays a certificate warning, do not ask customers to bypass it. See my note on [connection privacy errors](/blog/website-connection-not-private).
+
+## Tell me where you are stuck
+
+Share your public domain, the published app address if it is public, and the domain status you see. That gives me a place to start.
+
+If the domain works but the app's features are failing, my note on [repairing an existing Lovable app](/blog/fix-existing-lovable-app) explains how I would approach that separately.

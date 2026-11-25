@@ -8,6 +8,11 @@ export type ErrorExample = {
 export type NoteStarter = { label: string; message: string };
 
 const starters: Record<string, readonly NoteStarter[]> = {
+  "shopify-discount-code-not-working": [{"label":"Discount code invalid","message":"My Shopify store says my discount code is invalid."}, {"label":"Discount not applying","message":"Customers are not receiving the advertised discount."}, {"label":"Urgent: sale affected","message":"I have an active promotion and customers are having trouble checking out."}],
+  "elementor-editor-not-loading": [{"label":"Editor keeps loading","message":"My Elementor editor is stuck on the loading screen."}, {"label":"Blank editor","message":"I see a blank or gray screen when editing a WordPress page."}, {"label":"After an update","message":"Elementor stopped working after I updated WordPress or a plugin."}],
+  "google-business-profile-suspended": [{"label":"Profile suspended","message":"Google has suspended my business profile."}, {"label":"Appeal help","message":"I need help understanding the reason for my Google Business Profile suspension."}, {"label":"Listing disappeared","message":"My customers can no longer find my business listing after a restriction."}],
+  "gmail-rejecting-business-email-550-5-7-26": [{"label":"Gmail rejects email","message":"My business emails to Gmail addresses are being rejected."}, {"label":"550 5.7.26 error","message":"My email bounce message contains error 550 5.7.26."}, {"label":"Missing customer emails","message":"Customers are not receiving my invoices, confirmations or replies."}],
+  "lovable-custom-domain-not-working": [{"label":"Domain not connecting","message":"My custom domain is not connecting to my Lovable app."}, {"label":"Stuck setting up domain","message":"My Lovable domain setup is not completing."}, {"label":"Live app shows error","message":"My app works at its preview or default address but not on my own domain."}],
   "fix-existing-website-without-rebuild": [
     {
       "label": "Website not working",
@@ -417,6 +422,11 @@ const starters: Record<string, readonly NoteStarter[]> = {
 };
 
 const examples: Record<string, ErrorExample> = {
+  "shopify-discount-code-not-working": {"title":"Discount code not accepted","code":"Discount code isn't valid for the items in your cart","detail":"The cart may not meet the conditions for the promotion.","kind":"neutral"},
+  "elementor-editor-not-loading": {"title":"Elementor editor is loading","code":"Editor does not finish loading","detail":"The public page may still work even when the editing screen does not.","kind":"neutral"},
+  "google-business-profile-suspended": {"title":"Business Profile suspended","code":"Profile restricted or disabled","detail":"Check the reason for the restriction in your Google account.","kind":"warning"},
+  "gmail-rejecting-business-email-550-5-7-26": {"title":"Message blocked","code":"550 5.7.26","detail":"Gmail could not authenticate the sender or rejected the message under its authentication rules.","kind":"warning"},
+  "lovable-custom-domain-not-working": {"title":"Setting up domain","code":"Domain setup pending","detail":"Domain records, verification or the certificate may still need attention.","kind":"neutral"},
   "website-connection-not-private": {
     "title": "Your connection is not private",
     "code": "NET::ERR_CERT_DATE_INVALID",
@@ -472,6 +482,10 @@ const defaults: readonly NoteStarter[] = [
   { label: "Existing app", message: "I have an existing app that needs some changes." },
   { label: "Business process", message: "I want to understand how to improve a business process." },
 ];
+
+export function hasContextualStarters(slug: string): boolean {
+  return Object.hasOwn(starters, slug);
+}
 
 export function getNoteStarters(slug: string): readonly NoteStarter[] {
   return starters[slug] ?? defaults;

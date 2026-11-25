@@ -15,8 +15,11 @@ function formScript(filename, initialStep) {
   const hooks = {
     useState(initial) {
       const index = stateIndex++;
-      return [index === 0 ? initialStep : initial, value => updates.push(value)];
+      const stepIndex = filename === 'contact-dialog.tsx' ? 1 : 0;
+      const value = index === stepIndex ? initialStep : typeof initial === 'function' ? initial() : initial;
+      return [value, next => updates.push(next)];
     },
+    useId: () => 'test-id',
     useRef: current => ({ current }),
     useEffect() {},
   };
@@ -26,7 +29,7 @@ function formScript(filename, initialStep) {
     'react/jsx-runtime': { jsx: element, jsxs: element, Fragment: Symbol('Fragment') },
     'next/script': Script,
     'next/link': 'Link',
-    'lucide-react': { ArrowLeft: 'ArrowLeft', ArrowRight: 'ArrowRight', Check: 'Check', X: 'X' },
+    'lucide-react': { ArrowLeft: 'ArrowLeft', ArrowRight: 'ArrowRight', Check: 'Check', Plus: 'Plus', X: 'X' },
     '@radix-ui/react-dialog': new Proxy({}, { get: (_target, key) => `Dialog.${String(key)}` }),
     '@/components/ui/button': { Button: 'Button' },
     '@/lib/analytics': { trackEvent() {} },

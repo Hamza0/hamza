@@ -176,12 +176,20 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
           <Description className="mt-2 text-sm leading-6 text-muted-foreground">Thanks for reaching out. I&apos;ll get back to you soon.</Description>
           {!isInline && <Dialog.Close asChild><Button type="button" className="mt-7 w-full">Done</Button></Dialog.Close>}
         </div> : <>
-        <p className="mb-2 text-xs tabular-nums text-muted-foreground">{step} of 2</p>
+        {isInline ? (
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <span className="text-xs font-medium tabular-nums text-muted-foreground">Step {step} of 2</span>
+            <div aria-hidden="true" className="flex w-14 gap-1.5">
+              <span className="h-1 flex-1 rounded-full bg-primary" />
+              <span className={`h-1 flex-1 rounded-full ${step === 2 ? "bg-primary" : "bg-border"}`} />
+            </div>
+          </div>
+        ) : <p className="mb-2 text-xs tabular-nums text-muted-foreground">{step} of 2</p>}
         <Heading ref={title} tabIndex={-1} id={isInline ? `${fieldId}-heading` : undefined} className={isInline ? "text-xl font-semibold tracking-tight outline-none" : "pr-8 text-xl font-semibold tracking-tight outline-none"}>{isInline ? (step === 1 ? "What’s happening?" : "Where can I reach you?") : (step === 1 ? "What brings you here?" : selected?.title)}</Heading>
-        <Description className="mt-2 text-sm text-muted-foreground">{isInline ? (step === 1 ? "Tell me what you’re trying to do and where it gets stuck." : "I’ll reply to this email.") : (step === 1 ? "Have a project, role, or collaboration in mind? Tell me a little about it." : selected?.description)}</Description>
+        <Description className="mt-2 text-sm text-muted-foreground">{isInline ? (step === 1 ? "You don’t need to know the cause. Tell me what you’re trying to do and where it gets stuck." : "I’ll use your email to reply about this issue.") : (step === 1 ? "Have a project, role, or collaboration in mind? Tell me a little about it." : selected?.description)}</Description>
         {isInline && step === 1 ? <form key="note-problem" className="contact-step mt-5 space-y-4" onSubmit={continueInline}>
           <label htmlFor={`${fieldId}-problem`} className="sr-only">What’s happening?</label>
-          <textarea id={`${fieldId}-problem`} name="message" required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} onChange={event => { setFields(value => ({ ...value, message: event.target.value })); setStatus(""); }} placeholder="Tell me a little about it. A website or app link helps." className={`${fieldClass} block resize-y rounded-xl p-3 leading-relaxed`} />
+          <textarea id={`${fieldId}-problem`} name="message" required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} onChange={event => { setFields(value => ({ ...value, message: event.target.value })); setStatus(""); }} placeholder="Tell me a little about it. A website or app link helps." className={`${fieldClass} note-message-field block min-h-[108px] resize-y rounded-xl p-3 leading-relaxed`} />
           {inline?.starters?.length ? (
             <div className="space-y-2">
               <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
@@ -198,13 +206,13 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
                       type="button"
                       aria-pressed={active}
                       disabled={tooLong}
-                      className={`inline-flex min-h-9 max-w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-left text-xs font-medium leading-snug transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-50 ${active ? "border-primary bg-primary/10 text-primary" : "border-border bg-muted/50 text-foreground hover:bg-muted"}`}
+                      className={`inline-flex min-h-9 max-w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-left text-xs font-medium leading-snug transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-50 ${active ? "border-primary/60 bg-muted text-foreground" : "border-border bg-background text-foreground hover:bg-muted"}`}
                       onClick={() => {
                         setFields(value => ({ ...value, message: toggleNoteStarter(value.message, starter.message, CONTACT_LIMITS.message) }));
                         setStatus("");
                       }}
                     >
-                      {active ? <Check aria-hidden="true" className="size-3.5 shrink-0" /> : <Plus aria-hidden="true" className="size-3.5 shrink-0 text-muted-foreground" />}
+                      {active ? <Check aria-hidden="true" className="size-3.5 shrink-0 text-primary" /> : <Plus aria-hidden="true" className="size-3.5 shrink-0 text-muted-foreground" />}
                       <span className="min-w-0">{starter.label}</span>
                     </button>
                   );
@@ -212,15 +220,18 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
               </div>
             </div>
           ) : null}
-          <p className="text-xs leading-relaxed text-muted-foreground">No account needed. Your message comes directly to me. Please leave out passwords and private customer details.</p>
           <p role="status" aria-live="polite" className="text-sm empty:hidden">{status}</p>
           <Button type="submit" className="h-11 w-full rounded-full">Continue</Button>
+          <div className="border-t pt-3 text-xs leading-relaxed text-muted-foreground">
+            <p>No account needed. You’ll be able to email me in the next step.</p>
+            <p className="mt-1">Please leave out passwords and private customer details. <a href="/privacy" className="underline underline-offset-2">Privacy</a>.</p>
+          </div>
         </form> : step === 1 ? <form className="contact-step mt-6 space-y-4" onSubmit={event => { event.preventDefault(); if (category) { setStep(2); setStatus(""); } }}>
           <fieldset className="space-y-2" disabled={attempt.current.uncertain}><legend className="sr-only">Enquiry type</legend>{OPTIONS.map(option => <label key={option} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border p-3 text-sm has-[:checked]:border-primary"><input type="radio" name="category" value={option} checked={category === option} onChange={() => { if (category !== option) setFields(value => ({ ...value, context: "" })); setCategory(option); }} required className="accent-primary" />{CONTACT_CATEGORIES[option].label}</label>)}</fieldset>
           <Button type="submit" className="w-full" disabled={!category}>Continue</Button>
         </form> : <form key="contact-details" className="contact-step mt-5 space-y-3" aria-busy={sending} onFocusCapture={() => { if (isInline && !started) { setStarted(true); trackEvent("contact_open", { location: "section", category: "project" }); } }} onSubmit={submit} onInvalid={() => setStatus("Please check the required fields.")}>
           {!isInline && <div><label htmlFor={`${fieldId}-name`} className="block text-sm">Name</label><input id={`${fieldId}-name`} name="name" autoComplete="name" placeholder="Your name" required maxLength={CONTACT_LIMITS.name} value={fields.name} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, name: event.target.value }))} className={fieldClass} /></div>}
-          <div><label htmlFor={`${fieldId}-email`} className="block text-sm">Email</label><input id={`${fieldId}-email`} name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" required maxLength={CONTACT_LIMITS.email} value={fields.email} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, email: event.target.value }))} className={fieldClass} /></div>
+          <div><label htmlFor={`${fieldId}-email`} className="block text-sm">Email</label><input id={`${fieldId}-email`} name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" required maxLength={CONTACT_LIMITS.email} value={fields.email} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, email: event.target.value }))} className={isInline ? `${fieldClass} note-message-field rounded-xl py-3` : fieldClass} /></div>
           {!isInline && <div><label htmlFor={`${fieldId}-context`} className="block text-sm">{selected?.contextLabel}</label><input id={`${fieldId}-context`} name="context" autoComplete="off" placeholder={selected?.contextPlaceholder} required maxLength={CONTACT_LIMITS.context} value={fields.context} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, context: event.target.value }))} className={fieldClass} /></div>}
           {!isInline && <div><label htmlFor={`${fieldId}-message`} className="block text-sm">{selected?.messageLabel}</label><textarea id={`${fieldId}-message`} name="message" placeholder={selected?.messagePlaceholder} required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, message: event.target.value }))} className={`${fieldClass} block`} /></div>}
           <div hidden aria-hidden="true"><label>Leave this blank<input name="website" tabIndex={-1} autoComplete="off" value={fields.website} onChange={event => setFields(value => ({ ...value, website: event.target.value }))} /></label></div>
@@ -230,7 +241,7 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
           {verificationActive && !token && !verificationError && <p className="text-xs text-muted-foreground">Complete the spam verification to send.</p>}
           <p role="status" aria-live="polite" aria-atomic="true" className="text-sm empty:hidden">{status}</p>
           {cooldown > 0 && <p aria-live="off" className="text-xs text-muted-foreground">Try again in {cooldown}s.</p>}
-          <div className="flex gap-3"><Button type="button" variant="outline" disabled={sending || (isInline && attempt.current.uncertain)} onClick={() => { if (isInline) goBackInline(); else { setStep(1); setStatus(""); } }}>Back</Button><Button type="submit" className="flex-1" disabled={sending || !token || cooldown > 0}>{sending ? "Sending…" : "Send message"}</Button></div>
+          <div className="flex gap-3"><Button type="button" variant="outline" className={isInline ? "h-11 rounded-full shadow-none" : undefined} disabled={sending || (isInline && attempt.current.uncertain)} onClick={() => { if (isInline) goBackInline(); else { setStep(1); setStatus(""); } }}>Back</Button><Button type="submit" className={isInline ? "h-11 flex-1 rounded-full" : "flex-1"} disabled={sending || !token || cooldown > 0}>{sending ? "Sending…" : "Send message"}</Button></div>
           <p className="text-xs leading-relaxed text-muted-foreground">{isInline && <>I use your email to reply. <a href="/privacy" className="underline underline-offset-2">Privacy</a>. </>}Prefer another route? <a href="https://www.linkedin.com/in/mianhamza" className="underline">Message me on LinkedIn</a>.</p>
         </form>}
         </>}

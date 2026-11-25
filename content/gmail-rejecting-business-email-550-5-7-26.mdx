@@ -1,0 +1,40 @@
+---
+title: "Why Is Gmail Rejecting Your Business Emails? Understanding Error 550 5.7.26"
+publishedAt: "2026-11-25"
+updatedAt: "2026-11-25"
+summary: "What Gmail error 550 5.7.26 means and how to check SPF, DKIM and DMARC without disrupting business email."
+---
+
+If Gmail rejects your business email with error 550 5.7.26, email authentication is one of the first things I would check. Your team might still receive messages normally while outgoing invoices or booking confirmations fail.
+
+A delivery failure can be worrying when customers are waiting for a reply. The error code gives us a more useful starting point than simply saying the email is not working.
+
+## What does the error mean?
+
+Google checks whether a sending system is authorised to use a domain and whether the message passes the applicable authentication rules. Its [SMTP error guide](https://support.google.com/mail/answer/3726730?hl=en) lists several authentication failures that can produce 5.7.26.
+
+You may see these terms in the message:
+
+- SPF identifies permitted email senders for a domain.
+- DKIM uses a signature to help recipients verify the message.
+- DMARC tells receiving systems how to handle messages that fail aligned authentication checks.
+
+Google's [sender guidelines](https://support.google.com/mail/answer/81126) explain that requirements differ for ordinary and bulk senders.
+
+## Check every service that sends on your behalf
+
+Imagine your staff use Google Workspace, but a separate website or invoicing platform sends confirmations from the same business domain. The staff emails may arrive while the automated messages are rejected.
+
+I would identify the actual sending service and inspect the relevant authentication records. A website migration, new email provider or marketing platform can change what needs to be authorised.
+
+## Be careful when changing DNS records
+
+Adding an unrelated SPF record or removing an existing sender can disrupt email that already works. I would compare the current records with each legitimate provider's instructions before changing them. Correct authentication is important, but it does not guarantee inbox placement.
+
+After a fix, test from each affected sending service, including your website if it sends notifications.
+
+## What should you share?
+
+Tell me your business domain, the sending platform and the error code from the bounce message. Do not include passwords or confidential message contents.
+
+If you recently changed hosting, read my note on [keeping business email working during a website move](/blog/moving-website-keep-email-working).
