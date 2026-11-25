@@ -194,7 +194,6 @@ export default async function Page() {
           </Markdown>
           <nav aria-label="Professional profiles" className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
             <Link href={DATA.contact.social.LinkedIn.url} rel="me" className="underline underline-offset-4">LinkedIn</Link>
-            <Link href={DATA.contact.social.GitHub.url} rel="me" className="underline underline-offset-4">GitHub</Link>
             <Link href="https://www.codedsquare.com/" className="underline underline-offset-4">Coded Square</Link>
           </nav>
         </BlurFade>

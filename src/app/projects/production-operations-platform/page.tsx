@@ -76,7 +76,6 @@ export default function ProductionOperationsPlatform() {
       <nav aria-label="Case study navigation" className="flex flex-wrap gap-4 border-t pt-5 text-sm">
         <Link href="/#projects" className="underline underline-offset-4">Back to Selected Work</Link>
         <Link href="/blog" className="underline underline-offset-4">Notes</Link>
-        <Link href={DATA.contact.social.GitHub.url} className="underline underline-offset-4">GitHub</Link>
         <Link href="/#contact" className="underline underline-offset-4">Get in touch</Link>
       </nav>
     </main>
