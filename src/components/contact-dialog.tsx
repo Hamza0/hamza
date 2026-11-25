@@ -28,9 +28,10 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
   const uniqueId = useId();
   const fieldId = isInline ? `note-contact-${uniqueId}` : "contact";
   const [started, setStarted] = useState(false);
-  const [step, setStep] = useState<1 | 2>(isInline ? 2 : 1);
+  const [step, setStep] = useState<1 | 2>(1);
   const [category, setCategory] = useState<ContactCategory | "">(isInline ? "project" : "");
-  const [fields, setFields] = useState(() => ({ ...EMPTY, context: inline?.context.slice(0, CONTACT_LIMITS.context) ?? "" }));
+  // The existing mail contract requires a name; mark it as absent instead of collecting one.
+  const [fields, setFields] = useState(() => ({ ...EMPTY, name: isInline ? "Not provided" : "", context: inline?.context.slice(0, CONTACT_LIMITS.context) ?? "" }));
   const [token, setToken] = useState("");
   const [scriptReady, setScriptReady] = useState(false);
   const [verificationError, setVerificationError] = useState(false);
@@ -46,6 +47,7 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
   const busy = useRef(false);
   const activeRequest = useRef<AbortController | undefined>(undefined);
   const wasOpen = useRef(false);
+  const inlineNavigated = useRef(false);
   const selected = category ? CONTACT_CATEGORIES[category] : null;
 
   useEffect(() => {
@@ -57,7 +59,8 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
   }, [open, success]);
 
   useEffect(() => {
-    if (!open || (isInline && !success)) return;
+    if (!open || (isInline && !success && !inlineNavigated.current)) return;
+    inlineNavigated.current = false;
     title.current?.focus({ preventScroll: true });
   }, [open, step, success, isInline]);
   useEffect(() => () => activeRequest.current?.abort(), []);
@@ -92,7 +95,7 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (busy.current || !category || !token || cooldown) return;
+    if (busy.current || !category || !token || cooldown || (isInline && step !== 2)) return;
     const details = parseContactDetails({ ...fields, category });
     if (!details) { setStatus("Please check the required fields and message (10–3,000 characters)."); return; }
     busy.current = true;
@@ -139,6 +142,28 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
     }
   };
 
+  function continueInline(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (fields.message.trim().length < CONTACT_LIMITS.messageMin) {
+      setStatus("Tell me a little more about what is happening.");
+      return;
+    }
+    if (!started) {
+      setStarted(true);
+      trackEvent("contact_open", { location: "section", category: "project" });
+    }
+    inlineNavigated.current = true;
+    setStatus("");
+    setStep(2);
+  }
+
+  function goBackInline() {
+    if (busy.current || attempt.current.uncertain) return;
+    inlineNavigated.current = true;
+    setStatus("");
+    setStep(1);
+  }
+
   const Heading = isInline ? "h2" : Dialog.Title;
   const Description = isInline ? "p" : Dialog.Description;
   const formContent = (
@@ -149,17 +174,23 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
           <Description className="mt-2 text-sm leading-6 text-muted-foreground">Thanks for reaching out. I&apos;ll get back to you soon.</Description>
           {!isInline && <Dialog.Close asChild><Button type="button" className="mt-7 w-full">Done</Button></Dialog.Close>}
         </div> : <>
-        {!isInline && <p className="mb-2 text-xs text-muted-foreground">{step} of 2</p>}
-        <Heading ref={title} tabIndex={-1} id={isInline ? `${fieldId}-heading` : undefined} className={isInline ? "text-xl font-semibold tracking-tight outline-none" : "pr-8 text-xl font-semibold tracking-tight outline-none"}>{inline?.title ?? (step === 1 ? "What brings you here?" : selected?.title)}</Heading>
-        <Description className="mt-2 text-sm text-muted-foreground">{inline?.description ?? (step === 1 ? "Have a project, role, or collaboration in mind? Tell me a little about it." : selected?.description)}</Description>
-        {step === 1 ? <form className="contact-step mt-6 space-y-4" onSubmit={event => { event.preventDefault(); if (category) { setStep(2); setStatus(""); } }}>
+        <p className="mb-2 text-xs tabular-nums text-muted-foreground">{step} of 2</p>
+        <Heading ref={title} tabIndex={-1} id={isInline ? `${fieldId}-heading` : undefined} className={isInline ? "text-xl font-semibold tracking-tight outline-none" : "pr-8 text-xl font-semibold tracking-tight outline-none"}>{isInline ? (step === 1 ? "What’s happening?" : "Where can I reach you?") : (step === 1 ? "What brings you here?" : selected?.title)}</Heading>
+        <Description className="mt-2 text-sm text-muted-foreground">{isInline ? (step === 1 ? "Tell me what you’re trying to do and where it gets stuck." : "I’ll reply to this email.") : (step === 1 ? "Have a project, role, or collaboration in mind? Tell me a little about it." : selected?.description)}</Description>
+        {isInline && step === 1 ? <form key="note-problem" className="contact-step mt-5 space-y-4" onSubmit={continueInline}>
+          <label htmlFor={`${fieldId}-problem`} className="sr-only">What’s happening?</label>
+          <textarea id={`${fieldId}-problem`} name="message" required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} onChange={event => { setFields(value => ({ ...value, message: event.target.value })); setStatus(""); }} placeholder="A little about the problem. You can include a public website or app link." className={`${fieldClass} block resize-y`} />
+          <p className="text-xs leading-relaxed text-muted-foreground">Please don’t include passwords or private customer details.</p>
+          <p role="status" aria-live="polite" className="text-sm empty:hidden">{status}</p>
+          <Button type="submit" className="w-full">Continue</Button>
+        </form> : step === 1 ? <form className="contact-step mt-6 space-y-4" onSubmit={event => { event.preventDefault(); if (category) { setStep(2); setStatus(""); } }}>
           <fieldset className="space-y-2" disabled={attempt.current.uncertain}><legend className="sr-only">Enquiry type</legend>{OPTIONS.map(option => <label key={option} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border p-3 text-sm has-[:checked]:border-primary"><input type="radio" name="category" value={option} checked={category === option} onChange={() => { if (category !== option) setFields(value => ({ ...value, context: "" })); setCategory(option); }} required className="accent-primary" />{CONTACT_CATEGORIES[option].label}</label>)}</fieldset>
           <Button type="submit" className="w-full" disabled={!category}>Continue</Button>
-        </form> : <form className="contact-step mt-5 space-y-3" aria-busy={sending} onFocusCapture={() => { if (isInline && !started) { setStarted(true); trackEvent("contact_open", { location: "section", category: "project" }); } }} onSubmit={submit} onInvalid={() => setStatus("Please check the required fields.")}>
-          <div><label htmlFor={`${fieldId}-name`} className="block text-sm">Name</label><input id={`${fieldId}-name`} name="name" autoComplete="name" placeholder="Your name" required maxLength={CONTACT_LIMITS.name} value={fields.name} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, name: event.target.value }))} className={fieldClass} /></div>
+        </form> : <form key="contact-details" className="contact-step mt-5 space-y-3" aria-busy={sending} onFocusCapture={() => { if (isInline && !started) { setStarted(true); trackEvent("contact_open", { location: "section", category: "project" }); } }} onSubmit={submit} onInvalid={() => setStatus("Please check the required fields.")}>
+          {!isInline && <div><label htmlFor={`${fieldId}-name`} className="block text-sm">Name</label><input id={`${fieldId}-name`} name="name" autoComplete="name" placeholder="Your name" required maxLength={CONTACT_LIMITS.name} value={fields.name} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, name: event.target.value }))} className={fieldClass} /></div>}
           <div><label htmlFor={`${fieldId}-email`} className="block text-sm">Email</label><input id={`${fieldId}-email`} name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" required maxLength={CONTACT_LIMITS.email} value={fields.email} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, email: event.target.value }))} className={fieldClass} /></div>
           {!isInline && <div><label htmlFor={`${fieldId}-context`} className="block text-sm">{selected?.contextLabel}</label><input id={`${fieldId}-context`} name="context" autoComplete="off" placeholder={selected?.contextPlaceholder} required maxLength={CONTACT_LIMITS.context} value={fields.context} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, context: event.target.value }))} className={fieldClass} /></div>}
-          <div><label htmlFor={`${fieldId}-message`} className="block text-sm">{isInline ? "What’s happening?" : selected?.messageLabel}</label><textarea id={`${fieldId}-message`} name="message" placeholder={isInline ? "Tell me what you’re trying to do and where it gets stuck. A public website or app link helps." : selected?.messagePlaceholder} required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, message: event.target.value }))} className={`${fieldClass} block`} /></div>
+          {!isInline && <div><label htmlFor={`${fieldId}-message`} className="block text-sm">{selected?.messageLabel}</label><textarea id={`${fieldId}-message`} name="message" placeholder={selected?.messagePlaceholder} required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, message: event.target.value }))} className={`${fieldClass} block`} /></div>}
           <div hidden aria-hidden="true"><label>Leave this blank<input name="website" tabIndex={-1} autoComplete="off" value={fields.website} onChange={event => setFields(value => ({ ...value, website: event.target.value }))} /></label></div>
           {verificationActive && <Script id="contact-turnstile" src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" strategy="afterInteractive" onLoad={() => { setScriptReady(true); setVerificationError(false); }} onReady={() => { setScriptReady(true); setVerificationError(false); }} onError={() => setVerificationError(true)} />}
           <div ref={challenge} aria-label="Spam verification" />
@@ -167,8 +198,8 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
           {verificationActive && !token && !verificationError && <p className="text-xs text-muted-foreground">Complete the spam verification to send.</p>}
           <p role="status" aria-live="polite" aria-atomic="true" className="text-sm empty:hidden">{status}</p>
           {cooldown > 0 && <p aria-live="off" className="text-xs text-muted-foreground">Try again in {cooldown}s.</p>}
-          <div className="flex gap-3">{!isInline && <Button type="button" variant="outline" disabled={sending} onClick={() => { setStep(1); setStatus(""); }}>Back</Button>}<Button type="submit" className="flex-1" disabled={sending || !token || cooldown > 0}>{sending ? "Sending…" : "Send message"}</Button></div>
-          <p className="text-xs leading-relaxed text-muted-foreground">{isInline && <>Please don’t include passwords or private customer details. I use your details to reply. <a href="/privacy" className="underline underline-offset-2">Privacy</a>. </>}Prefer another route? <a href="https://www.linkedin.com/in/mianhamza" className="underline">Message me on LinkedIn</a>.</p>
+          <div className="flex gap-3"><Button type="button" variant="outline" disabled={sending || (isInline && attempt.current.uncertain)} onClick={() => { if (isInline) goBackInline(); else { setStep(1); setStatus(""); } }}>Back</Button><Button type="submit" className="flex-1" disabled={sending || !token || cooldown > 0}>{sending ? "Sending…" : "Send message"}</Button></div>
+          <p className="text-xs leading-relaxed text-muted-foreground">{isInline && <>I use your email to reply. <a href="/privacy" className="underline underline-offset-2">Privacy</a>. </>}Prefer another route? <a href="https://www.linkedin.com/in/mianhamza" className="underline">Message me on LinkedIn</a>.</p>
         </form>}
         </>}
 
