@@ -1,0 +1,34 @@
+---
+title: "Why Can't Your Customers Log Into Your App?"
+publishedAt: "2026-11-25"
+updatedAt: "2026-11-25"
+summary: "Find out whether sign-in, password reset or the page after login is failing."
+---
+
+If your customers cannot log into your web app, I would first find out exactly where they get stuck. The login screen, password reset email and page that opens after sign-in are separate parts of the same journey.
+
+You may have a working login system with one broken connection.
+
+## Does the problem happen only on the published app?
+
+Imagine you build a web app and sign in successfully during development. After publishing it on your own domain, customers click their confirmation email and land on an old development address.
+
+That is a clue to check the addresses used by your sign-in system rather than rebuilding the login page.
+
+For example, Supabase's [redirect URL documentation](https://supabase.com/docs/guides/auth/redirect-urls) explains that confirmation, password reset and third-party sign-in depend on the configured website and allowed destinations.
+
+## Find the exact step that fails
+
+I would use a test customer account and try the same action your visitor attempted.
+
+Did the password reset email arrive? Does the link open the correct page? Can the customer sign in but immediately get sent back to the login screen? Do they reach the dashboard but see a permission error?
+
+Each result gives a different direction for the investigation. An email that never arrived needs a different check from an expired link or a session that is lost after refreshing.
+
+## Make sure the fix is safe
+
+I would test the sign-in journey with a new and existing test account, then check that each account can only see the information it is meant to see. I would not remove security checks simply to make a login error go away.
+
+If your app is already taking customer bookings or payments, we can separate the investigation from live customer activity. My [note about protecting customer records](/blog/customer-data-access-after-login) explains why signing in and having permission are different.
+
+Tell me what your customer sees, and whether the error happens to everyone or only a particular account. Please leave passwords and private customer information out of the message.

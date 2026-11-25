@@ -72,7 +72,7 @@ export default async function Blog({
         { name: "Notes", path: "/blog" },
         { name: post.metadata.title, path: `/blog/${post.slug}` },
       ]} />
-      <article>
+      <article className="note-article">
         <header className="mb-6 max-w-[650px]">
           <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
             <Badge variant="secondary" className="note-chip rounded-full border-transparent px-3 py-1 font-medium shadow-none">{presentation.label}</Badge>
@@ -85,7 +85,7 @@ export default async function Blog({
             <span>By <Link href="/#about" rel="author" className="underline underline-offset-4">{AUTHOR.name}</Link></span>
           </div>
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-            I’m a software developer in the Greater Toronto Area and the founder of{" "}
+            Software developer in the Greater Toronto Area · Founder of{" "}
             <Link href="https://www.codedsquare.com/" className="underline underline-offset-4">Coded Square</Link>.
           </p>
           {post.metadata.dateLabel && <p className="mt-2 text-xs text-muted-foreground">{post.metadata.dateLabel}</p>}
@@ -104,7 +104,7 @@ export default async function Blog({
         </section>
       )}
       {post.slug !== "google-business-profile-address-change-help" && (
-        <NoteContactCTA title={presentation.ctaTitle} description={presentation.ctaDescription} />
+        <NoteContactCTA title={presentation.ctaTitle} description={presentation.ctaDescription} context={post.metadata.title} />
       )}
       <div className="mt-10 flex items-center gap-3 border-t pt-5">
         <PulseHeart key={post.slug} noteSlug={post.slug} icon="heart" showCount={true} size={26} />

@@ -1,0 +1,32 @@
+---
+title: "Built an App With Lovable? You May Not Need to Start Over"
+publishedAt: "2026-11-25"
+updatedAt: "2026-11-25"
+summary: "If your AI-built app keeps breaking, find out which parts need attention before rebuilding."
+---
+
+You've built an app with Lovable or another AI development tool. The screens look great, but one change breaks something that worked yesterday. That does not automatically mean you have to start over.
+
+I would look at the existing code and how the app handles real users before recommending any replacement.
+
+## Find the problem behind the screen
+
+Imagine a booking app that works for its owner. A customer signs up, tries to book an appointment, and sees an error. The page looks finished, but the app may not be saving the booking or checking the customer's permissions correctly.
+
+Rather than asking the AI to redesign the page, I would follow that one booking through the app: which account is signed in, what information it sends, what the server returns, and whether the booking is saved.
+
+## Work with what you already have
+
+If the project has usable code and accessible accounts, I can assess which parts should stay. Before making changes, I want to know where the code lives, where customer records are stored, and what version is published.
+
+Keep a safe copy of the current working version. Try changes separately so you can compare them without interrupting the customers who already use your app.
+
+Lovable's [security guidance](https://lovable.dev/blog/a-founders-guide-to-lovable-security) also explains why database permissions and security reviews matter. A working preview does not guarantee that each customer can access only their own information.
+
+## Check the everyday tasks first
+
+I would try signing up, signing back in, saving and editing a record, and completing any payment or booking flow using test accounts and sample data. If your app uses payments, test with the payment provider's test mode rather than charging real customers.
+
+Start with the task your users actually need to complete. A new design is not useful if they still cannot finish it.
+
+If you already have an app, tell me which feature is failing. You do not need to understand the code or decide whether it needs a rebuild before we talk.

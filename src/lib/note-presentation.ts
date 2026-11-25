@@ -14,6 +14,12 @@ const topics = {
 } satisfies Record<string, NoteTopic>;
 
 const noteTopics: Record<string, keyof typeof topics> = {
+  "fix-existing-website-without-rebuild": "web",
+  "fix-existing-lovable-app": "systems",
+  "website-developer-stopped-responding": "web",
+  "wordpress-critical-error-help": "web",
+  "customers-cannot-log-into-web-app": "systems",
+  "website-booking-no-available-times": "web",
   "a-fast-website-still-needs-a-clear-next-step": "web",
   "accessibility-is-part-of-the-build": "web",
   "apis-are-where-systems-start-talking": "systems",
@@ -59,6 +65,12 @@ const noteTopics: Record<string, keyof typeof topics> = {
 };
 
 const noteCallsToAction: Record<string, Pick<NoteTopic, "ctaTitle" | "ctaDescription">> = {
+  "fix-existing-website-without-rebuild": { ctaTitle: "Tell me what is broken", ctaDescription: "Share your website address and the one thing you wish worked better." },
+  "fix-existing-lovable-app": { ctaTitle: "Tell me about your app", ctaDescription: "Share what you built, what still works and what is getting in the way." },
+  "website-developer-stopped-responding": { ctaTitle: "Need someone to look at your existing website?", ctaDescription: "Tell me what you can access and which changes you have been unable to make." },
+  "wordpress-critical-error-help": { ctaTitle: "Is your WordPress website down?", ctaDescription: "Share the website address, exact error and when it first appeared." },
+  "customers-cannot-log-into-web-app": { ctaTitle: "Are your customers stuck at login?", ctaDescription: "Tell me which app they use and what they see after trying to sign in." },
+  "website-booking-no-available-times": { ctaTitle: "Is your booking page losing appointments?", ctaDescription: "Share the booking page and an example time your customer should be able to choose." },
   "website-changes-not-showing": {
     ctaTitle: "Still seeing the old version of your website?",
     ctaDescription: "Share the page and the change you expected to see.",

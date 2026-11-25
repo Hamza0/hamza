@@ -548,3 +548,17 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 @media (prefers-reduced-motion: reduce) {
   .note-card { transition: none; }
 }
+
+/* Comfortable reading with one accent and no decorative side rules. */
+.note-article { max-width: 65ch; margin-inline: auto; }
+.note-article .note-lead p { font-size: 1.125rem; line-height: 1.65; color: hsl(var(--foreground) / 0.9); }
+.note-article .note-prose { font-size: 1rem; color: hsl(var(--foreground) / 0.83); }
+.note-article .note-prose p { margin-block: 0.9rem; line-height: 1.75; }
+.note-article .note-prose h2 { margin-top: 2rem; margin-bottom: 0.6rem; font-size: 1.3rem; font-weight: 650; }
+.note-article .note-prose :is(ul, ol) { margin-block: 0.9rem; }
+.note-article .note-prose li { margin-block: 0.35rem; }
+.note-article .note-prose strong { color: hsl(var(--foreground)); }
+@media (min-width: 640px) {
+  .note-article .note-prose { font-size: 1.0625rem; }
+  .note-article .note-lead p { font-size: 1.2rem; }
+}

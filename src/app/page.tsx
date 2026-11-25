@@ -7,8 +7,6 @@ import { ContactButton } from "@/components/contact-provider";
 import { contactFormAvailable } from "@/lib/contact/config";
 import { DATA } from "@/data/resume";
 import { getBlogPosts } from "@/data/blog";
-import { getFeaturedNotes } from "@/lib/note-order";
-import { getNotePresentation } from "@/lib/note-presentation";
 import { PROFILE, SITE_UPDATED_AT } from "@/lib/site";
 import { PERSON_ID, WEBSITE_ID, serializeJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
@@ -35,13 +33,17 @@ const HERO_REVEAL_PROPS = {
 export default async function Page() {
   const contactReady = contactFormAvailable();
   const posts = await getBlogPosts();
-  const editorialNotes = getFeaturedNotes(posts);
-  const latestNotes = posts.slice(0, 2);
-  const featuredNotes = [
-    ...latestNotes,
-    ...posts.filter((note) => note.slug === "google-business-profile-address-change-help"),
-    ...editorialNotes,
-  ].filter((note, index, notes) => notes.findIndex((entry) => entry.slug === note.slug) === index).slice(0, 5);
+  // Hand-picked for owners who need help with an existing website or app.
+  // New publication dates do not displace these useful starting points.
+  const featuredSlugs = [
+    "fix-existing-website-without-rebuild",
+    "fix-existing-lovable-app",
+    "google-business-profile-address-change-help",
+    "wordpress-critical-error-help",
+    "customers-cannot-log-into-web-app",
+    "website-developer-stopped-responding",
+  ];
+  const featuredNotes = featuredSlugs.flatMap(slug => posts.filter(note => note.slug === slug));
   return (
     <main className="flex flex-col min-h-[100dvh] space-y-10">
       <script
@@ -283,13 +285,12 @@ export default async function Page() {
             <Link href="/blog" className="shrink-0 text-sm underline underline-offset-4">All notes →</Link>
           </div>
           <p className="mt-2 text-sm text-muted-foreground">
-              Practical help with websites and business tools.
+              Already have a website or app? Here’s where I’d start when something isn’t working.
           </p>
           <ul className="mt-3 divide-y divide-border/50">
             {featuredNotes.map((note) => (
               <li key={note.slug}>
-                <Link href={`/blog/${note.slug}`} className={`note-theme note-tone-${getNotePresentation(note.slug).tone} note-list-link group -mx-3 block rounded-lg px-3 py-4 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring`}>
-                  <span className="note-accent mb-2 block text-xs font-medium">{getNotePresentation(note.slug).label}</span>
+                <Link href={`/blog/${note.slug}`} className="note-theme note-list-link group -mx-3 block rounded-lg px-3 py-4 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
                   <h3 className="text-sm font-semibold group-hover:underline underline-offset-4">{note.metadata.title}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{note.metadata.summary}</p>
                 </Link>

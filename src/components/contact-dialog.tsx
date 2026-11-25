@@ -6,7 +6,7 @@ import { trackEvent } from "@/lib/analytics";
 import { CONTACT_CATEGORIES, CONTACT_LIMITS, parseContactDetails, type ContactCategory } from "@/lib/contact/schema";
 import { Check, X } from "lucide-react";
 import Script from "next/script";
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 
 declare global {
   interface Window {
@@ -21,10 +21,16 @@ const OPTIONS = Object.keys(CONTACT_CATEGORIES) as ContactCategory[];
 const EMPTY = { name: "", email: "", context: "", message: "", website: "" };
 const fieldClass = "mt-1 w-full rounded-md border bg-background px-3 py-2 text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring";
 
-export default function ContactDialog({ open, onOpenChange, restoreFocus }: { open: boolean; onOpenChange: (value: boolean) => void; restoreFocus: () => void }) {
-  const [step, setStep] = useState<1 | 2>(1);
-  const [category, setCategory] = useState<ContactCategory | "">("");
-  const [fields, setFields] = useState(EMPTY);
+type InlineContact = { title: string; description: string; context: string };
+
+export default function ContactDialog({ open, onOpenChange, restoreFocus, inline }: { open: boolean; onOpenChange: (value: boolean) => void; restoreFocus: () => void; inline?: InlineContact }) {
+  const isInline = Boolean(inline);
+  const uniqueId = useId();
+  const fieldId = isInline ? `note-contact-${uniqueId}` : "contact";
+  const [started, setStarted] = useState(false);
+  const [step, setStep] = useState<1 | 2>(isInline ? 2 : 1);
+  const [category, setCategory] = useState<ContactCategory | "">(isInline ? "project" : "");
+  const [fields, setFields] = useState(() => ({ ...EMPTY, context: inline?.context.slice(0, CONTACT_LIMITS.context) ?? "" }));
   const [token, setToken] = useState("");
   const [scriptReady, setScriptReady] = useState(false);
   const [verificationError, setVerificationError] = useState(false);
@@ -51,12 +57,12 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus }: { op
   }, [open, success]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open || (isInline && !success)) return;
     title.current?.focus({ preventScroll: true });
-  }, [open, step, success]);
+  }, [open, step, success, isInline]);
   useEffect(() => () => activeRequest.current?.abort(), []);
   useEffect(() => {
-    if (!open) return;
+    if (!open || isInline) return;
     const view = window.visualViewport;
     const update = () => setViewport({ height: view?.height ?? window.innerHeight, top: view?.offsetTop ?? 0 });
     update();
@@ -64,9 +70,10 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus }: { op
     view?.addEventListener("scroll", update);
     window.addEventListener("resize", update);
     return () => { view?.removeEventListener("resize", update); view?.removeEventListener("scroll", update); window.removeEventListener("resize", update); };
-  }, [open]);
+  }, [open, isInline]);
+  const verificationActive = open && step === 2 && (!isInline || started);
   useEffect(() => {
-    if (!open || step !== 2 || !scriptReady || success || !challenge.current || !window.turnstile) return;
+    if (!verificationActive || !scriptReady || success || !challenge.current || !window.turnstile) return;
     try {
       widget.current = window.turnstile.render(challenge.current, {
         sitekey: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!, action: "portfolio_contact", theme: "auto",
@@ -76,7 +83,7 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus }: { op
       });
     } catch { setVerificationError(true); }
     return () => { if (widget.current) window.turnstile?.remove(widget.current); widget.current = undefined; setToken(""); };
-  }, [open, step, scriptReady, success]);
+  }, [verificationActive, scriptReady, success]);
   useEffect(() => {
     if (!cooldown) return;
     const timer = setInterval(() => setCooldown(value => Math.max(0, value - 1)), 1000);
@@ -132,40 +139,51 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus }: { op
     }
   };
 
+  const Heading = isInline ? "h2" : Dialog.Title;
+  const Description = isInline ? "p" : Dialog.Description;
+  const formContent = (
+    <>
+        {success ? <div className="contact-step pt-7 text-center">
+          <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-[#DDF7E9] text-[#14532d]" aria-hidden="true"><Check size={26} strokeWidth={2} /></div>
+          <Heading ref={title} tabIndex={-1} className="mt-5 text-xl font-semibold tracking-tight outline-none">Message received.</Heading>
+          <Description className="mt-2 text-sm leading-6 text-muted-foreground">Thanks for reaching out. I&apos;ll get back to you soon.</Description>
+          {!isInline && <Dialog.Close asChild><Button type="button" className="mt-7 w-full">Done</Button></Dialog.Close>}
+        </div> : <>
+        {!isInline && <p className="mb-2 text-xs text-muted-foreground">{step} of 2</p>}
+        <Heading ref={title} tabIndex={-1} id={isInline ? `${fieldId}-heading` : undefined} className={isInline ? "text-xl font-semibold tracking-tight outline-none" : "pr-8 text-xl font-semibold tracking-tight outline-none"}>{inline?.title ?? (step === 1 ? "What brings you here?" : selected?.title)}</Heading>
+        <Description className="mt-2 text-sm text-muted-foreground">{inline?.description ?? (step === 1 ? "Have a project, role, or collaboration in mind? Tell me a little about it." : selected?.description)}</Description>
+        {step === 1 ? <form className="contact-step mt-6 space-y-4" onSubmit={event => { event.preventDefault(); if (category) { setStep(2); setStatus(""); } }}>
+          <fieldset className="space-y-2" disabled={attempt.current.uncertain}><legend className="sr-only">Enquiry type</legend>{OPTIONS.map(option => <label key={option} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border p-3 text-sm has-[:checked]:border-primary"><input type="radio" name="category" value={option} checked={category === option} onChange={() => { if (category !== option) setFields(value => ({ ...value, context: "" })); setCategory(option); }} required className="accent-primary" />{CONTACT_CATEGORIES[option].label}</label>)}</fieldset>
+          <Button type="submit" className="w-full" disabled={!category}>Continue</Button>
+        </form> : <form className="contact-step mt-5 space-y-3" aria-busy={sending} onFocusCapture={() => { if (isInline && !started) { setStarted(true); trackEvent("contact_open", { location: "section", category: "project" }); } }} onSubmit={submit} onInvalid={() => setStatus("Please check the required fields.")}>
+          <div><label htmlFor={`${fieldId}-name`} className="block text-sm">Name</label><input id={`${fieldId}-name`} name="name" autoComplete="name" placeholder="Your name" required maxLength={CONTACT_LIMITS.name} value={fields.name} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, name: event.target.value }))} className={fieldClass} /></div>
+          <div><label htmlFor={`${fieldId}-email`} className="block text-sm">Email</label><input id={`${fieldId}-email`} name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" required maxLength={CONTACT_LIMITS.email} value={fields.email} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, email: event.target.value }))} className={fieldClass} /></div>
+          {!isInline && <div><label htmlFor={`${fieldId}-context`} className="block text-sm">{selected?.contextLabel}</label><input id={`${fieldId}-context`} name="context" autoComplete="off" placeholder={selected?.contextPlaceholder} required maxLength={CONTACT_LIMITS.context} value={fields.context} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, context: event.target.value }))} className={fieldClass} /></div>}
+          <div><label htmlFor={`${fieldId}-message`} className="block text-sm">{isInline ? "What’s happening?" : selected?.messageLabel}</label><textarea id={`${fieldId}-message`} name="message" placeholder={isInline ? "Tell me what you’re trying to do and where it gets stuck. A public website or app link helps." : selected?.messagePlaceholder} required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, message: event.target.value }))} className={`${fieldClass} block`} /></div>
+          <div hidden aria-hidden="true"><label>Leave this blank<input name="website" tabIndex={-1} autoComplete="off" value={fields.website} onChange={event => setFields(value => ({ ...value, website: event.target.value }))} /></label></div>
+          {verificationActive && <Script id="contact-turnstile" src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" strategy="afterInteractive" onLoad={() => { setScriptReady(true); setVerificationError(false); }} onReady={() => { setScriptReady(true); setVerificationError(false); }} onError={() => setVerificationError(true)} />}
+          <div ref={challenge} aria-label="Spam verification" />
+          {verificationError && <p role="alert" className="text-sm">Verification could not load. Please retry later or use <a href="https://www.linkedin.com/in/mianhamza" className="underline">LinkedIn</a>.</p>}
+          {verificationActive && !token && !verificationError && <p className="text-xs text-muted-foreground">Complete the spam verification to send.</p>}
+          <p role="status" aria-live="polite" aria-atomic="true" className="text-sm empty:hidden">{status}</p>
+          {cooldown > 0 && <p aria-live="off" className="text-xs text-muted-foreground">Try again in {cooldown}s.</p>}
+          <div className="flex gap-3">{!isInline && <Button type="button" variant="outline" disabled={sending} onClick={() => { setStep(1); setStatus(""); }}>Back</Button>}<Button type="submit" className="flex-1" disabled={sending || !token || cooldown > 0}>{sending ? "Sending…" : "Send message"}</Button></div>
+          <p className="text-xs leading-relaxed text-muted-foreground">{isInline && <>Please don’t include passwords or private customer details. I use your details to reply. <a href="/privacy" className="underline underline-offset-2">Privacy</a>. </>}Prefer another route? <a href="https://www.linkedin.com/in/mianhamza" className="underline">Message me on LinkedIn</a>.</p>
+        </form>}
+        </>}
+
+    </>
+  );
+
+  if (isInline) return <div className="w-full min-w-0">{formContent}</div>;
+
   return <Dialog.Root open={open} onOpenChange={onOpenChange}>
     <Dialog.Portal>
       <Dialog.Overlay className="fixed inset-0 z-[60] bg-black/40" />
       <Dialog.Content className="contact-dialog fixed left-1/2 top-1/2 z-[61] flex w-[calc(100%_-_2rem)] max-w-[460px] max-h-[calc(100dvh_-_2rem)] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl border bg-background shadow-xl" style={viewport ? { maxHeight: Math.max(120, viewport.height - 32), top: viewport.top + viewport.height / 2 } : undefined} onOpenAutoFocus={event => { event.preventDefault(); title.current?.focus(); }} onCloseAutoFocus={event => { event.preventDefault(); restoreFocus(); }}>
         <Dialog.Close asChild><button type="button" aria-label="Close contact dialog" className="absolute right-3 top-3 z-10 flex size-10 items-center justify-center rounded-md bg-background hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"><X size={18} aria-hidden="true" /></button></Dialog.Close>
         <div className="contact-dialog-scroll min-h-0 overflow-y-auto overscroll-contain p-5 sm:p-7">
-        {success ? <div className="contact-step pt-7 text-center">
-          <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-[#DDF7E9] text-[#14532d]" aria-hidden="true"><Check size={26} strokeWidth={2} /></div>
-          <Dialog.Title ref={title} tabIndex={-1} className="mt-5 text-xl font-semibold tracking-tight outline-none">Message received.</Dialog.Title>
-          <Dialog.Description className="mt-2 text-sm leading-6 text-muted-foreground">Thanks for reaching out. I&apos;ll get back to you soon.</Dialog.Description>
-          <Dialog.Close asChild><Button type="button" className="mt-7 w-full">Done</Button></Dialog.Close>
-        </div> : <>
-        <p className="mb-2 text-xs text-muted-foreground">{step} of 2</p>
-        <Dialog.Title ref={title} tabIndex={-1} className="pr-8 text-xl font-semibold tracking-tight outline-none">{step === 1 ? "What brings you here?" : selected?.title}</Dialog.Title>
-        <Dialog.Description className="mt-2 text-sm text-muted-foreground">{step === 1 ? "Have a project, role, or collaboration in mind? Tell me a little about it." : selected?.description}</Dialog.Description>
-        {step === 1 ? <form className="contact-step mt-6 space-y-4" onSubmit={event => { event.preventDefault(); if (category) { setStep(2); setStatus(""); } }}>
-          <fieldset className="space-y-2" disabled={attempt.current.uncertain}><legend className="sr-only">Enquiry type</legend>{OPTIONS.map(option => <label key={option} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border p-3 text-sm has-[:checked]:border-primary"><input type="radio" name="category" value={option} checked={category === option} onChange={() => { if (category !== option) setFields(value => ({ ...value, context: "" })); setCategory(option); }} required className="accent-primary" />{CONTACT_CATEGORIES[option].label}</label>)}</fieldset>
-          <Button type="submit" className="w-full" disabled={!category}>Continue</Button>
-        </form> : <form className="contact-step mt-5 space-y-3" onSubmit={submit} onInvalid={() => setStatus("Please check the required fields.")}>
-          <div><label htmlFor="contact-name" className="block text-sm">Name</label><input id="contact-name" name="name" autoComplete="name" placeholder="Your name" required maxLength={CONTACT_LIMITS.name} value={fields.name} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, name: event.target.value }))} className={fieldClass} /></div>
-          <div><label htmlFor="contact-email" className="block text-sm">Email</label><input id="contact-email" name="email" type="email" inputMode="email" autoComplete="email" placeholder="you@example.com" required maxLength={CONTACT_LIMITS.email} value={fields.email} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, email: event.target.value }))} className={fieldClass} /></div>
-          <div><label htmlFor="contact-context" className="block text-sm">{selected?.contextLabel}</label><input id="contact-context" name="context" autoComplete="off" placeholder={selected?.contextPlaceholder} required maxLength={CONTACT_LIMITS.context} value={fields.context} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, context: event.target.value }))} className={fieldClass} /></div>
-          <div><label htmlFor="contact-message" className="block text-sm">{selected?.messageLabel}</label><textarea id="contact-message" name="message" placeholder={selected?.messagePlaceholder} required minLength={CONTACT_LIMITS.messageMin} maxLength={CONTACT_LIMITS.message} rows={4} value={fields.message} readOnly={sending || attempt.current.uncertain} onChange={event => setFields(value => ({ ...value, message: event.target.value }))} className={`${fieldClass} block`} /></div>
-          <div hidden aria-hidden="true"><label>Leave this blank<input name="website" tabIndex={-1} autoComplete="off" value={fields.website} onChange={event => setFields(value => ({ ...value, website: event.target.value }))} /></label></div>
-          {open && <Script id="contact-turnstile" src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" strategy="afterInteractive" onLoad={() => { setScriptReady(true); setVerificationError(false); }} onReady={() => { setScriptReady(true); setVerificationError(false); }} onError={() => setVerificationError(true)} />}
-          <div ref={challenge} aria-label="Spam verification" />
-          {verificationError && <p role="alert" className="text-sm">Verification could not load. Please retry later or use <a href="https://www.linkedin.com/in/mianhamza" className="underline">LinkedIn</a>.</p>}
-          {!token && !verificationError && <p className="text-xs text-muted-foreground">Complete the spam verification to send.</p>}
-          <p role="status" aria-live="polite" aria-atomic="true" className="text-sm empty:hidden">{status}</p>
-          {cooldown > 0 && <p aria-live="off" className="text-xs text-muted-foreground">Try again in {cooldown}s.</p>}
-          <div className="flex gap-3"><Button type="button" variant="outline" disabled={sending} onClick={() => { setStep(1); setStatus(""); }}>Back</Button><Button type="submit" className="flex-1" disabled={sending || !token || cooldown > 0}>{sending ? "Sending…" : "Send message"}</Button></div>
-          <p className="text-xs text-muted-foreground">Prefer another route? <a href="https://www.linkedin.com/in/mianhamza" className="underline">Message me on LinkedIn</a>.</p>
-        </form>}
-        </>}
+        {formContent}
         </div>
       </Dialog.Content>
     </Dialog.Portal>
