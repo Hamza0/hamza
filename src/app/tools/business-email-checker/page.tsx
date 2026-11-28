@@ -39,7 +39,7 @@ export default function EmailCheckerPage() {
       <header className="space-y-3">
         <p className="text-xs font-medium text-muted-foreground">Free diagnostic tool</p>
         <h1 className="text-balance text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Business email checker</h1>
-        <p className="text-base leading-relaxed text-muted-foreground">Are invoices bouncing, or are contact form emails not arriving? Check your domain's public MX, SPF, DKIM and DMARC records before changing your email settings.</p>
+        <p className="text-base leading-relaxed text-muted-foreground">Are invoices bouncing, or are contact form emails not arriving? Check your domain&apos;s public MX, SPF, DKIM and DMARC records before changing your email settings.</p>
         <p className="text-xs text-muted-foreground">Built by <Link href="/#about" className="underline underline-offset-4">Hamza Shakeel</Link>, software developer in the Greater Toronto Area.</p>
       </header>
       <BusinessEmailChecker />
