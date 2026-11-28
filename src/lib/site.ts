@@ -2,7 +2,7 @@ export const SITE_URL = "https://www.hamzashakeel.ca";
 
 // Editorial dates describe actual page changes, never the build time.
 export const SITE_UPDATED_AT = "2026-11-28";
-export const NOTES_UPDATED_AT = "2026-11-25";
+export const NOTES_UPDATED_AT = "2026-11-28";
 
 export const PROFILE = {
   name: "Hamza Shakeel",

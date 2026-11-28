@@ -1,0 +1,12 @@
+export type DnsLookup = { state: "present" | "absent" | "unavailable"; records: string[]; reason: string };
+export type EmailCheck = { key: "mx" | "spf" | "dmarc" | "dkim"; title: string; status: "found" | "review" | "unknown" | "skipped"; label: string; detail: string; records: string[] };
+export function normalizeDomain(input: string): string | null;
+export function normalizeSelector(input: string, domain: string): string | null;
+export function decodeTxt(raw: string): string | null;
+export function parseDnsReply(raw: unknown, name: string, type: number): DnsLookup;
+export function lookupDns(name: string, type: number, signal: AbortSignal, transport?: typeof fetch): Promise<DnsLookup>;
+export function assessMx(dns: DnsLookup): EmailCheck;
+export function assessSpf(dns: DnsLookup): EmailCheck;
+export function assessDmarc(dns: DnsLookup): EmailCheck;
+export function assessDkim(dns: DnsLookup | null, selector: string): EmailCheck;
+export function checkEmailDns(domain: string, selector: string, signal: AbortSignal, transport?: typeof fetch): Promise<EmailCheck[]>;

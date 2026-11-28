@@ -44,9 +44,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${SITE_URL}/privacy`,
       // Last substantive privacy policy update, verified in Git history.
-      lastModified: "2026-11-25",
+      lastModified: "2026-11-28",
       changeFrequency: "yearly",
       priority: 0.2,
+    },
+    {
+      url: `${SITE_URL}/tools/business-email-checker`,
+      lastModified: "2026-11-28",
     },
     ...services.map(service => ({
       url: SITE_URL + servicePath(service),

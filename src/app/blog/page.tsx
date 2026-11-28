@@ -1,3 +1,4 @@
+import Link from "next/link";
 import BlurFade from "@/components/magicui/blur-fade";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { NotePinboardCard } from "@/components/note-pinboard-card";
@@ -74,6 +75,10 @@ export default async function BlogPage() {
         <h1 id="notes-title" className="text-3xl font-semibold tracking-tight">Notes</h1>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Questions about your website or software? Here’s where I’d start.</p>
       </BlurFade>
+      <div className="mt-5 rounded-xl border bg-muted/30 px-4 py-3">
+        <Link href="/tools/business-email-checker" className="text-sm font-medium underline underline-offset-4">Free business email checker</Link>
+        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">Check MX, SPF, DKIM and DMARC records when business emails are not arriving.</p>
+      </div>
       <section id="all-notes" aria-labelledby="notes-title">
         <NoteList posts={posts} />
       </section>

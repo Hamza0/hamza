@@ -51,7 +51,7 @@ export function Analytics({ production, paths }: { production: boolean; paths: s
     if (!eligible || !ready || !window.portfolioAnalytics?.enabled) return;
     const path = safePage(pathname);
     if (lastPage.current === path) return;
-    const pageTitle = path === "/" ? "Home" : path === "/privacy" ? "Privacy" : path === "/google-business-profile-help" ? "Google Business Profile help" : path.startsWith("/services/") ? "Development services" : path.startsWith("/projects/") ? "Engineering case study" : "Notes";
+    const pageTitle = path === "/" ? "Home" : path === "/privacy" ? "Privacy" : path === "/google-business-profile-help" ? "Google Business Profile help" : path === "/tools/business-email-checker" ? "Business email checker" : path.startsWith("/services/") ? "Development services" : path.startsWith("/projects/") ? "Engineering case study" : "Notes";
     window.gtag?.("event", "page_view", { send_to: GA_ID, page_location: `https://www.hamzashakeel.ca${path}`, page_referrer: lastPage.current ? `https://www.hamzashakeel.ca${lastPage.current}` : "", page_title: pageTitle });
     lastPage.current = path;
   }, [pathname, eligible, ready]);
