@@ -650,3 +650,23 @@ html[data-portfolio-theme-transition="active"]::view-transition-new(root) {
   .note-reading-page .note-article .note-prose { font-size: 1.0625rem; }
   .note-reading-page .note-article .note-prose h2 { font-size: 1.5rem; }
 }
+
+
+/* Portfolio projects only: neutral surfaces, readable type, quiet links. */
+.portfolio-project-featured { background: #f5f5f7; }
+.dark .portfolio-project-featured { background: #18181b; }
+.portfolio-project-link { color: #0066cc; }
+.dark .portfolio-project-link { color: #64b5ff; }
+.portfolio-project-card .project-description :is(p, ul, ol) { margin: 0; }
+.portfolio-project-card .project-description p + p { margin-top: 0.6rem; }
+.portfolio-project-card .project-description a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Article-only reading refinements. Leave existing enquiry UI unchanged. */
+.note-reading-page .note-article { max-width: 62ch; }
+.note-reading-page .note-article .note-lead p { color: hsl(var(--foreground) / 0.94); }
+.note-reading-page .note-article .note-prose { color: hsl(var(--foreground) / 0.87); }
+.note-reading-page .note-article .note-prose p { margin-block: 0.85rem; line-height: 1.7; }
+.note-reading-page .note-article .note-prose :is(h2,h3) { scroll-margin-top: 2rem; }
+.note-reading-page .note-article .note-prose > :first-child { margin-top: 0; }
+.note-contents { background: #f5f5f7; }
+.dark .note-contents { background: #18181b; }

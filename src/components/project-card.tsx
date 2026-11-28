@@ -1,11 +1,3 @@
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,123 +19,65 @@ interface Props {
     href: string;
   }[];
   className?: string;
+  variant?: "featured" | "compact";
 }
 
 export function ProjectCard({
-  title,
-  href,
-  description,
-  dates,
-  highlights,
-  tags,
-  link,
-  image,
-  video,
-  links,
-  className,
+  title, href, description, dates, highlights, tags, link, image, video, links,
+  className, variant = "compact",
 }: Props) {
   const trimmedHref = href?.trim();
   const projectHref = trimmedHref && trimmedHref !== "#" ? trimmedHref : undefined;
-  const projectLinks = links?.filter(
-    (link) => link.href.trim() && link.href.trim() !== "#"
-  );
+  const projectLinks = links?.filter(item => item.href.trim() && item.href.trim() !== "#") ?? [];
+  const divider = title.indexOf(" – ");
+  const organization = divider >= 0 ? title.slice(0, divider) : undefined;
+  const projectName = divider >= 0 ? title.slice(divider + 3) : title;
+  const featured = variant === "featured";
   const media = (
     <>
-      {video && (
-        <video
-          src={video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="pointer-events-none mx-auto h-40 w-full object-cover object-top"
-        />
-      )}
-      {image && (
-        <Image
-          src={image}
-          alt={title}
-          width={500}
-          height={300}
-          className="h-40 w-full overflow-hidden object-cover object-top"
-        />
-      )}
+      {video && <video src={video} autoPlay loop muted playsInline className="mx-auto h-40 w-full object-cover object-top motion-reduce:hidden" />}
+      {image && <Image src={image} alt={title} width={500} height={300} className="h-40 w-full object-cover object-top" />}
     </>
   );
 
   return (
-    <Card
-      className={
-        "flex flex-col overflow-hidden border hover:shadow-lg transition-all duration-300 ease-out h-full"
-      }
-    >
-      {(video || image) && (
-        projectHref ? (
-          <Link
-            href={projectHref}
-            aria-label={`View ${title}`}
-            className={cn("block cursor-pointer", className)}
-          >
-            {media}
-          </Link>
-        ) : (
-          <div className={cn("block", className)}>{media}</div>
-        )
-      )}
-      <CardHeader className="px-2">
-        <div className="space-y-1">
-          <CardTitle className="mt-1 text-base">
-            {projectHref ? <Link href={projectHref}>{title}</Link> : title}
-          </CardTitle>
-          <p className="font-sans text-xs">{dates}</p>
-          <div className="hidden font-sans text-xs underline print:visible">
-            {link?.replace("https://", "").replace("www.", "").replace("/", "")}
-          </div>
-          <Markdown className="prose max-w-full text-pretty font-sans text-xs text-muted-foreground dark:prose-invert">
-            {description}
-          </Markdown>
-          {highlights && (
-            <ul className="list-disc space-y-2 pl-4 pt-2 text-sm text-muted-foreground">
-              {highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+    <article className={cn(
+      "portfolio-project-card flex h-full min-w-0 flex-col overflow-hidden rounded-[20px]",
+      featured ? "portfolio-project-featured" : "border border-border/80 bg-card",
+      className
+    )}>
+      {(video || image) && (projectHref ? <Link href={projectHref} aria-label={"View " + title} className="block">{media}</Link> : <div>{media}</div>)}
+      <div className={cn("flex flex-1 flex-col", featured ? "p-5" : "p-4")}>
+        <header className="space-y-1.5">
+          <h3 className={cn("leading-[1.3] font-semibold tracking-[-0.025em]", featured ? "text-[19px]" : "text-[17px]")}>
+            {organization && <span className="mb-1 block text-[12px] font-medium leading-snug tracking-normal text-muted-foreground">{organization}<span className="sr-only">: </span></span>}
+            {projectHref ? <Link href={projectHref} className="rounded-sm underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">{projectName}</Link> : projectName}
+          </h3>
+          <p className="text-[12px] leading-relaxed text-muted-foreground">{dates}</p>
+          {link && <p className="hidden break-all text-xs print:block">{link}</p>}
+        </header>
+        <Markdown className="project-description mt-3 min-w-0 text-[14px] leading-[1.6] text-muted-foreground">{description}</Markdown>
+        {highlights && highlights.length > 0 && <ul className="mt-3 list-disc space-y-1 pl-4 text-sm leading-relaxed text-muted-foreground">{highlights.map(item => <li key={item}>{item}</li>)}</ul>}
+        <div className="mt-auto">
+          {tags.length > 0 && (
+            <p aria-label="Technologies" className="mt-4 break-words border-t border-border/70 pt-3 text-[12px] leading-[1.65] text-muted-foreground">
+              {tags.join(" · ")}
+            </p>
+          )}
+          {projectLinks.length > 0 && (
+            <ul aria-label="Project links" className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
+              {projectLinks.map((item, i) => {
+                const external = /^https?:\/\//i.test(item.href);
+                return <li key={item.href + i} className="min-w-0">
+                  <Link href={item.href} target={external ? "_blank" : undefined} rel={external ? "noopener noreferrer" : undefined} aria-label={item.type + ": " + title + (external ? " (opens in new tab)" : "")} className="portfolio-project-link inline-flex min-h-8 items-center gap-1.5 rounded-sm text-[13px] font-medium leading-snug underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+                    <span aria-hidden="true" className="shrink-0">{item.icon}</span>{item.type}
+                  </Link>
+                </li>;
+              })}
             </ul>
           )}
         </div>
-      </CardHeader>
-      <CardContent className="mt-auto flex flex-col px-2">
-        {tags && tags.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-1">
-            {tags?.map((tag) => (
-              <Badge
-                className="px-1 py-0 text-[10px]"
-                variant="secondary"
-                key={tag}
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
-      </CardContent>
-      <CardFooter className="px-2 pb-2">
-        {projectLinks && projectLinks.length > 0 && (
-          <div className="flex flex-row flex-wrap items-start gap-1">
-            {projectLinks.map((link, idx) => (
-              <Link
-                href={link.href}
-                key={idx}
-                target={link.href.startsWith("https://") ? "_blank" : undefined}
-                rel={link.href.startsWith("https://") ? "noopener noreferrer" : undefined}
-                aria-label={`${link.type}: ${title}`}
-              >
-                <Badge key={idx} className="flex gap-2 px-2 py-1 text-[10px]">
-                  {link.icon}
-                  {link.type}
-                </Badge>
-              </Link>
-            ))}
-          </div>
-        )}
-      </CardFooter>
-    </Card>
+      </div>
+    </article>
   );
 }

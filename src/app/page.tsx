@@ -165,7 +165,7 @@ export default async function Page() {
       </nav>
 
       <section id="projects">
-        <div className="space-y-6 w-full">
+        <div className="space-y-4 w-full">
           <BlurFade delay={BLUR_FADE_DELAY * 11}>
             <div className="flex flex-col space-y-3">
               <div className="space-y-2">
@@ -178,13 +178,15 @@ export default async function Page() {
               </div>
             </div>
           </BlurFade>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {DATA.projects.filter((project) => "featured" in project && project.featured).map((project, id) => (
               <BlurFade
                 key={project.title}
                 delay={BLUR_FADE_DELAY * 4 + id * 0.05}
+                className="h-full"
               >
                 <ProjectCard
+                  variant="featured"
                   href={project.href}
                   title={project.title}
                   description={project.description}
@@ -319,15 +321,15 @@ export default async function Page() {
 
       <section id="additional-projects" aria-labelledby="additional-projects-title" className="scroll-mt-8">
         <BlurFade delay={BLUR_FADE_DELAY * 11}>
-          <h2 id="additional-projects-title" className="text-xl font-bold">Additional Projects</h2>
+          <h2 id="additional-projects-title" className="text-2xl font-semibold tracking-tight sm:text-3xl">Additional Projects</h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Earlier web, design and digital experience delivery, alongside independent architecture explorations.
           </p>
         </BlurFade>
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {DATA.projects.filter((project) => !("featured" in project && project.featured)).map((project, index) => (
-            <BlurFade key={project.title} delay={BLUR_FADE_DELAY * 12 + index * 0.05}>
-              <ProjectCard title={project.title} href={project.href} description={project.description}
+            <BlurFade key={project.title} delay={BLUR_FADE_DELAY * 12 + index * 0.05} className="h-full">
+              <ProjectCard variant="compact" title={project.title} href={project.href} description={project.description}
                 dates={project.dates} tags={project.technologies} image={project.image}
                 video={project.video} links={project.links} />
             </BlurFade>
