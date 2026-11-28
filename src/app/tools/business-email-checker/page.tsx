@@ -36,7 +36,7 @@ export default function EmailCheckerPage() {
       }) }} />
       <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Notes", path: "/blog" }, { name: "Business email checker", path }]} />
       <header className="mx-auto max-w-xl space-y-3 text-center">
-        <h1 className="text-balance text-[2.5rem] font-semibold leading-[1.06] tracking-[-0.045em] sm:text-[3.25rem]">Business email checker</h1>
+        <h1 className="page-opening-title text-balance text-[2.5rem] font-semibold leading-[1.06] tracking-[-0.045em] sm:text-[3.25rem]">Business email checker</h1>
         <p className="mx-auto max-w-md text-[17px] leading-relaxed text-muted-foreground">Find out why your business emails may not be arriving.</p>
       </header>
       <BusinessEmailChecker />

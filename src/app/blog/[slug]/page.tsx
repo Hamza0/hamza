@@ -86,7 +86,7 @@ export default async function Blog({
             <span>{minutes} min read</span>
             {post.metadata.dateLabel && <><span aria-hidden="true">·</span><span>{post.metadata.dateLabel}</span></>}
           </div>
-          <h1 className="text-pretty text-[2rem] font-semibold leading-[1.12] tracking-[-0.04em] sm:text-[2.625rem]">
+          <h1 className="page-opening-title text-pretty text-[2rem] font-semibold leading-[1.12] tracking-[-0.04em] sm:text-[2.625rem]">
             {post.metadata.title}
           </h1>
           <div className="mt-5 flex items-center gap-3 border-b border-border/70 pb-5">

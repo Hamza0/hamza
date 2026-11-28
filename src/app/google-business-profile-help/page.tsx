@@ -24,7 +24,7 @@ export default function BusinessProfileHelpPage() {
       <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Business Profile help", path }]} />
       <header className="space-y-4">
         <p className="text-sm text-muted-foreground">Google Business Profile support</p>
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Need help with a business address change?</h1>
+        <h1 className="page-opening-title text-3xl font-bold tracking-tight sm:text-4xl">Need help with a business address change?</h1>
         <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">
           If an address change is stuck, showing the wrong location, or affecting customer enquiries, tell me what you are seeing.
           I&apos;ll review the details and let you know whether I can help, with the scope agreed before work begins.

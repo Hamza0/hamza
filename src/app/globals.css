@@ -670,3 +670,43 @@ html[data-portfolio-theme-transition="active"]::view-transition-new(root) {
 .note-reading-page .note-article .note-prose > :first-child { margin-top: 0; }
 .note-contents { background: #f5f5f7; }
 .dark .note-contents { background: #18181b; }
+
+
+/* Homepage typography. Preserve the original About text and links. */
+.home-about-copy > p { margin: 0; }
+.home-about-copy > p + p { margin-top: 0.8rem; }
+.home-about-copy > p:first-child {
+  color: hsl(var(--foreground));
+  font-size: 1rem;
+  line-height: 1.65;
+  letter-spacing: -0.012em;
+}
+.home-about-copy a {
+  color: #0066cc;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.dark .home-about-copy a { color: #64b5ff; }
+.home-about-copy a:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 3px; border-radius: 2px; }
+
+/* Whole-text blur-in-up inspired by Magic UI Text Animate.
+   Headings remain in server HTML; do not animate forms or whole articles. */
+@media (prefers-reduced-motion: no-preference) {
+  .page-opening-title {
+    animation: page-opening-title 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .page-opening-title + p {
+    animation: page-opening-subtitle 440ms 45ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+@keyframes page-opening-title {
+  from { opacity: 0.55; transform: translateY(7px); filter: blur(3px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes page-opening-subtitle {
+  from { opacity: 0.65; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-opening-title, .page-opening-title + p { animation: none; }
+}

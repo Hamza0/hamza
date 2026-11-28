@@ -7,7 +7,7 @@ export const metadata = pageMetadata({
 
 export default function PrivacyPage() {
   return <main className="space-y-5 text-sm leading-relaxed">
-    <h1 className="text-3xl font-semibold tracking-tight">Privacy</h1>
+    <h1 className="page-opening-title text-3xl font-semibold tracking-tight">Privacy</h1>
     <p>This portfolio uses Google Analytics 4 (G-1BKHGCCN3E) to understand visits to public pages and selected contact actions. Analytics loads automatically on the production site without a consent banner or an on-site analytics preference control.</p>
     <p>Google Analytics uses first-party cookies, including _ga and _ga_ cookies, to distinguish browsers and maintain session information. Google processes analytics events and technical information about visits, such as browser and device details. The site configures advertising storage, advertising user data, ad personalization and Google signals as disabled.</p>
     <p>The site sends public page paths without query strings or fragments, and fixed event names for opening contact, accepted submissions, submission errors, LinkedIn clicks and call clicks. Custom event parameters are limited to the contact entry point and enquiry category; they do not include names, email addresses, phone numbers, messages, verification tokens or other form values.</p>

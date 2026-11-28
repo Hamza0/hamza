@@ -56,7 +56,7 @@ export default async function BlogPage() {
       }) }} />
       <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Notes", path: "/blog" }]} />
       <header className="mb-7 space-y-2.5">
-        <h1 id="notes-title" className="text-[2.5rem] font-semibold leading-[1.06] tracking-[-0.045em] sm:text-[3.25rem]">Notes</h1>
+        <h1 id="notes-title" className="page-opening-title text-[2.5rem] font-semibold leading-[1.06] tracking-[-0.045em] sm:text-[3.25rem]">Notes</h1>
         <p className="max-w-lg text-[17px] leading-relaxed text-muted-foreground">Practical answers for your website, business tools and software.</p>
       </header>
       <Link href="/tools/business-email-checker" className="email-check-surface group mb-8 flex items-center gap-3 rounded-[22px] p-4 sm:gap-4 sm:p-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">

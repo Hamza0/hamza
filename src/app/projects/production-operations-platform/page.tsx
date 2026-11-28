@@ -21,7 +21,7 @@ export default function ProductionOperationsPlatform() {
       <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: title, path }]} />
       <header className="space-y-4">
         <p className="text-sm text-muted-foreground">Engineering case study · 2 minute read</p>
-        <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">{title}</h1>
+        <h1 className="page-opening-title text-3xl font-bold tracking-tighter sm:text-5xl">{title}</h1>
         <p className="text-muted-foreground">{description}</p>
         <p className="text-sm text-muted-foreground">
           By <Link href="/#about" rel="author" className="underline underline-offset-4">{DATA.name}</Link>

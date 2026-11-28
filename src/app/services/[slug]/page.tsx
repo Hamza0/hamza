@@ -37,7 +37,7 @@ export default async function ServicePage({ params }: PageProps) {
       }) }} />
       <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: service.title, path }]} />
       <header className="space-y-4">
-        <h1 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">{service.title}</h1>
+        <h1 className="page-opening-title text-balance text-3xl font-semibold tracking-tight sm:text-4xl">{service.title}</h1>
         <p className="text-base leading-relaxed text-muted-foreground">{service.intro}</p>
         <a href="#get-help" className="inline-block text-sm font-medium underline underline-offset-4">{service.action} ↓</a>
       </header>

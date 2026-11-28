@@ -14,10 +14,18 @@ import { PROFILE, SITE_UPDATED_AT } from "@/lib/site";
 import { PERSON_ID, WEBSITE_ID, serializeJsonLd } from "@/lib/seo";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import Markdown from "react-markdown";
 
 export const metadata: Metadata = {
   alternates: { canonical: DATA.url },
+};
+
+const SECTION_TITLE = "text-2xl font-semibold leading-tight tracking-[-0.03em] sm:text-3xl";
+const SERVICE_SUMMARIES: Record<(typeof services)[number]["slug"], string> = {
+  "website-repair-toronto": "Broken pages, forms, checkout and website errors.",
+  "wordpress-development-toronto-mississauga": "WordPress, WooCommerce, Elementor and ongoing support.",
+  "existing-web-application-development-support": "Fix, finish or improve an existing web application.",
 };
 
 const BLUR_FADE_DELAY = 0.04;
@@ -152,29 +160,33 @@ export default async function Page() {
         </div>
       </section>
 
-      <nav aria-labelledby="services-title">
-        <h2 id="services-title" className="mb-3 text-xl font-semibold tracking-tight">Work with me</h2>
-        <p className="mb-3 text-sm leading-relaxed text-muted-foreground">Need help fixing your website, maintaining WordPress or finishing an existing web app? I work directly with businesses and agencies in the Greater Toronto Area and remotely.</p>
-        <ul className="divide-y rounded-xl border px-4">
+      <section aria-labelledby="services-title" id="services">
+        <h2 id="services-title" className={SECTION_TITLE}>Work with me</h2>
+        <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-muted-foreground">Website repairs, WordPress development and web app support in the Greater Toronto Area and remotely.</p>
+        <ul className="portfolio-project-featured mt-4 divide-y divide-border/70 rounded-[20px] px-4 sm:px-5">
           {services.map(service => (
             <li key={service.slug}>
-              <Link href={servicePath(service)} className="flex items-center justify-between gap-4 py-3 text-sm font-medium hover:underline underline-offset-4">
-                {service.title}<span aria-hidden="true" className="text-muted-foreground">→</span>
+              <Link href={servicePath(service)} className="group -mx-2 flex items-center gap-3 rounded-xl px-2 py-3.5 transition-colors hover:bg-background/60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none">
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-[16px] font-semibold leading-snug tracking-tight group-hover:text-primary dark:group-hover:text-[#64b5ff]">{service.title}</h3>
+                  <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">{SERVICE_SUMMARIES[service.slug]}</p>
+                </div>
+                <ArrowUpRight className="size-4 shrink-0 text-muted-foreground group-hover:text-primary dark:group-hover:text-[#64b5ff]" aria-hidden="true" />
               </Link>
             </li>
           ))}
         </ul>
-      </nav>
+      </section>
 
       <section id="projects">
         <div className="space-y-4 w-full">
           <BlurFade delay={BLUR_FADE_DELAY * 11}>
             <div className="flex flex-col space-y-3">
               <div className="space-y-2">
-                <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+                <h2 className={SECTION_TITLE}>
                   {DATA.projectsTitle}
                 </h2>
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <p className="text-[15px] leading-relaxed text-muted-foreground">
                   {DATA.projectsIntro}
                 </p>
               </div>
@@ -207,17 +219,17 @@ export default async function Page() {
         </div>
       </section>
 
-      <section id="about">
+      <section id="about" aria-labelledby="about-title">
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
-          <h2 className="text-xl font-bold">About</h2>
+          <h2 id="about-title" className={SECTION_TITLE}>About</h2>
         </BlurFade>
         <BlurFade delay={BLUR_FADE_DELAY * 4}>
-          <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
+          <Markdown className="home-about-copy mt-3 max-w-full font-sans text-[15px] leading-[1.7] text-muted-foreground">
             {DATA.summary}
           </Markdown>
-          <nav aria-label="Professional profiles" className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            <Link href={DATA.contact.social.LinkedIn.url} rel="me" className="underline underline-offset-4">LinkedIn</Link>
-            <Link href="https://www.codedsquare.com/" className="underline underline-offset-4">Coded Square</Link>
+          <nav aria-label="Professional profiles" className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[14px] font-medium">
+            <Link href={DATA.contact.social.LinkedIn.url} rel="me" className="portfolio-project-link inline-flex items-center gap-1.5 rounded-sm underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">LinkedIn <ArrowUpRight aria-hidden="true" className="size-3.5" /></Link>
+            <Link href="https://www.codedsquare.com/" className="portfolio-project-link inline-flex items-center gap-1.5 rounded-sm underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">Coded Square <ArrowUpRight aria-hidden="true" className="size-3.5" /></Link>
           </nav>
         </BlurFade>
       </section>
@@ -225,7 +237,7 @@ export default async function Page() {
       <section id="work">
         <div className="flex min-h-0 flex-col gap-y-3">
           <BlurFade delay={BLUR_FADE_DELAY * 5}>
-            <h2 className="text-xl font-bold">Work Experience</h2>
+            <h2 className={SECTION_TITLE}>Work Experience</h2>
           </BlurFade>
           {DATA.work.map((work, id) => (
             <BlurFade
@@ -253,7 +265,7 @@ export default async function Page() {
       <section id="education">
         <div className="flex min-h-0 flex-col gap-y-3">
           <BlurFade delay={BLUR_FADE_DELAY * 7}>
-            <h2 className="text-xl font-bold">Education</h2>
+            <h2 className={SECTION_TITLE}>Education</h2>
           </BlurFade>
           {DATA.education.map((education, id) => (
             <BlurFade
@@ -276,7 +288,7 @@ export default async function Page() {
 
       <section id="skills" aria-labelledby="skills-title">
         <BlurFade delay={BLUR_FADE_DELAY * 9}>
-          <h2 id="skills-title" className="text-2xl font-semibold tracking-tight sm:text-3xl">Skills</h2>
+          <h2 id="skills-title" className={SECTION_TITLE}>Skills</h2>
         </BlurFade>
         <div className="mt-4 space-y-4">
           {DATA.skillGroups.slice(0, 1).map(group => (
@@ -310,7 +322,7 @@ export default async function Page() {
       {featuredNotes.length > 0 && (
         <section id="notes" aria-labelledby="technical-notes-title" className="note-theme scroll-mt-8">
           <div className="flex items-baseline justify-between gap-4">
-            <h2 id="technical-notes-title" className="text-2xl font-semibold tracking-tight sm:text-3xl">Notes</h2>
+            <h2 id="technical-notes-title" className={SECTION_TITLE}>Notes</h2>
             <Link href="/blog" className="portfolio-project-link shrink-0 rounded-sm text-[14px] font-medium underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">All notes <span aria-hidden="true">→</span></Link>
           </div>
           <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
@@ -335,8 +347,8 @@ export default async function Page() {
 
       <section id="additional-projects" aria-labelledby="additional-projects-title" className="scroll-mt-8">
         <BlurFade delay={BLUR_FADE_DELAY * 11}>
-          <h2 id="additional-projects-title" className="text-2xl font-semibold tracking-tight sm:text-3xl">Additional Projects</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <h2 id="additional-projects-title" className={SECTION_TITLE}>Additional Projects</h2>
+          <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
             Earlier web, design and digital experience delivery, alongside independent architecture explorations.
           </p>
         </BlurFade>
@@ -355,13 +367,11 @@ export default async function Page() {
         <div className="grid items-center justify-center gap-4 px-4 text-center md:px-6 w-full py-12">
           <BlurFade delay={BLUR_FADE_DELAY * 16}>
             <div className="space-y-3">
-              <div className="inline-block rounded-lg bg-foreground text-background px-3 py-1 text-sm">
-                Contact
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">
+              <p className="text-[13px] font-medium text-muted-foreground">Contact</p>
+              <h2 className="text-3xl font-semibold tracking-[-0.035em] sm:text-4xl">
                 Get in Touch
               </h2>
-              <p className="mx-auto max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              <p className="mx-auto max-w-md text-[15px] leading-relaxed text-muted-foreground sm:text-base">
                 {contactReady ? <>Have a project, role, or collaboration in mind? Tell me a little about it.</> : <>
                 Want to chat? The best way to reach me is on{" "}
                 <Link
