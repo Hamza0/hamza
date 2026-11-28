@@ -2,7 +2,6 @@ import { PulseHeart } from "@/components/ui/pulse-heart";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { BusinessProfileInquiry } from "@/components/business-profile-inquiry";
 import { NoteContactCTA } from "@/components/note-contact-cta";
-import { Badge } from "@/components/ui/badge";
 import { contactFormAvailable } from "@/lib/contact/config";
 import { getBlogPosts, getPost, getPublishedPosts } from "@/data/blog";
 import { AUTHOR, articleJsonLd, pageMetadata, serializeJsonLd } from "@/lib/seo";
@@ -58,7 +57,7 @@ export default async function Blog({
   const { lead, body } = splitNoteLead(post.source);
 
   return (
-    <main id="blog" className={`note-theme note-tone-${presentation.tone}`}>
+    <main id="blog" className={`note-theme note-reading-page note-tone-${presentation.tone}`}>
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -76,22 +75,23 @@ export default async function Blog({
         { name: post.metadata.title, path: `/blog/${post.slug}` },
       ]} />
       <article className="note-article">
-        <header className="mb-6 max-w-[650px]">
-          <div className="mb-4 flex flex-wrap items-center gap-3 text-xs">
-            <Badge variant="secondary" className="note-chip rounded-full border-transparent px-3 py-1 font-medium shadow-none">{presentation.label}</Badge>
-            <span className="text-muted-foreground">{readingMinutes(post.source)} min read</span>
+        <header className="mb-7 sm:mb-9">
+          <div className="mb-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] font-medium text-muted-foreground">
+            <span className="text-[hsl(var(--note-accent))]">{presentation.label}</span>
+            <span aria-hidden="true">·</span>
+            <span>{readingMinutes(post.source)} min read</span>
+            {post.metadata.dateLabel && <><span aria-hidden="true">·</span><span>{post.metadata.dateLabel}</span></>}
           </div>
-          <h1 className="title text-pretty text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+          <h1 className="text-pretty text-[2rem] font-semibold leading-[1.13] tracking-[-0.04em] sm:text-[2.75rem]">
             {post.metadata.title}
           </h1>
-          <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-muted-foreground">
-            <span>By <Link href="/#about" rel="author" className="underline underline-offset-4">{AUTHOR.name}</Link></span>
+          <div className="mt-5 border-b border-border/70 pb-5">
+            <p className="text-[14px] font-medium">By <Link href="/#about" rel="author" className="underline decoration-border underline-offset-4 hover:decoration-current">{AUTHOR.name}</Link></p>
+            <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+              Software developer in the Greater Toronto Area · Founder of{" "}
+              <Link href="https://www.codedsquare.com/" className="underline underline-offset-4">Coded Square</Link>.
+            </p>
           </div>
-          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-            Software developer in the Greater Toronto Area · Founder of{" "}
-            <Link href="https://www.codedsquare.com/" className="underline underline-offset-4">Coded Square</Link>.
-          </p>
-          {post.metadata.dateLabel && <p className="mt-2 text-xs text-muted-foreground">{post.metadata.dateLabel}</p>}
         </header>
         {lead && <div className="note-lead prose max-w-none dark:prose-invert" dangerouslySetInnerHTML={{ __html: lead }} />}
         {errorExample && <NoteErrorExample example={errorExample} />}

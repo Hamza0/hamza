@@ -1,10 +1,10 @@
 import Link from "next/link";
-import BlurFade from "@/components/magicui/blur-fade";
+import { ArrowRight, Mail } from "lucide-react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { NotePinboardCard } from "@/components/note-pinboard-card";
+import { NotesBrowser } from "@/components/notes-browser";
 import { getBlogPosts } from "@/data/blog";
 import { AUTHOR, WEBSITE_ID, pageMetadata, serializeJsonLd } from "@/lib/seo";
-import { readingMinutes } from "@/lib/note-presentation";
+import { getNotePresentation, readingMinutes } from "@/lib/note-presentation";
 import { modificationDate } from "@/lib/publication";
 import { NOTES_UPDATED_AT, SITE_URL } from "@/lib/site";
 
@@ -17,28 +17,12 @@ export const metadata = pageMetadata({
   path: "/blog",
 });
 
-const BLUR_FADE_DELAY = 0.04;
-
-function NoteList({ posts }: { posts: Awaited<ReturnType<typeof getBlogPosts>> }) {
-  return (
-    <ul className="mt-7 grid gap-x-4 gap-y-5 rounded-3xl border border-border/40 bg-muted/40 p-3 sm:grid-cols-2 sm:gap-5 sm:p-5">
-      {posts.map((post, index) => (
-        <li key={post.slug} className="min-w-0">
-          <BlurFade delay={Math.min(index, 4) * BLUR_FADE_DELAY} className="h-full">
-            <NotePinboardCard slug={post.slug} title={post.metadata.title} summary={post.metadata.summary} minutes={readingMinutes(post.source)} />
-          </BlurFade>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 export default async function BlogPage() {
   const posts = await getBlogPosts();
   const url = `${SITE_URL}/blog`;
 
   return (
-    <main className="note-theme max-w-2xl lg:-mx-4 lg:w-[calc(100%+2rem)] lg:max-w-none">
+    <main className="note-theme pb-12">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd({
         "@context": "https://schema.org",
         "@type": "CollectionPage",
@@ -71,17 +55,25 @@ export default async function BlogPage() {
         },
       }) }} />
       <Breadcrumbs items={[{ name: "Home", path: "/" }, { name: "Notes", path: "/blog" }]} />
-      <BlurFade delay={BLUR_FADE_DELAY}>
-        <h1 id="notes-title" className="text-3xl font-semibold tracking-tight">Notes</h1>
-        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Questions about your website or software? Here’s where I’d start.</p>
-      </BlurFade>
-      <div className="mt-5 rounded-xl border bg-muted/30 px-4 py-3">
-        <Link href="/tools/business-email-checker" className="text-sm font-medium underline underline-offset-4">Free business email checker</Link>
-        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">Check MX, SPF, DKIM and DMARC records when business emails are not arriving.</p>
-      </div>
-      <section id="all-notes" aria-labelledby="notes-title">
-        <NoteList posts={posts} />
-      </section>
+      <header className="mb-7 space-y-2.5">
+        <h1 id="notes-title" className="text-[2.5rem] font-semibold leading-[1.06] tracking-[-0.045em] sm:text-[3.25rem]">Notes</h1>
+        <p className="max-w-lg text-[17px] leading-relaxed text-muted-foreground">Practical answers for your website, business tools and software.</p>
+      </header>
+      <Link href="/tools/business-email-checker" className="email-check-surface group mb-8 flex items-center gap-3 rounded-[22px] p-4 sm:gap-4 sm:p-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-background text-[hsl(var(--note-accent))]"><Mail aria-hidden="true" className="size-5" strokeWidth={1.7} /></div>
+        <div className="min-w-0 flex-1">
+          <h2 className="text-[16px] font-semibold tracking-tight group-hover:text-[hsl(var(--note-accent))]">Free business email checker</h2>
+          <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">Check MX, SPF, DKIM and DMARC records.</p>
+        </div>
+        <ArrowRight aria-hidden="true" className="size-4 shrink-0 text-[hsl(var(--note-accent))]" />
+      </Link>
+      <NotesBrowser notes={posts.map(post => ({
+        slug: post.slug,
+        title: post.metadata.title,
+        summary: post.metadata.summary,
+        minutes: readingMinutes(post.source),
+        topic: getNotePresentation(post.slug).label,
+      }))} />
     </main>
   );
 }
