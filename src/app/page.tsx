@@ -5,6 +5,7 @@ import { ResumeCard } from "@/components/resume-card";
 import { HeroLanyard } from "@/components/hero-lanyard";
 import { ContactButton } from "@/components/contact-provider";
 import { contactFormAvailable } from "@/lib/contact/config";
+import { servicePath, services } from "@/data/services";
 import { DATA } from "@/data/resume";
 import { getBlogPosts } from "@/data/blog";
 import { PROFILE, SITE_UPDATED_AT } from "@/lib/site";
@@ -148,6 +149,19 @@ export default async function Page() {
           </div>
         </div>
       </section>
+
+      <nav aria-labelledby="services-title">
+        <h2 id="services-title" className="mb-3 text-xl font-semibold tracking-tight">Work with me</h2>
+        <ul className="divide-y rounded-xl border px-4">
+          {services.map(service => (
+            <li key={service.slug}>
+              <Link href={servicePath(service)} className="flex items-center justify-between gap-4 py-3 text-sm font-medium hover:underline underline-offset-4">
+                {service.title}<span aria-hidden="true" className="text-muted-foreground">→</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       <section id="projects">
         <div className="space-y-6 w-full">

@@ -1,3 +1,4 @@
+import { servicePath, services } from "@/data/services";
 import { getBlogPosts } from "@/data/blog";
 import { modificationDate } from "@/lib/publication";
 import { CASE_STUDY } from "@/lib/case-study";
@@ -47,6 +48,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly",
       priority: 0.2,
     },
+    ...services.map(service => ({
+      url: SITE_URL + servicePath(service),
+      lastModified: "2026-11-28",
+    })),
     ...posts.map((post) => ({
       url: `${SITE_URL}/blog/${post.slug}`,
       lastModified: modificationDate(post.metadata) || post.metadata.publishedAt,

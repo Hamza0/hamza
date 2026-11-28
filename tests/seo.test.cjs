@@ -59,6 +59,6 @@ test('each page owns its canonical and social metadata, including noindex overri
   const hidden = pageMetadata({ title: 'Unlisted', description: 'Unlisted', path: '/blog/unlisted', noindex: true });
   assert.equal(hidden.robots.index, false);
   assert.equal(hidden.robots.googleBot.index, false);
-  assert.equal(SOCIAL_PREVIEW.title, 'Hamza Shakeel | Software Developer | Toronto, Canada');
+  assert.equal(SOCIAL_PREVIEW.title, 'Hamza Shakeel | Software Developer in Toronto');
   assert.ok(SOCIAL_PREVIEW.description.includes('Greater Toronto Area'));
 });

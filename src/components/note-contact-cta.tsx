@@ -12,7 +12,7 @@ export function NoteContactCTA({ title, description, context, starters }: { titl
   const headingId = useId();
 
   return (
-    <section id="get-help" className="note-enquiry mt-10 scroll-mt-6 rounded-[1.5rem] border p-3 sm:p-4" aria-label="Contact Hamza about this note">
+    <section id="get-help" className="note-enquiry mt-10 scroll-mt-6 rounded-[1.5rem] border p-3 sm:p-4" aria-label={title}>
       <div className="flex items-center gap-3 px-2 pb-4 pt-1 sm:px-3 sm:pb-5">
         <Image src="/hamza-portrait.webp" alt="" width={44} height={44} className="size-11 shrink-0 rounded-full border border-border/70 object-cover" />
         <div className="min-w-0">

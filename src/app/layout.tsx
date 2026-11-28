@@ -1,3 +1,4 @@
+import { servicePath, services } from "@/data/services";
 import Navbar from "@/components/navbar";
 import { Analytics } from "@/components/analytics";
 import { ContactProvider } from "@/components/contact-provider";
@@ -19,7 +20,7 @@ const fontSans = FontSans({
   display: "swap",
 });
 
-const analyticsPaths = ["/", "/projects/production-operations-platform", "/google-business-profile-help", "/blog", "/privacy", ...fs.readdirSync(path.join(process.cwd(), "content")).filter(file => file.endsWith(".mdx")).map(file => `/blog/${file.slice(0, -4)}`)];
+const analyticsPaths = ["/", "/projects/production-operations-platform", "/google-business-profile-help", "/blog", "/privacy", ...services.map(servicePath), ...fs.readdirSync(path.join(process.cwd(), "content")).filter(file => file.endsWith(".mdx")).map(file => `/blog/${file.slice(0, -4)}`)];
 
 export const metadata: Metadata = {
   metadataBase: new URL(DATA.url),
