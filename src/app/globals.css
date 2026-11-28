@@ -586,3 +586,31 @@ code[data-line-numbers-max-digits="3"] > [data-line]::before {
 .dark .note-enquiry-inner { background: hsl(var(--card)); box-shadow: 0 3px 12px rgb(0 0 0 / 0.16); }
 .dark .note-message-field { background: hsl(var(--muted) / 0.55); box-shadow: none; }
 .dark .note-message-field:focus { background: hsl(var(--background)); }
+
+
+/* Quiet support-tool surfaces, scoped to the email checker. */
+.email-check-surface { background: #f5f5f7; }
+.dark .email-check-surface { background: #18181b; }
+
+/* Magic UI-inspired circular view-transition reveal. Scope the snapshot
+   overrides to theme changes so unrelated transitions are unaffected. */
+html[data-portfolio-theme-transition="active"]::view-transition-group(root) {
+  animation-duration: 400ms;
+}
+html[data-portfolio-theme-transition="active"]::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+  z-index: 1;
+}
+html[data-portfolio-theme-transition="active"]::view-transition-new(root) {
+  animation: portfolio-theme-reveal 400ms ease-in-out both;
+  mix-blend-mode: normal;
+  z-index: 2;
+}
+@keyframes portfolio-theme-reveal {
+  from { clip-path: var(--portfolio-theme-clip-start); }
+  to { clip-path: var(--portfolio-theme-clip-end); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-portfolio-theme-transition="active"]::view-transition-new(root) { animation: none; }
+}
