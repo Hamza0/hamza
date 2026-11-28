@@ -1,6 +1,8 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { DiaTextReveal } from "@/components/ui/dia-text-reveal";
 import { ProjectCard } from "@/components/project-card";
+import { NotePinboardCard } from "@/components/note-pinboard-card";
+import { getNotePresentation, readingMinutes } from "@/lib/note-presentation";
 import { ResumeCard } from "@/components/resume-card";
 import { HeroLanyard } from "@/components/hero-lanyard";
 import { ContactButton } from "@/components/contact-provider";
@@ -272,24 +274,32 @@ export default async function Page() {
         </div>
       </section>
 
-      <section id="skills">
-        <div className="flex min-h-0 flex-col gap-y-3">
-          <BlurFade delay={BLUR_FADE_DELAY * 9}>
-            <h2 className="text-xl font-bold">Skills</h2>
-          </BlurFade>
-          <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
-            {DATA.skillGroups.map((group, index) => (
-              <BlurFade key={group.title} delay={BLUR_FADE_DELAY * 10 + index * 0.05}
-                className={index === 0 || index === DATA.skillGroups.length - 1 ? "sm:col-span-2" : undefined}>
-                <div className={index === 0 ? "rounded-lg border p-4" : undefined}>
-                  <h3 className="mb-2 text-sm font-semibold">{group.title}</h3>
-                  {index === 0 ? (
-                    <ul className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
-                      {group.skills.map((skill) => <li key={skill}>{skill}</li>)}
-                    </ul>
-                  ) : (
-                    <p className="text-xs leading-relaxed text-muted-foreground">{group.skills.join(" · ")}</p>
-                  )}
+      <section id="skills" aria-labelledby="skills-title">
+        <BlurFade delay={BLUR_FADE_DELAY * 9}>
+          <h2 id="skills-title" className="text-2xl font-semibold tracking-tight sm:text-3xl">Skills</h2>
+        </BlurFade>
+        <div className="mt-4 space-y-4">
+          {DATA.skillGroups.slice(0, 1).map(group => (
+            <BlurFade key={group.title} delay={BLUR_FADE_DELAY * 10}>
+              <div className="portfolio-project-featured rounded-[20px] p-4 sm:p-5">
+                <h3 className="text-[17px] font-semibold tracking-[-0.025em]">{group.title}</h3>
+                <ul className="mt-3 grid grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                  {group.skills.map(skill => (
+                    <li key={skill} className="flex min-w-0 items-start gap-2.5 text-[14px] leading-relaxed">
+                      <span aria-hidden="true" className="mt-[8px] size-1.5 shrink-0 rounded-full bg-muted-foreground/60" />
+                      <span>{skill}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </BlurFade>
+          ))}
+          <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
+            {DATA.skillGroups.slice(1).map((group, index) => (
+              <BlurFade key={group.title} delay={BLUR_FADE_DELAY * 10 + index * 0.03} className="h-full">
+                <div className="h-full border-b border-border/70 py-3">
+                  <h3 className="text-[15px] font-semibold leading-snug tracking-tight">{group.title}</h3>
+                  <p className="mt-1.5 text-[13px] leading-[1.7] text-muted-foreground">{group.skills.join(" · ")}</p>
                 </div>
               </BlurFade>
             ))}
@@ -298,21 +308,25 @@ export default async function Page() {
       </section>
 
       {featuredNotes.length > 0 && (
-        <section id="notes" aria-labelledby="technical-notes-title" className="scroll-mt-8">
+        <section id="notes" aria-labelledby="technical-notes-title" className="note-theme scroll-mt-8">
           <div className="flex items-baseline justify-between gap-4">
-            <h2 id="technical-notes-title" className="text-xl font-bold">Notes</h2>
-            <Link href="/blog" className="shrink-0 text-sm underline underline-offset-4">All notes →</Link>
+            <h2 id="technical-notes-title" className="text-2xl font-semibold tracking-tight sm:text-3xl">Notes</h2>
+            <Link href="/blog" className="portfolio-project-link shrink-0 rounded-sm text-[14px] font-medium underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">All notes <span aria-hidden="true">→</span></Link>
           </div>
-          <p className="mt-2 text-sm text-muted-foreground">
-              Already have a website or app? Here’s where I’d start when something isn’t working. If you need help with a specific issue, you can tell me about it directly in any note.
+          <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
+            Practical answers when a website or app needs attention.
           </p>
-          <ul className="mt-3 divide-y divide-border/50">
-            {featuredNotes.map((note) => (
+          <ul className="mt-3 divide-y divide-border/70">
+            {featuredNotes.map(note => (
               <li key={note.slug}>
-                <Link href={`/blog/${note.slug}`} className="note-theme note-list-link group -mx-3 block rounded-lg px-3 py-4 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
-                  <h3 className="text-sm font-semibold group-hover:underline underline-offset-4">{note.metadata.title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{note.metadata.summary}</p>
-                </Link>
+                <NotePinboardCard
+                  slug={note.slug}
+                  title={note.metadata.title}
+                  summary={note.metadata.summary}
+                  minutes={readingMinutes(note.source)}
+                  topic={getNotePresentation(note.slug).label}
+                  compact
+                />
               </li>
             ))}
           </ul>
