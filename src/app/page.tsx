@@ -152,6 +152,7 @@ export default async function Page() {
 
       <nav aria-labelledby="services-title">
         <h2 id="services-title" className="mb-3 text-xl font-semibold tracking-tight">Work with me</h2>
+        <p className="mb-3 text-sm leading-relaxed text-muted-foreground">Need help fixing your website, maintaining WordPress or finishing an existing web app? I work directly with businesses and agencies in the Greater Toronto Area and remotely.</p>
         <ul className="divide-y rounded-xl border px-4">
           {services.map(service => (
             <li key={service.slug}>

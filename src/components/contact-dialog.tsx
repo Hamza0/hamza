@@ -180,9 +180,8 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
           {!isInline && <Dialog.Close asChild><Button type="button" className="mt-7 w-full">Done</Button></Dialog.Close>}
         </div> : <>
         {isInline ? (
-          <div className="mb-4 flex items-center justify-between gap-4">
-            <span className="text-xs font-medium tabular-nums text-muted-foreground">Step {step} of 2</span>
-            <div aria-hidden="true" className="flex w-14 gap-1.5">
+          <div className="mb-4 flex min-h-4 items-center justify-end">
+            <div role="progressbar" aria-label="Enquiry progress" aria-valuemin={0} aria-valuemax={2} aria-valuenow={step} className="flex w-14 gap-1.5">
               <span className="h-1 flex-1 rounded-full bg-primary" />
               <span className={`h-1 flex-1 rounded-full ${step === 2 ? "bg-primary" : "bg-border"}`} />
             </div>
@@ -226,8 +225,7 @@ export default function ContactDialog({ open, onOpenChange, restoreFocus, inline
           <p role="status" aria-live="polite" className="text-sm empty:hidden">{status}</p>
           <Button type="submit" className="h-11 w-full rounded-full">Continue</Button>
           <div className="border-t pt-3 text-xs leading-relaxed text-muted-foreground">
-            <p>No account needed. You’ll be able to email me in the next step.</p>
-            <p className="mt-1">Please leave out passwords and private customer details. <a href="/privacy" className="underline underline-offset-2">Privacy</a>.</p>
+            <p>Please leave out passwords and private customer details. <a href="/privacy" className="underline underline-offset-2">Privacy</a>.</p>
           </div>
         </form> : step === 1 ? <form className="contact-step mt-6 space-y-4" onSubmit={event => { event.preventDefault(); if (category) { setStep(2); setStatus(""); } }}>
           <fieldset className="space-y-2" disabled={attempt.current.uncertain}><legend className="sr-only">Enquiry type</legend>{OPTIONS.map(option => <label key={option} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-md border p-3 text-sm has-[:checked]:border-primary"><input type="radio" name="category" value={option} checked={category === option} onChange={() => { if (category !== option) setFields(value => ({ ...value, context: "" })); setCategory(option); }} required className="accent-primary" />{CONTACT_CATEGORIES[option].label}</label>)}</fieldset>

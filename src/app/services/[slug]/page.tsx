@@ -50,6 +50,16 @@ export default async function ServicePage({ params }: PageProps) {
           </div>
         ))}
         <Link href={service.link.path} className="inline-block text-sm underline underline-offset-4">{service.link.label}</Link>
+        <div className="space-y-3 border-t pt-4">
+          <h3 className="font-semibold">Practical notes about these problems</h3>
+          <ul className="space-y-2">
+            {service.related.map(note => (
+              <li key={note.path}>
+                <Link href={note.path} className="text-sm underline underline-offset-4">{note.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
       <NoteContactCTA title={service.action} description={service.prompt} context={service.title} starters={service.starters} />
     </main>
